@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QDS - AI System v4.0</title>
+    <title>QDS - AI System v5.0</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
     <style>
         :root { --bg: #050505; --accent: #00f2ff; --panel: #111; }
         body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        
+        /* شاشة الدخول */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
         .login-box { background: var(--panel); padding: 30px; border-radius: 20px; border: 2px solid var(--accent); box-shadow: 0 0 30px rgba(0, 242, 255, 0.3); width: 85%; max-width: 320px; }
-        .brand { font-size: 3rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px var(--accent); margin: 0 0 10px; }
-        input { width: 90%; padding: 15px; margin-bottom: 20px; background: #000; border: 1px solid #333; color: var(--accent); text-align: center; border-radius: 10px; font-size: 1.2rem; outline: none; }
-        button { width: 100%; padding: 15px; background: var(--accent); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        #main-content { display: none; padding: 15px; max-width: 400px; margin: auto; }
-        .timer-box { background: rgba(255, 204, 0, 0.1); border: 1px solid #ffcc00; color: #ffcc00; padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #222; padding: 12px; border-radius: 15px; margin: 20px 0; border: 1px solid #444; }
-        .tile { aspect-ratio: 1; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .tile input { width: 100%; height: 100%; background: transparent; border: none; color: var(--accent); text-align: center; font-size: 1.5rem; font-weight: bold; padding: 0; margin: 0; }
-        .btn-ai { background: var(--accent); color: #000; width: 100%; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.3rem; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4); border: none; cursor: pointer; }
-        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        .btn-m { background: #111; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 10px; font-weight: bold; }
+        .brand { font-size: 3.5rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px var(--accent); margin-bottom: 5px; letter-spacing: 5px; }
+        .sub-text { color: #666; font-size: 0.8rem; margin-bottom: 25px; }
+        
+        input { width: 90%; padding: 15px; margin-bottom: 20px; background: #000; border: 1px solid #333; color: var(--accent); text-align: center; border-radius: 12px; font-size: 1.2rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
+        
+        button.main-btn { width: 100%; padding: 15px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
+        button.main-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+        
+        /* المحتوى الرئيسي */
+        #main-content { display: none; padding: 15px; max-width: 420px; margin: auto; opacity: 0; transition: 1s; }
+        .timer-badge { background: rgba(255, 204, 0, 0.1); border: 1px solid #ffcc00; color: #ffcc00; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; display: inline-block; margin-bottom: 15px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #252525; padding: 12px; border-radius: 15px; margin: 15px 0; border: 1px solid #444; }
+        .tile { aspect-ratio: 1; background: #000; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; }
+        .tile input { width: 100%; height: 100%; background: transparent; border: none; color: var(--accent); text-align: center; font-size: 1.6rem; font-weight: bold; padding: 0; }
+        
+        .ai-action-btn { background: var(--accent); color: #000; width: 100%; padding: 22px; border-radius: 18px; font-weight: 900; font-size: 1.4rem; border: none; cursor: pointer; margin-top: 10px; box-shadow: 0 8px 25px rgba(0, 242, 255, 0.3); }
+        .ai-action-btn:active { transform: scale(0.98); }
+        
+        .nav-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 25px; }
+        .btn-m { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 18px; border-radius: 12px; font-size: 1.2rem; cursor: pointer; }
+        .btn-m:active { background: var(--accent); color: #000; }
+        
+        #error-msg { color: #ff4d4d; font-size: 0.85rem; margin-top: 15px; display: none; }
     </style>
 </head>
 <body>
@@ -29,43 +46,50 @@
 <div id="login-overlay">
     <div class="login-box">
         <div class="brand">QDS</div>
-        <p style="color:#666; font-size:0.8rem; margin-bottom:20px;">نظام الوصول المشفر - 48 ساعة</p>
-        <input type="text" id="pass-code" placeholder="كود التفعيل">
-        <button id="login-btn" onclick="verifyAccess()">تفعيل العضوية 🛡️</button>
-        <p id="error-msg" style="color:#ff4444; font-size:0.8rem; margin-top:15px;"></p>
+        <div class="sub-text">نظام التحكم الذكي بالوحوش | v5.0</div>
+        <input type="text" id="pass-code" placeholder="أدخل كود 48 ساعة">
+        <button id="login-btn" class="main-btn" onclick="verifyAccess()">بدء التفعيل 🛡️</button>
+        <p id="error-msg"></p>
     </div>
 </div>
 
 <div id="main-content">
-    <div class="brand" style="font-size: 2rem;">QDS AI</div>
-    <div id="timer" class="timer-box">جاري حساب الوقت...</div>
+    <div class="brand" style="font-size: 2.2rem;">QDS AI</div>
+    <div id="timer" class="timer-badge">جاري التحقق من الصلاحية...</div>
     
+    <div style="background:#111; padding:8px; border-radius:8px; font-size:0.9rem; color:#888; margin-bottom:10px;">
+        الوضعية: <span id="status-text" style="color:var(--accent)">جاهز للتحليل</span>
+    </div>
+
     <div class="grid" id="mainGrid"></div>
     
-    <button class="btn-ai" onclick="deepThink()">تحليل حركة QDS ⚡</button>
+    <button class="ai-action-btn" onclick="deepThink()">تحليل حركة QDS ⚡</button>
 
-    <div class="controls">
+    <div class="nav-controls">
         <div></div><button class="btn-m" onclick="manualMove('up')">↑</button><div></div>
         <button class="btn-m" onclick="manualMove('left')">←</button>
         <button class="btn-m" onclick="manualMove('down')">↓</button>
         <button class="btn-m" onclick="manualMove('right')">→</button>
     </div>
-    <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:20px;">تسجيل الخروج</button>
+    
+    <button onclick="location.reload()" style="margin-top:30px; background:none; border:none; color:#444; font-size:0.8rem; cursor:pointer;">تسجيل الخروج</button>
 </div>
 
 <script>
-    // إعدادات Firebase
+    // --- إعدادات Firebase المباشرة ---
     const config = { databaseURL: "https://al-fateh-store-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(config);
     const db = firebase.database();
 
+    // --- نظام التحقق من الأكواد ---
     async function verifyAccess() {
         const code = document.getElementById('pass-code').value.trim();
         const error = document.getElementById('error-msg');
         const btn = document.getElementById('login-btn');
         if(!code) return;
 
-        btn.disabled = true; btn.innerText = "فحص السيرفر...";
+        btn.disabled = true; btn.innerText = "جاري الاتصال بالسيرفر...";
+        error.style.display = "none";
 
         try {
             const snap = await db.ref('keys/' + code).once('value');
@@ -73,36 +97,54 @@
 
             if (data) {
                 const now = Date.now();
+                // حالة 1: كود جديد لم يستخدم
                 if (!data.used) {
                     const expiry = now + (48 * 60 * 60 * 1000);
                     await db.ref('keys/' + code).update({ used: true, expires_at: expiry });
-                    launch(expiry);
-                } else if (now < data.expires_at) {
-                    launch(data.expires_at);
-                } else { error.innerText = "انتهت صلاحية هذا الكود!"; }
-            } else { error.innerText = "الكود غير موجود في قاعدة البيانات!"; }
-        } catch (e) { error.innerText = "خطأ في الاتصال!"; }
-        btn.disabled = false; btn.innerText = "تفعيل العضوية 🛡️";
+                    showApp(expiry);
+                } 
+                // حالة 2: كود مستخدم ولكن الوقت لم ينتهِ
+                else if (now < data.expires_at) {
+                    showApp(data.expires_at);
+                } 
+                // حالة 3: وقت الكود انتهى
+                else {
+                    error.innerText = "انتهت صلاحية هذا الكود (48 ساعة).";
+                    error.style.display = "block";
+                }
+            } else {
+                error.innerText = "الكود غير موجود في سجلات QDS!";
+                error.style.display = "block";
+            }
+        } catch (e) {
+            error.innerText = "خطأ في الاتصال! تأكد من إعدادات الـ Rules.";
+            error.style.display = "block";
+        }
+        btn.disabled = false; btn.innerText = "بدء التفعيل 🛡️";
     }
 
-    function launch(expiry) {
+    function showApp(expiry) {
         document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
-        setInterval(() => {
+        const main = document.getElementById('main-content');
+        main.style.display = 'block';
+        setTimeout(() => main.style.opacity = '1', 50);
+
+        // عداد الوقت التنازلي
+        const timerInt = setInterval(() => {
             const left = expiry - Date.now();
-            if(left <= 0) location.reload();
-            const h = Math.floor(left/(3600000));
-            const m = Math.floor((left%3600000)/60000);
-            document.getElementById('timer').innerText = `صلاحية الوصول: ${h} ساعة و ${m} دقيقة متبقية`;
+            if(left <= 0) { clearInterval(timerInt); location.reload(); }
+            const hours = Math.floor(left / 3600000);
+            const mins = Math.floor((left % 3600000) / 60000);
+            document.getElementById('timer').innerText = `صلاحية: متبقي ${hours} ساعة و ${mins} دقيقة`;
         }, 1000);
     }
 
-    // بناء الشبكة والذكاء
+    // --- بناء الشبكة والمحرك ---
     const gridEl = document.getElementById('mainGrid');
-    for(let i=0; i<16; i++) gridEl.innerHTML += `<div class="tile"><input type="number" id="t-${i}" placeholder="0"></div>`;
+    for(let i=0; i<16; i++) gridEl.innerHTML += `<div class="tile"><input type="number" id="t-${i}" placeholder="0" inputmode="numeric"></div>`;
 
     const W = [[2,4,8,16],[32,64,128,256],[1024,512,256,128],[2048,4096,8192,16384]];
-    
+
     function getM() {
         let m = [];
         for(let i=0; i<4; i++) {
@@ -154,7 +196,10 @@
         });
         if(bm) {
             manualMove(bm);
-            document.getElementById('status-text').innerText = "تم تطبيق حركة ذكية";
+            const dirs = {up:'لأعلى', down:'لأسفل', left:'لليسار', right:'لليمين'};
+            document.getElementById('status-text').innerText = "اقتراح QDS: " + dirs[bm];
+        } else {
+            document.getElementById('status-text').innerText = "لا توجد حركات متاحة!";
         }
     }
 
