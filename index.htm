@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QDS AI - Final Fix</title>
+    <title>QDS AI - Zero Error</title>
     <style>
         :root { --bg: #050505; --accent: #00f2ff; --panel: #111; }
         body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; text-align: center; }
         .container { max-width: 420px; margin: auto; }
         .brand-name { font-size: 3.5rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px var(--accent); letter-spacing: 5px; margin: 20px 0 5px; }
-        .status-box { background: var(--panel); border: 2px solid var(--accent); padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 1.1rem; }
+        .status-box { background: var(--panel); border: 2px solid var(--accent); padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 1.1rem; min-height: 30px; }
         #status-text { color: var(--accent); font-weight: bold; }
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #222; padding: 12px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
         .tile { aspect-ratio: 1; background: #000; border-radius: 8px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; }
@@ -23,19 +23,23 @@
 
 <div class="container">
     <h1 class="brand-name">QDS</h1>
-    <div class="status-box">الوضعية: <span id="status-text">جاهز</span></div>
+    <div class="status-box">الوضعية: <span id="status-text">جاهز للتحليل</span></div>
     <div class="grid" id="mainGrid"></div>
-    <button class="btn-ai" onclick="deepThink()">⚡ تحليل QDS (العمق المطور)</button>
+    <button class="btn-ai" onclick="deepThink()">⚡ تحليل وحركة QDS</button>
     <div class="nav-controls">
         <div></div><button class="btn-move" onclick="manualMove('up')">↑</button><div></div>
-        <button class="btn-move" onclick="manualMove('right')">←</button> <button class="btn-move" onclick="manualMove('down')">↓</button>
-        <button class="btn-move" onclick="manualMove('left')">→</button> </div>
+        <button class="btn-move" onclick="manualMove('left')">←</button>
+        <button class="btn-move" onclick="manualMove('down')">↓</button>
+        <button class="btn-move" onclick="manualMove('right')">→</button>
+    </div>
 </div>
 
 <script>
+    // إنشاء الشبكة
     const gridEl = document.getElementById('mainGrid');
     for(let i=0; i<16; i++) gridEl.innerHTML += `<div class="tile"><input type="number" id="t-${i}" placeholder="0"></div>`;
 
+    // مصفوفة الأوزان لتعزيز الزاوية (أساس ذكاء QDS)
     const W = [[2,4,8,16],[32,64,128,256],[1024,512,256,128],[2048,4096,8192,16384]];
 
     function getM() {
@@ -59,23 +63,32 @@
         return n;
     }
 
+    // المحرك الأساسي: تم ضبطه ليتجاهل اتجاه اللغة ويركز على حركة المصفوفة
     function simulate(m, dir) {
         const old = JSON.stringify(m);
-        // تم عكس منطق اليمين واليسار برمجياً هنا لحل مشكلة الـ RTL
-        if(dir === 'right' || dir === 'left') {
+        if(dir === 'left') { // اليسار يعني ضغط الأرقام لبداية الصف (index 0)
+            for(let i=0; i<4; i++) m[i] = compress(m[i]);
+        } 
+        else if(dir === 'right') { // اليمين يعني عكس الصف، ضغطه، ثم إعادته
             for(let i=0; i<4; i++) {
-                let row = [...m[i]];
-                if(dir === 'left') row.reverse(); // الحركة لليمين فعلياً في الصفحة
-                let nr = compress(row);
-                if(dir === 'left') nr.reverse();
-                m[i] = nr;
+                m[i].reverse();
+                m[i] = compress(m[i]);
+                m[i].reverse();
             }
-        } else {
+        } 
+        else if(dir === 'up') { // لأعلى يعني ضغط الأعمدة لبداية العمود
             for(let j=0; j<4; j++) {
                 let col = [m[0][j], m[1][j], m[2][j], m[3][j]];
-                if(dir === 'down') col.reverse();
                 let nc = compress(col);
-                if(dir === 'down') nc.reverse();
+                for(let i=0; i<4; i++) m[i][j] = nc[i];
+            }
+        } 
+        else if(dir === 'down') { // لأسفل يعني عكس العمود، ضغطه، ثم إعادته
+            for(let j=0; j<4; j++) {
+                let col = [m[0][j], m[1][j], m[2][j], m[3][j]];
+                col.reverse();
+                let nc = compress(col);
+                nc.reverse();
                 for(let i=0; i<4; i++) m[i][j] = nc[i];
             }
         }
@@ -116,8 +129,8 @@
             const labels = {
                 'up': 'تحرك للأعلى ↑',
                 'down': 'تحرك للأسفل ↓',
-                'left': 'تحرك لليمين →',
-                'right': 'تحرك للليسار ←'
+                'left': 'تحرك للليسار ←',
+                'right': 'تحرك لليمين →'
             };
             document.getElementById('status-text').innerText = labels[bestMove];
         }
