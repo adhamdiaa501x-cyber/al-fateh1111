@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QDS AI - لوحة التحكم</title>
+    <title>QDS AI - Corrected Edition</title>
     <style>
         :root { --bg: #050505; --accent: #00f2ff; --panel: #111; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; text-align: center; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; text-align: center; overflow-x: hidden; }
         
         .container { max-width: 420px; margin: auto; }
         
@@ -15,16 +15,16 @@
         .sub-title { font-size: 0.8rem; color: #555; margin-bottom: 20px; }
 
         /* حالة المحرك */
-        .status-box { background: var(--panel); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 0.9rem; }
+        .status-box { background: var(--panel); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 0.9rem; border: 1px solid var(--accent); }
         #status-text { color: var(--accent); font-weight: bold; }
 
         /* الشبكة Grid */
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #222; padding: 12px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
         .tile { aspect-ratio: 1; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; }
-        .tile input { width: 100%; height: 100%; background: transparent; border: none; color: var(--accent); text-align: center; font-size: 1.5rem; font-weight: bold; outline: none; padding: 0; }
+        .tile input { width: 100%; height: 100%; background: transparent; border: none; color: var(--accent); text-align: center; font-size: 1.6rem; font-weight: bold; outline: none; padding: 0; }
         
         /* أزرار التحكم */
-        .btn-ai { background: var(--accent); color: #000; width: 100%; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.3rem; border: none; cursor: pointer; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.3); margin-bottom: 25px; }
+        .btn-ai { background: var(--accent); color: #000; width: 100%; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.3rem; border: none; cursor: pointer; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4); margin-bottom: 25px; }
         .btn-ai:active { transform: scale(0.97); }
         
         .nav-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 280px; margin: auto; }
@@ -38,7 +38,7 @@
 
 <div class="container">
     <h1 class="brand-name">QDS</h1>
-    <div class="sub-title">نظام الذكاء الاصطناعي لدمج الوحوش</div>
+    <div class="sub-title">نظام التحكم الذكي بالوحوش - نسخة مصححة</div>
     
     <div class="status-box">
         الوضعية: <span id="status-text">جاهز للتحليل</span>
@@ -55,7 +55,7 @@
         <button class="btn-move" onclick="manualMove('right')">→</button>
     </div>
 
-    <p style="margin-top: 20px; font-size: 0.7rem; color: #444;">ملاحظة: أدخل أرقام الوحوش في المربعات ثم اضغط تحليل</p>
+    <button onclick="clearGrid()" style="margin-top: 25px; background:none; border:none; color:#444; cursor:pointer; font-size:0.8rem;">تصفير الساحة 🗑️</button>
     
     <div class="footer-text">QDS SYSTEM ONLINE</div>
 </div>
@@ -98,19 +98,23 @@
         return n;
     }
 
-    function simulate(m, dir) {
+    function simulateLogic(m, dir) {
         const old = JSON.stringify(m);
         if(dir === 'left' || dir === 'right') {
             for(let i=0; i<4; i++) {
-                let r = [...m[i]]; if(dir === 'right') r.reverse();
-                let nr = compress(r); if(dir === 'right') nr.reverse();
-                m[i] = nr;
+                let row = [...m[i]]; 
+                if(dir === 'right') row.reverse(); // عكس الصف للحركة لليمين
+                let newRow = compress(row); 
+                if(dir === 'right') newRow.reverse(); // إعادة الصف لوضعه الطبيعي
+                m[i] = newRow;
             }
         } else {
             for(let j=0; j<4; j++) {
-                let c = [m[0][j], m[1][j], m[2][j], m[3][j]]; if(dir === 'down') c.reverse();
-                let nc = compress(c); if(dir === 'down') nc.reverse();
-                for(let i=0; i<4; i++) m[i][j] = nc[i];
+                let col = [m[0][j], m[1][j], m[2][j], m[3][j]]; 
+                if(dir === 'down') col.reverse(); // عكس العمود للحركة لأسفل
+                let newCol = compress(col); 
+                if(dir === 'down') newCol.reverse(); // إعادة العمود لوضعه الطبيعي
+                for(let i=0; i<4; i++) m[i][j] = newCol[i];
             }
         }
         return old !== JSON.stringify(m);
@@ -121,7 +125,7 @@
         let bestS = -1, bestM = '';
         ['up', 'down', 'left', 'right'].forEach(move => {
             let sim = JSON.parse(JSON.stringify(current));
-            if(simulate(sim, move)) {
+            if(simulateLogic(sim, move)) {
                 let score = 0;
                 for(let i=0; i<4; i++) for(let j=0; j<4; j++) score += sim[i][j] * WEIGHTS[i][j];
                 if(score > bestS) { bestS = score; bestM = move; }
@@ -129,14 +133,21 @@
         });
         if(bestM) {
             manualMove(bestM);
-            const dNames = {up:'لأعلى', down:'لأسفل', left:'لليسار', right:'لليمين'};
+            const dNames = {up:'لأعلى ↑', down:'لأسفل ↓', left:'لليسار ←', right:'لليمين →'};
             document.getElementById('status-text').innerText = "تم التحرك " + dNames[bestM];
+        } else {
+            document.getElementById('status-text').innerText = "لا توجد حركات مفيدة";
         }
     }
 
     function manualMove(d) {
         let m = getMatrix();
-        if(simulate(m, d)) setMatrix(m);
+        if(simulateLogic(m, d)) setMatrix(m);
+    }
+
+    function clearGrid() {
+        for(let i=0; i<16; i++) document.getElementById(`t-${i}`).value = "";
+        document.getElementById('status-text').innerText = "تم تصفير الساحة";
     }
 </script>
 
