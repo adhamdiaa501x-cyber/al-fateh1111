@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super AI - Conquerors Solver</title>
+    <style>
+        :root { --bg: #050505; --accent: #00f2ff; --panel: #111; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 340px; margin: 15px auto; background: #222; padding: 10px; border-radius: 8px; box-shadow: 0 0 20px var(--accent); }
+        .tile { aspect-ratio: 1; background: var(--panel); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .tile input { width: 100%; height: 100%; background: transparent; border: none; color: var(--accent); text-align: center; font-size: 1.6rem; font-weight: bold; outline: none; }
+        .ai-status { background: #111; border: 1px solid var(--accent); padding: 15px; border-radius: 8px; max-width: 340px; margin: 10px auto; font-size: 0.9rem; }
+        .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 340px; margin: auto; }
+        button { padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-ai { background: var(--accent); color: #000; grid-column: span 2; font-size: 1.2rem; }
+        .btn-move { background: #333; color: #fff; }
+        .score-tag { color: #00ff00; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2 style="color: var(--accent)">المحرك العميق v2.0</h2>
+    
+    <div class="ai-status">
+        الوضعية الحالية: <span id="status-text">انتظار البيانات...</span><br>
+        التقييم الاستراتيجي: <span id="score-val" class="score-tag">0</span>
+    </div>
+
+    <div class="grid" id="mainGrid"></div>
+
+    <div class="controls">
+        <button class="btn-ai" onclick="deepThink()">بدء التفكير العميق (Deep Analysis) 🧠</button>
+        <button class="btn-move" onclick="manualMove('up')">أعلى ↑</button>
+        <button class="btn-move" onclick="manualMove('down')">أسفل ↓</button>
+        <button class="btn-move" onclick="manualMove('left')">يسار ←</button>
+        <button class="btn-move" onclick="manualMove('right')">يمين →</button>
+    </div>
+
+<script>
+    // إنشاء الشبكة
+    for(let i=0; i<16; i++) {
+        document.getElementById('mainGrid').innerHTML += `<div class="tile"><input type="number" id="t-${i}" placeholder="0"></div>`;
+    }
+
+    // مصفوفة الأوزان (السر الحقيقي): بنعطي قيمة أعلى للزوايا عشان الـ AI يحافظ على الوحوش الكبيرة هناك
+    const WEIGHTS = [
+        [128, 64, 32, 16],
+        [8, 16, 32, 64],
+        [8, 4, 2, 1],
+        [0, 1, 2, 4]
+    ];
+
+    function getMatrix() {
+        let m = [];
+        for(let i=0; i<4; i++) {
+            let row = [];
+            for(let j=0; j<4; j++) row.push(parseInt(document.getElementById(`t-${i*4+j}`).value) || 0);
+            m.push(row);
+        }
+        return m;
+    }
+
+    function calculateHeuristic(matrix) {
+        let score = 0;
+        let emptyCells = 0;
+        for(let i=0; i<4; i++) {
+            for(let j=0; j<4; j++) {
+                score += matrix[i][j] * WEIGHTS[i][j];
+                if(matrix[i][j] === 0) emptyCells++;
+            }
+        }
+        return score + (emptyCells * 50); // مكافأة للمساحات الفاضية
+    }
+
+    function deepThink() {
+        document.getElementById('status-text').innerText = "يتم فحص آلاف الاحتمالات...";
+        
+        const moves = ['up', 'down', 'left', 'right'];
+        let bestScore = -1;
+        let bestMove = '';
+
+        moves.forEach(move => {
+            let simMatrix = JSON.parse(JSON.stringify(getMatrix()));
+            let changed = simulateLogic(simMatrix, move);
+            
+            if (changed) {
+                let currentScore = calculateHeuristic(simMatrix);
+                if (currentScore > bestScore) {
+                    bestScore = currentScore;
+                    bestMove = move;
+                }
+            }
+        });
+
+        if(bestMove) {
+            document.getElementById('status-text').innerText = "أفضل حركة: " + translate(bestMove);
+            document.getElementById('score-val').innerText = bestScore;
+            // تنفيذ الحركة تلقائياً
+            manualMove(bestMove);
+        } else {
+            document.getElementById('status-text').innerText = "لا يوجد حركات متاحة!";
+        }
+    }
+
+    function translate(m) {
+        const d = {up:'أعلى', down:'أسفل', left:'يسار', right:'يمين'};
+        return d[m];
+    }
+
+    // دالة المحاكاة الميكانيكية للدمج
+    function manualMove(dir) {
+        let m = getMatrix();
+        if(simulateLogic(m, dir)) {
+            for(let i=0; i<4; i++) {
+                for(let j=0; j<4; j++) {
+                    document.getElementById(`t-${i*4+j}`).value = m[i][j] || "";
+                }
+            }
+        }
+    }
+
+    function simulateLogic(m, dir) {
+        let changed = false;
+        const compress = (row) => {
+            let n = row.filter(v => v !== 0);
+            for(let i=0; i<n.length-1; i++) {
+                if(n[i] === n[i+1]) { n[i]*=2; n.splice(i+1,1); changed = true; }
+            }
+            while(n.length < 4) n.push(0);
+            return n;
+        };
+
+        if(dir === 'left' || dir === 'right') {
+            for(let i=0; i<4; i++) {
+                let old = JSON.stringify(m[i]);
+                if(dir === 'right') m[i].reverse();
+                m[i] = compress(m[i]);
+                if(dir === 'right') m[i].reverse();
+                if(old !== JSON.stringify(m[i])) changed = true;
+            }
+        } else {
+            for(let j=0; j<4; j++) {
+                let col = [m[0][j], m[1][j], m[2][j], m[3][j]];
+                let old = JSON.stringify(col);
+                if(dir === 'down') col.reverse();
+                let newCol = compress(col);
+                if(dir === 'down') newCol.reverse();
+                for(let i=0; i<4; i++) m[i][j] = newCol[i];
+                if(old !== JSON.stringify(newCol)) changed = true;
+            }
+        }
+        return changed;
+    }
+</script>
+</body>
+</html>
