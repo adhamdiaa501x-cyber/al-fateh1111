@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS SUPER AI</title>
+<title>QDS GOD AI</title>
 
 <style>
 
@@ -17,8 +18,9 @@ body{
 background:var(--bg);
 color:#fff;
 font-family:Segoe UI;
-text-align:center;
+margin:0;
 padding:15px;
+text-align:center;
 }
 
 .container{
@@ -28,9 +30,26 @@ margin:auto;
 
 .brand{
 font-size:3rem;
-color:var(--accent);
 font-weight:900;
+color:var(--accent);
 text-shadow:0 0 20px var(--accent);
+}
+
+.credit{
+margin-top:5px;
+font-size:1rem;
+color:#aaa;
+line-height:1.6;
+}
+
+.status{
+background:var(--panel);
+border:2px solid var(--accent);
+border-radius:12px;
+padding:15px;
+margin:15px 0;
+font-size:2rem;
+color:var(--accent);
 }
 
 .grid{
@@ -40,7 +59,6 @@ gap:10px;
 background:#222;
 padding:12px;
 border-radius:15px;
-margin:20px 0;
 }
 
 .tile{
@@ -55,8 +73,8 @@ justify-content:center;
 .tile input{
 width:100%;
 height:100%;
-background:transparent;
 border:none;
+background:transparent;
 color:var(--accent);
 font-size:1.6rem;
 text-align:center;
@@ -68,10 +86,11 @@ background:var(--accent);
 border:none;
 padding:18px;
 border-radius:12px;
+font-size:1.2rem;
 font-weight:900;
 cursor:pointer;
 width:100%;
-margin:10px 0;
+margin-top:12px;
 }
 
 </style>
@@ -81,12 +100,19 @@ margin:10px 0;
 
 <div class="container">
 
-<h1 class="brand">QDS AI</h1>
+<h1 class="brand">QDS</h1>
 
-<div class="grid" id="grid"></div>
+<div class="credit">
+Al FaTeh<br>
+01016057623
+</div>
 
-<button class="btn" onclick="think()">تحليل حركة</button>
-<button class="btn" onclick="autoPlay()">AUTO PLAY</button>
+<div id="status" class="status">⚡</div>
+
+<div id="grid" class="grid"></div>
+
+<button class="btn" onclick="deepThink()">⚡ تحليل QDS</button>
+<button class="btn" onclick="autoPlay()">🤖 Auto Play</button>
 
 </div>
 
@@ -96,6 +122,9 @@ const grid=document.getElementById("grid")
 
 for(let i=0;i<16;i++)
 grid.innerHTML+=`<div class="tile"><input id="t${i}" type="number"></div>`
+
+let cache=new Map()
+let auto=false
 
 function getBoard(){
 
@@ -198,29 +227,62 @@ return e
 
 }
 
-function evaluate(b){
+function smoothness(b){
 
-let score=0
-let empty=emptyCells(b).length
+let s=0
 
 for(let i=0;i<4;i++)
-for(let j=0;j<4;j++){
+for(let j=0;j<3;j++)
+s-=Math.abs(b[i][j]-b[i][j+1])
 
-let v=b[i][j]
-
-score+=v*Math.pow(2,i+j)
+return s
 
 }
 
-score+=empty*5000
+function monotonic(b){
+
+let score=0
+
+for(let i=0;i<4;i++)
+for(let j=0;j<3;j++)
+if(b[i][j]>=b[i][j+1])score++
 
 return score
 
 }
 
+function maxTile(b){
+
+let m=0
+
+for(let r of b)
+for(let v of r)
+if(v>m)m=v
+
+return m
+
+}
+
+function evaluate(b){
+
+let empty=emptyCells(b).length
+
+return smoothness(b)*2 +
+monotonic(b)*5 +
+empty*1200 +
+maxTile(b)*50
+
+}
+
 function expectimax(b,depth,player){
 
+let key=JSON.stringify(b)+depth+player
+
+if(cache.has(key))return cache.get(key)
+
 if(depth==0)return evaluate(b)
+
+let result
 
 if(player){
 
@@ -234,13 +296,11 @@ let sim=JSON.parse(JSON.stringify(b))
 
 if(!simulate(sim,m))continue
 
-let val=expectimax(sim,depth-1,false)
-
-if(val>best)best=val
+best=Math.max(best,expectimax(sim,depth-1,false))
 
 }
 
-return best
+result=best
 
 }
 
@@ -250,7 +310,7 @@ let cells=emptyCells(b)
 
 if(cells.length==0)return evaluate(b)
 
-let score=0
+let total=0
 
 for(let c of cells){
 
@@ -258,19 +318,40 @@ let sim=JSON.parse(JSON.stringify(b))
 
 sim[c[0]][c[1]]=1
 
-score+=expectimax(sim,depth-1,true)
+total+=expectimax(sim,depth-1,true)
 
 }
 
-return score/cells.length
+result=total/cells.length
 
 }
 
+cache.set(key,result)
+
+return result
+
 }
 
-function think(){
+function showArrow(move){
+
+const arrows={
+up:"↑",
+down:"↓",
+left:"←",
+right:"→"
+}
+
+document.getElementById("status").innerText=arrows[move]
+
+}
+
+function deepThink(){
 
 let b=getBoard()
+
+let empty=emptyCells(b).length
+
+let depth=empty>8?24:16
 
 let moves=["up","down","left","right"]
 
@@ -283,7 +364,7 @@ let sim=JSON.parse(JSON.stringify(b))
 
 if(!simulate(sim,m))continue
 
-let score=expectimax(sim,12,false)
+let score=expectimax(sim,depth,false)
 
 if(score>bestScore){
 
@@ -298,12 +379,11 @@ if(bestMove){
 
 simulate(b,bestMove)
 setBoard(b)
+showArrow(bestMove)
 
 }
 
 }
-
-let auto=false
 
 function autoPlay(){
 
@@ -317,9 +397,9 @@ function loop(){
 
 if(!auto)return
 
-think()
+deepThink()
 
-setTimeout(loop,100)
+setTimeout(loop,80)
 
 }
 
@@ -327,3 +407,4 @@ setTimeout(loop,100)
 
 </body>
 </html>
+```
