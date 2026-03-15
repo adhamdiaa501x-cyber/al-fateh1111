@@ -3,45 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS AI - Monte Carlo 40 خطوات</title>
+<title>QDS SUPER AI</title>
 
 <style>
+
 :root{
 --bg:#050505;
 --accent:#00f2ff;
 --panel:#111;
 }
+
 body{
 background:var(--bg);
 color:#fff;
-font-family:'Segoe UI',sans-serif;
-margin:0;
-padding:15px;
+font-family:Segoe UI;
 text-align:center;
+padding:15px;
 }
+
 .container{
 max-width:420px;
 margin:auto;
 }
-.brand-name{
-font-size:3.5rem;
+
+.brand{
+font-size:3rem;
+color:var(--accent);
 font-weight:900;
-color:var(--accent);
-text-shadow:0 0 15px var(--accent);
-letter-spacing:5px;
-margin:20px 0 5px;
+text-shadow:0 0 20px var(--accent);
 }
-.status-box{
-background:var(--panel);
-border:2px solid var(--accent);
-padding:15px;
-border-radius:12px;
-margin-bottom:20px;
-}
-#status-text{
-font-size:2rem;
-color:var(--accent);
-}
+
 .grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -49,202 +40,287 @@ gap:10px;
 background:#222;
 padding:12px;
 border-radius:15px;
-border:1px solid #333;
-margin-bottom:20px;
+margin:20px 0;
 }
+
 .tile{
 aspect-ratio:1;
 background:#000;
 border-radius:8px;
-border:1px solid #333;
 display:flex;
 align-items:center;
 justify-content:center;
 }
+
 .tile input{
 width:100%;
 height:100%;
 background:transparent;
 border:none;
 color:var(--accent);
-text-align:center;
 font-size:1.6rem;
-font-weight:bold;
+text-align:center;
 outline:none;
 }
-.btn-ai{
+
+.btn{
 background:var(--accent);
-color:#000;
-width:100%;
-padding:20px;
-border-radius:15px;
-font-weight:900;
-font-size:1.4rem;
 border:none;
-cursor:pointer;
-box-shadow:0 5px 25px rgba(0,242,255,0.5);
-margin-bottom:25px;
-}
-.nav-controls{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-max-width:280px;
-margin:auto;
-}
-.btn-move{
-background:#1a1a1a;
-color:#fff;
-border:1px solid #333;
-padding:15px;
+padding:18px;
 border-radius:12px;
-font-size:1.5rem;
+font-weight:900;
 cursor:pointer;
+width:100%;
+margin:10px 0;
 }
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
-<h1 class="brand-name">QDS</h1>
+<h1 class="brand">QDS AI</h1>
 
-<div class="status-box">
-<div id="status-text">⚡</div>
-</div>
+<div class="grid" id="grid"></div>
 
-<div class="grid" id="mainGrid"></div>
-
-<button class="btn-ai" onclick="deepThink()">⚡ تحليل QDS</button>
-
-<div class="nav-controls">
-<div></div>
-<button class="btn-move" onclick="manualMove('up')">↑</button>
-<div></div>
-<button class="btn-move" onclick="manualMove('left')">←</button>
-<button class="btn-move" onclick="manualMove('down')">↓</button>
-<button class="btn-move" onclick="manualMove('right')">→</button>
-</div>
+<button class="btn" onclick="think()">تحليل حركة</button>
+<button class="btn" onclick="autoPlay()">AUTO PLAY</button>
 
 </div>
 
 <script>
 
-const gridEl=document.getElementById("mainGrid");
+const grid=document.getElementById("grid")
+
 for(let i=0;i<16;i++)
-gridEl.innerHTML+=`<div class="tile"><input type="number" id="t-${i}" placeholder="0"></div>`;
+grid.innerHTML+=`<div class="tile"><input id="t${i}" type="number"></div>`
 
-function getM(){
-let m=[];
+function getBoard(){
+
+let b=[]
+
 for(let i=0;i<4;i++){
-let r=[];
+
+let r=[]
+
 for(let j=0;j<4;j++)
-r.push(parseInt(document.getElementById(`t-${i*4+j}`).value)||0);
-m.push(r);
-}
-return m;
+r.push(parseInt(document.getElementById("t"+(i*4+j)).value)||0)
+
+b.push(r)
+
 }
 
-function setM(m){
+return b
+
+}
+
+function setBoard(b){
+
 for(let i=0;i<4;i++)
 for(let j=0;j<4;j++)
-document.getElementById(`t-${i*4+j}`).value=m[i][j]||"";
+document.getElementById("t"+(i*4+j)).value=b[i][j]||""
+
 }
 
 function compress(row){
-let n=row.filter(v=>v!==0);
+
+let n=row.filter(v=>v)
+
 for(let i=0;i<n.length-1;i++){
-if(n[i]===n[i+1]){
-n[i]=n[i]+1;
-n.splice(i+1,1);
-}
-}
-while(n.length<4) n.push(0);
-return n;
+
+if(n[i]==n[i+1]){
+
+n[i]+=1
+n.splice(i+1,1)
+
 }
 
-function simulate(m,dir){
-const old=JSON.stringify(m);
-if(dir==="left"){
-for(let i=0;i<4;i++) m[i]=compress(m[i]);
-}else if(dir==="right"){
+}
+
+while(n.length<4)n.push(0)
+
+return n
+
+}
+
+function simulate(b,dir){
+
+let old=JSON.stringify(b)
+
+if(dir=="left")
+for(let i=0;i<4;i++)b[i]=compress(b[i])
+
+if(dir=="right")
 for(let i=0;i<4;i++){
-m[i].reverse();
-m[i]=compress(m[i]);
-m[i].reverse();
-}
-}else if(dir==="up"){
-for(let j=0;j<4;j++){
-let col=[m[0][j],m[1][j],m[2][j],m[3][j]];
-let nc=compress(col);
-for(let i=0;i<4;i++) m[i][j]=nc[i];
-}
-}else if(dir==="down"){
-for(let j=0;j<4;j++){
-let col=[m[0][j],m[1][j],m[2][j],m[3][j]];
-col.reverse();
-let nc=compress(col);
-nc.reverse();
-for(let i=0;i<4;i++) m[i][j]=nc[i];
-}
-}
-return old!==JSON.stringify(m);
+b[i].reverse()
+b[i]=compress(b[i])
+b[i].reverse()
 }
 
-// التقييم الذكي
-function evaluate(m){
-let score=0;
-let empty=0;
-for(let i=0;i<4;i++){
+if(dir=="up")
 for(let j=0;j<4;j++){
-let v=m[i][j];
-score += v*(Math.pow(2, i+j)); // تفضيل الزوايا العليا
-if(v===0) empty++;
-}
-}
-score += empty*4000;
-score += m[0][0]*1000 + m[0][3]*1000 + m[3][0]*500 + m[3][3]*500;
-return score;
+
+let c=[b[0][j],b[1][j],b[2][j],b[3][j]]
+let nc=compress(c)
+
+for(let i=0;i<4;i++)b[i][j]=nc[i]
+
 }
 
-// محاكاة Monte Carlo لكل حركة
-function monteCarlo(m, move, simulations=500){
-let totalScore=0;
-for(let s=0;s<simulations;s++){
-let sim=JSON.parse(JSON.stringify(m));
-if(!simulate(sim, move)) continue;
-for(let step=0;step<40;step++){
-let moves=["up","down","left","right"];
-let rndMove=moves[Math.floor(Math.random()*4)];
-simulate(sim,rndMove);
-}
-totalScore += evaluate(sim);
-}
-return totalScore/simulations;
+if(dir=="down")
+for(let j=0;j<4;j++){
+
+let c=[b[0][j],b[1][j],b[2][j],b[3][j]]
+c.reverse()
+
+let nc=compress(c)
+nc.reverse()
+
+for(let i=0;i<4;i++)b[i][j]=nc[i]
+
 }
 
-function deepThink(){
-const current=getM();
-let bestMove="";
-let bestScore=-Infinity;
-const moves=["up","down","left","right"];
-for(let move of moves){
-let score=monteCarlo(current, move, 300); // عدد المحاكاة لكل حركة
+return old!=JSON.stringify(b)
+
+}
+
+function emptyCells(b){
+
+let e=[]
+
+for(let i=0;i<4;i++)
+for(let j=0;j<4;j++)
+if(b[i][j]==0)e.push([i,j])
+
+return e
+
+}
+
+function evaluate(b){
+
+let score=0
+let empty=emptyCells(b).length
+
+for(let i=0;i<4;i++)
+for(let j=0;j<4;j++){
+
+let v=b[i][j]
+
+score+=v*Math.pow(2,i+j)
+
+}
+
+score+=empty*5000
+
+return score
+
+}
+
+function expectimax(b,depth,player){
+
+if(depth==0)return evaluate(b)
+
+if(player){
+
+let best=-Infinity
+
+let moves=["up","down","left","right"]
+
+for(let m of moves){
+
+let sim=JSON.parse(JSON.stringify(b))
+
+if(!simulate(sim,m))continue
+
+let val=expectimax(sim,depth-1,false)
+
+if(val>best)best=val
+
+}
+
+return best
+
+}
+
+else{
+
+let cells=emptyCells(b)
+
+if(cells.length==0)return evaluate(b)
+
+let score=0
+
+for(let c of cells){
+
+let sim=JSON.parse(JSON.stringify(b))
+
+sim[c[0]][c[1]]=1
+
+score+=expectimax(sim,depth-1,true)
+
+}
+
+return score/cells.length
+
+}
+
+}
+
+function think(){
+
+let b=getBoard()
+
+let moves=["up","down","left","right"]
+
+let bestMove=""
+let bestScore=-Infinity
+
+for(let m of moves){
+
+let sim=JSON.parse(JSON.stringify(b))
+
+if(!simulate(sim,m))continue
+
+let score=expectimax(sim,12,false)
+
 if(score>bestScore){
-bestScore=score;
-bestMove=move;
-}
-}
-if(bestMove){
-manualMove(bestMove);
-const arrows={up:"↑",down:"↓",left:"←",right:"→"};
-document.getElementById("status-text").innerText=arrows[bestMove];
-}
+
+bestScore=score
+bestMove=m
+
 }
 
-function manualMove(d){
-let m=getM();
-if(simulate(m,d)) setM(m);
+}
+
+if(bestMove){
+
+simulate(b,bestMove)
+setBoard(b)
+
+}
+
+}
+
+let auto=false
+
+function autoPlay(){
+
+auto=!auto
+
+if(auto)loop()
+
+}
+
+function loop(){
+
+if(!auto)return
+
+think()
+
+setTimeout(loop,100)
+
 }
 
 </script>
