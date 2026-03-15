@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS AI</title>
+<title>الفاتحون - دمج الوحوش المتطور</title>
 
 <style>
 
 :root{
---bg:#050505;
---accent:#00f2ff;
---panel:#111;
+--bg:#1a0f0a;
+--accent:#d4a017;
+--panel:#2a1a12;
+--gold:#ffd700;
 }
 
 body{
 background:var(--bg);
 color:#fff;
-font-family:Segoe UI;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 margin:0;
 padding:15px;
 text-align:center;
+background-image:radial-gradient(circle at 10% 20%, #3d2b1f 0%, #0f0a07 90%);
 }
 
 .container{
@@ -28,26 +30,31 @@ margin:auto;
 }
 
 .brand{
-font-size:3rem;
+font-size:2.5rem;
 font-weight:900;
-color:var(--accent);
-text-shadow:0 0 20px var(--accent);
+color:var(--gold);
+text-shadow:0 0 20px #b8860b, 0 0 40px #8b4513;
+margin-bottom:5px;
 }
 
 .credit{
 margin-top:5px;
 font-size:1rem;
-color:#aaa;
+color:#c0a070;
+background:rgba(0,0,0,0.5);
+padding:5px;
+border-radius:20px;
 }
 
 .status{
 background:var(--panel);
-border:2px solid var(--accent);
-border-radius:12px;
+border:3px solid var(--accent);
+border-radius:15px;
 padding:15px;
 margin:15px 0;
 font-size:2rem;
-color:var(--accent);
+color:var(--gold);
+box-shadow:inset 0 0 15px rgba(0,0,0,0.8), 0 0 20px rgba(212,160,23,0.3);
 }
 
 .score-box{
@@ -57,73 +64,160 @@ border-radius:12px;
 padding:10px;
 margin:10px 0;
 font-size:1.2rem;
-color:var(--accent);
+color:var(--gold);
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:10px;
-background:#222;
-padding:12px;
-border-radius:15px;
+gap:12px;
+background:#2c1a0e;
+padding:15px;
+border-radius:20px;
+border:2px solid #8b5a2b;
+box-shadow:inset 0 0 20px #000000, 0 10px 15px #00000080;
 }
 
 .tile{
 aspect-ratio:1;
-background:#000;
-border-radius:8px;
+background:#1e130b;
+border-radius:12px;
 display:flex;
 align-items:center;
 justify-content:center;
+border:2px solid #5a3e28;
+box-shadow:inset 0 0 10px #000000, 0 5px 0 #2d1f14;
+transition:0.2s;
 }
 
 .tile input{
-width:100%;
-height:100%;
+width:90%;
+height:90%;
 border:none;
 background:transparent;
-color:var(--accent);
-font-size:1.6rem;
+color:var(--gold);
+font-size:1.8rem;
+font-weight:bold;
 text-align:center;
 outline:none;
+border-radius:8px;
+transition:0.2s;
+font-family:'Segoe UI', monospace;
 }
 
+.tile input:focus{
+background:rgba(212,160,23,0.15);
+box-shadow:0 0 20px #d4a017;
+}
+
+/* تلوين الأرقام حسب قيمتها */
+.tile input[value="1"] { color: #cdd7e0; } /* وحش مستوى 1 */
+.tile input[value="2"] { color: #b8e2f2; } /* وحش مستوى 2 */
+.tile input[value="3"] { color: #a5d6a5; } /* وحش مستوى 3 */
+.tile input[value="4"] { color: #ffe066; } /* وحش مستوى 4 */
+.tile input[value="5"] { color: #ffb366; } /* وحش مستوى 5 */
+.tile input[value="6"] { color: #ff9966; } /* وحش مستوى 6 */
+.tile input[value="7"] { color: #ff7f7f; } /* وحش مستوى 7 */
+.tile input[value="8"] { color: #ff6b8b; } /* وحش مستوى 8 */
+.tile input[value="9"] { color: #da70d6; } /* وحش مستوى 9 */
+.tile input[value="10"] { color: #b77ee6; } /* وحش مستوى 10 */
+.tile input[value="11"] { color: #9b4dff; text-shadow:0 0 10px purple; } /* وحش مستوى 11 */
+.tile input[value="12"] { color: #ff44aa; text-shadow:0 0 15px magenta; } /* وحش مستوى 12 */
+.tile input[value="13"] { color: #ff8844; text-shadow:0 0 15px orange; } /* وحش مستوى 13 */
+.tile input[value="14"] { color: #ff4444; text-shadow:0 0 20px red; } /* وحش مستوى 14 */
+.tile input[value="15"] { color: #ffd700; text-shadow:0 0 20px gold; font-weight:900; } /* وحش مستوى 15 */
+
 .btn{
-background:var(--accent);
+background:linear-gradient(135deg, #8b5a2b, #d4a017);
 border:none;
 padding:18px;
-border-radius:12px;
-font-size:1.2rem;
+border-radius:40px;
+font-size:1.4rem;
 font-weight:900;
 cursor:pointer;
 width:100%;
 margin-top:15px;
-transition:0.3s;
+color:#1e130b;
+box-shadow:0 8px 0 #5a3e28, 0 10px 20px black;
+transition:0.1s;
+border:1px solid #f0c45a;
 }
 
-.btn:hover{
-transform:scale(1.02);
-box-shadow:0 0 20px var(--accent);
+.btn:active{
+transform:translateY(8px);
+box-shadow:0 2px 0 #5a3e28, 0 10px 20px black;
 }
 
 .btn-small{
-background:#333;
-color:#fff;
-border:1px solid var(--accent);
-padding:10px;
-border-radius:8px;
-font-size:1rem;
+background:#3a281c;
+color:#e4b076;
+border:2px solid #b8860b;
+padding:12px 15px;
+border-radius:30px;
+font-size:1.3rem;
+font-weight:bold;
 cursor:pointer;
 margin:5px;
+box-shadow:0 4px 0 #2a1a0a;
+transition:0.1s;
+width:60px;
+}
+
+.btn-small:active{
+transform:translateY(4px);
+box-shadow:none;
 }
 
 .controls{
 display:flex;
-gap:10px;
-margin-top:10px;
+gap:8px;
+margin-top:15px;
 flex-wrap:wrap;
 justify-content:center;
+background:rgba(0,0,0,0.5);
+padding:10px;
+border-radius:50px;
+}
+
+.hint{
+background:rgba(0,0,0,0.6);
+border:1px solid #b8860b;
+border-radius:10px;
+padding:10px;
+margin:10px 0;
+font-size:1rem;
+color:#e4b076;
+text-align:right;
+}
+
+.target-display{
+background:#8b4513;
+color:#ffd700;
+padding:5px 15px;
+border-radius:30px;
+font-weight:bold;
+font-size:1.1rem;
+}
+
+/* مؤشر الهدف */
+.progress-bar{
+width:100%;
+height:10px;
+background:#2a1a12;
+border-radius:10px;
+margin:10px 0;
+overflow:hidden;
+border:1px solid #b8860b;
+}
+
+.progress-fill{
+height:100%;
+background:linear-gradient(90deg, #d4a017, #ffd700);
+width:0%;
+transition:0.3s;
 }
 
 </style>
@@ -133,26 +227,44 @@ justify-content:center;
 
 <div class="container">
 
-<h1 class="brand">QDS</h1>
+<h1 class="brand">الفاتحون</h1>
+<div class="credit">دمج الوحوش - نظام 4096 | Al FaTeh</div>
 
-<div class="credit">
-Al FaTeh<br>
-01016057623
+<div id="status" class="status">🦁</div>
+
+<div class="score-box">
+    <span>⚔️ مجموع المستويات:</span>
+    <span id="scoreDisplay">0</span>
 </div>
 
-<div id="status" class="status">⚡</div>
-<div id="scoreDisplay" class="score-box">مجموع النقاط: 0</div>
+<div class="score-box">
+    <span>👾 أعلى وحش:</span>
+    <span id="maxDisplay">0</span>
+</div>
+
+<div class="score-box" style="background:#8b4513;">
+    <span>🎯 الهدف القادم:</span>
+    <span id="nextTarget">12 (4096)</span>
+</div>
+
+<div class="progress-bar">
+    <div id="progressFill" class="progress-fill"></div>
+</div>
 
 <div id="grid" class="grid"></div>
 
-<button class="btn" onclick="deepThink()">⚡ تحليل QDS</button>
+<button class="btn" onclick="deepThink()">⚡ احسب أفضل دمج (4096)</button>
 
 <div class="controls">
-<button class="btn-small" onclick="resetGame()">🔄 جديد</button>
-<button class="btn-small" onclick="manualUp()">↑</button>
-<button class="btn-small" onclick="manualDown()">↓</button>
-<button class="btn-small" onclick="manualLeft()">←</button>
-<button class="btn-small" onclick="manualRight()">→</button>
+    <button class="btn-small" onclick="manualUp()">↑</button>
+    <button class="btn-small" onclick="manualDown()">↓</button>
+    <button class="btn-small" onclick="manualLeft()">←</button>
+    <button class="btn-small" onclick="manualRight()">→</button>
+    <button class="btn-small" onclick="resetGame()" style="background:#5a2e2e;">🔄</button>
+</div>
+
+<div class="hint" id="hintArea">
+    <span>📝 المستوى 12 = 4096 | المستوى 13 = 8192 | المستوى 14 = 16384 | المستوى 15 = 32768</span>
 </div>
 
 </div>
@@ -161,8 +273,9 @@ Al FaTeh<br>
 
 const grid=document.getElementById("grid")
 
+// إنشاء الخانات (نقبل أرقام حتى 20)
 for(let i=0;i<16;i++)
-grid.innerHTML+=`<div class="tile"><input id="t${i}" type="number"></div>`
+grid.innerHTML+=`<div class="tile"><input id="t${i}" type="number" min="0" max="20" placeholder="0"></div>`
 
 let cache=new Map()
 let totalScore=0
@@ -176,8 +289,11 @@ for(let i=0;i<4;i++){
 
 let r=[]
 
-for(let j=0;j<4;j++)
-r.push(parseInt(document.getElementById("t"+(i*4+j)).value)||0)
+for(let j=0;j<4;j++){
+let val=parseInt(document.getElementById("t"+(i*4+j)).value)
+if(isNaN(val) || val<0) val=0
+r.push(val)
+}
 
 b.push(r)
 
@@ -200,31 +316,58 @@ let score=0
 for(let i=0;i<4;i++)
 for(let j=0;j<4;j++)
 if(b[i][j]>0)
-score+=Math.pow(2,b[i][j])
+score+=Math.pow(2,b[i][j]) // النقاط الحقيقية (2^المستوى)
 return score
+}
+
+function getMaxNumber(b){
+let max=0
+for(let i=0;i<4;i++)
+for(let j=0;j<4;j++)
+if(b[i][j]>max) max=b[i][j]
+return max
 }
 
 function updateScore(b){
 totalScore=calculateBoardScore(b)
-document.getElementById("scoreDisplay").innerText=`مجموع النقاط: ${totalScore}`
+document.getElementById("scoreDisplay").innerText=totalScore.toLocaleString()
+let maxNum=getMaxNumber(b)
+document.getElementById("maxDisplay").innerText=maxNum
+
+// تحديث الهدف القادم
+let nextTarget = maxNum + 1
+if(nextTarget <= 15){
+document.getElementById("nextTarget").innerHTML = nextTarget + " (" + Math.pow(2,nextTarget).toLocaleString() + ")"
+}else{
+document.getElementById("nextTarget").innerHTML = "🎉 أسطورة!"
+}
+
+// تحديث شريط التقدم
+let progress = (maxNum / 15) * 100
+document.getElementById("progressFill").style.width = Math.min(progress,100) + "%"
+
+// رسائل تشجيعية
+if(maxNum >= 12){
+document.getElementById("hintArea").innerHTML = "🔥 أنت أسطورة! وصلت للمستوى " + maxNum + " = " + Math.pow(2,maxNum).toLocaleString()
+}
 }
 
 function compress(row){
 
-let n=row.filter(v=>v)
+let n=row.filter(v=>v>0) // فلترة الأصفار
 
 for(let i=0;i<n.length-1;i++){
 
-if(n[i]==n[i+1]){
+if(n[i]==n[i+1] && n[i]>0){ // دمج الوحوش المتساوية
 
-n[i]+=1
-n.splice(i+1,1)
-
-}
+n[i]+=1 // مستوى الوحش الجديد (يدعم حتى مستوى 15+)
+n.splice(i+1,1) // إزالة الوحش المدمج
 
 }
 
-while(n.length<4)n.push(0)
+}
+
+while(n.length<4)n.push(0) // تعبئة الفراغات بأصفار
 
 return n
 
@@ -233,13 +376,9 @@ return n
 function simulate(b, dir) {
     let old = JSON.stringify(b)
     
-    // تصحيح الاتجاهات حسب المطلوب:
-    // left = حركة لليسار (السهم يشير لليسار)
-    // right = حركة لليمين (السهم يشير لليمين)
-    
     if(dir == "left") { // حركة لليسار
         for(let i=0; i<4; i++) {
-            b[i] = compress(b[i]) // ضغط لليسار
+            b[i] = compress(b[i])
         }
     }
     else if(dir == "right") { // حركة لليمين
@@ -281,38 +420,51 @@ return e
 
 }
 
+// تقييم متقدم للوصول لمستويات عالية
 function evaluate(b){
 
 let score=0
 let empty=emptyCells(b).length
+let maxVal=getMaxNumber(b)
 
-// 1. الأولوية القصوى للخلايا الفارغة
+// 1. فراغات مهمة جداً
 score+=empty*10000
 
-// 2. مكافأة للقيمة الأكبر في الزاوية
-let maxVal=0
-for(let i=0;i<4;i++)
-for(let j=0;j<4;j++)
-if(b[i][j]>maxVal) maxVal=b[i][j]
+// 2. الزوايا مهمة جداً للمستويات العالية
+if(b[0][0]==maxVal) score+=maxVal*1000  // الزاوية الرئيسية
+else if(b[0][3]==maxVal || b[3][0]==maxVal) score+=maxVal*700
+else if(b[3][3]==maxVal) score+=maxVal*500
+else score-=maxVal*300 // عقاب كبير لو أعلى وحش مش في زاوية
 
-if(b[0][0]==maxVal) score+=maxVal*500
-else if(b[0][3]==maxVal || b[3][0]==maxVal) score+=maxVal*300
-else if(b[3][3]==maxVal) score+=maxVal*200
-else score-=maxVal*100
+// 3. مكافأة ضخمة للوصول لمستويات عالية
+if(maxVal >= 12) score+=500000
+if(maxVal >= 13) score+=1000000
+if(maxVal >= 14) score+=2000000
+if(maxVal >= 15) score+=5000000
 
-// 3. مكافأة للتجانس
+// 4. تشجيع وجود وحوش متساوية جنب بعض
 for(let i=0;i<4;i++){
 for(let j=0;j<3;j++){
 if(b[i][j]==b[i][j+1] && b[i][j]>0){
-score+=b[i][j]*200
+score+=b[i][j]*300
 }
 }
 }
 for(let j=0;j<4;j++){
 for(let i=0;i<3;i++){
 if(b[i][j]==b[i+1][j] && b[i][j]>0){
-score+=b[i][j]*200
+score+=b[i][j]*300
 }
+}
+}
+
+// 5. مكافأة للوحوش المرتفعة
+score+=maxVal*2000
+
+// 6. تشجيع الترتيب التصاعدي في الزاوية
+for(let i=0;i<4;i++){
+for(let j=0;j<3;j++){
+if(b[i][j] >= b[i][j+1]) score+=b[i][j]*50
 }
 }
 
@@ -327,7 +479,7 @@ if(depth==0)return evaluate(b)
 let key=JSON.stringify(b)+depth
 if(cache.has(key))return cache.get(key)
 
-let moves=["up","down","left","right"] // ترتيب عادي
+let moves=["up","down","left","right"]
 let best=-Infinity
 
 for(let m of moves){
@@ -342,7 +494,7 @@ if(val>best){
 best=val
 }
 
-if(best>1000000) break
+if(best>10000000) break // تقليم للسرعة
 
 }
 
@@ -352,22 +504,14 @@ return best
 
 }
 
-function spawnRandom(b){
-    let empty=emptyCells(b)
-    if(empty.length>0){
-        let [i,j]=empty[Math.floor(Math.random()*empty.length)]
-        b[i][j]=Math.random()<0.9?1:2
-    }
-}
-
 function showArrow(move){
     const arrows={
         up:"↑",
         down:"↓",
-        left:"←",  // حركة لليسار = سهم لليسار
-        right:"→"  // حركة لليمين = سهم لليمين
+        left:"←",
+        right:"→"
     }
-    document.getElementById("status").innerText = arrows[move] || "⚡"
+    document.getElementById("status").innerText = arrows[move] || "🦁"
 }
 
 // حركات يدوية
@@ -375,7 +519,6 @@ function manualUp(){
     if(thinking) return
     let b=getBoard()
     if(simulate(b,"up")){
-        spawnRandom(b)
         setBoard(b)
         updateScore(b)
         showArrow("up")
@@ -386,7 +529,6 @@ function manualDown(){
     if(thinking) return
     let b=getBoard()
     if(simulate(b,"down")){
-        spawnRandom(b)
         setBoard(b)
         updateScore(b)
         showArrow("down")
@@ -396,34 +538,33 @@ function manualDown(){
 function manualLeft(){
     if(thinking) return
     let b=getBoard()
-    if(simulate(b,"left")){ // حركة لليسار
-        spawnRandom(b)
+    if(simulate(b,"left")){
         setBoard(b)
         updateScore(b)
-        showArrow("left") // سهم لليسار ←
+        showArrow("left")
     }
 }
 
 function manualRight(){
     if(thinking) return
     let b=getBoard()
-    if(simulate(b,"right")){ // حركة لليمين
-        spawnRandom(b)
+    if(simulate(b,"right")){
         setBoard(b)
         updateScore(b)
-        showArrow("right") // سهم لليمين →
+        showArrow("right")
     }
 }
 
 function resetGame(){
     if(thinking) return
-    let b=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-    b[0][0]=1
-    b[2][2]=1
-    setBoard(b)
-    totalScore=2
-    updateScore(b)
-    document.getElementById("status").innerText="⚡"
+    // تفريغ كل الخانات
+    for(let i=0;i<16;i++)
+        document.getElementById("t"+i).value=""
+    updateScore([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]])
+    document.getElementById("status").innerText="🦁"
+    document.getElementById("progressFill").style.width="0%"
+    document.getElementById("nextTarget").innerHTML = "12 (4096)"
+    document.getElementById("hintArea").innerHTML = "📝 المستوى 12 = 4096 | المستوى 13 = 8192 | المستوى 14 = 16384 | المستوى 15 = 32768"
     cache.clear()
 }
 
@@ -440,53 +581,53 @@ function deepThink(){
 
         let b=getBoard()
         let empty=emptyCells(b).length
+        let maxVal=getMaxNumber(b)
 
+        // عمق تفكير ديناميكي (أعمق للمستويات العالية)
         let depth
-        if(empty>10) depth=4
-        else if(empty>7) depth=5
-        else if(empty>4) depth=6
-        else if(empty>2) depth=7
-        else depth=8
+        if(maxVal >= 12) depth = 9  // تفكير عميق جداً للوصول للأسطورة
+        else if(maxVal >= 9) depth = 8
+        else if(empty > 8) depth = 5
+        else if(empty > 5) depth = 6
+        else depth = 7
 
-        let moves=["up","down","left","right"] // ترتيب عادي
+        let moves=["up","down","left","right"]
         let bestMove=""
         let bestScore=-Infinity
 
-        // البحث على مرحلتين
-        let candidateMoves=[]
+        // تجربة كل حركة
         for(let m of moves){
             let sim=JSON.parse(JSON.stringify(b))
             if(!simulate(sim,m)) continue
-            let quickScore=smartExpectimax(sim,Math.min(3,depth-2))
-            candidateMoves.push({move:m, score:quickScore})
-        }
-
-        candidateMoves.sort((a,b)=>b.score-a.score)
-        let topMoves=candidateMoves.slice(0,3)
-
-        for(let cm of topMoves){
-            let sim=JSON.parse(JSON.stringify(b))
-            simulate(sim,cm.move)
             let score=smartExpectimax(sim,depth-1)
             if(score>bestScore){
                 bestScore=score
-                bestMove=cm.move
+                bestMove=m
             }
         }
 
         if(bestMove){
+            // ننفذ الحركة
             simulate(b,bestMove)
-            spawnRandom(b)
             setBoard(b)
             updateScore(b)
             showArrow(bestMove)
+            
+            // عرض نصيحة حسب المستوى
+            let newMax=getMaxNumber(b)
+            if(newMax >= 12){
+                document.getElementById("hintArea").innerHTML = "🏆 أنت بطل! وصلت للمستوى " + newMax + " استمر!"
+            }else if(newMax >= 9){
+                document.getElementById("hintArea").innerHTML = "💡 ركز تحط الوحوش العالية في الزاوية اليسرى العليا"
+            }
         }else{
             document.getElementById("status").innerText="❌"
+            document.getElementById("hintArea").innerHTML = "⚠️ مفيش حركة متاحة... جرب تبدأ من جديد"
         }
 
         thinking=false
 
-    }, 5)
+    }, 10)
 
 }
 
@@ -497,4 +638,4 @@ window.onload=function(){
 </script>
 
 </body>
-</html>
+    </html>
