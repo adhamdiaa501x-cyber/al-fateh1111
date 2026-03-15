@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS AI - Smart</title>
+<title>QDS AI - Monte Carlo 40 خطوات</title>
 
 <style>
 :root{
@@ -191,37 +191,36 @@ for(let i=0;i<4;i++) m[i][j]=nc[i];
 return old!==JSON.stringify(m);
 }
 
-// النسخة الذكية من دالة التقييم
+// التقييم الذكي
 function evaluate(m){
 let score=0;
 let empty=0;
 for(let i=0;i<4;i++){
 for(let j=0;j<4;j++){
 let v=m[i][j];
-score += v*(Math.pow(2, i+j)); // وزن أكبر للزوايا العليا
+score += v*(Math.pow(2, i+j)); // تفضيل الزوايا العليا
 if(v===0) empty++;
 }
 }
-score += empty*4000; // تشجيع على الفراغات
-// مكافأة للكتل الكبيرة في الزوايا
+score += empty*4000;
 score += m[0][0]*1000 + m[0][3]*1000 + m[3][0]*500 + m[3][3]*500;
 return score;
 }
 
-// البحث مع Alpha-Beta pruning و Negamax
-function search(m, depth, alpha=-Infinity, beta=Infinity){
-if(depth===0) return evaluate(m);
-let best=-Infinity;
-const moves=["up","down","left","right"];
-for(let move of moves){
+// محاكاة Monte Carlo لكل حركة
+function monteCarlo(m, move, simulations=500){
+let totalScore=0;
+for(let s=0;s<simulations;s++){
 let sim=JSON.parse(JSON.stringify(m));
-if(!simulate(sim,move)) continue;
-let val = -search(sim, depth-1, -beta, -alpha);
-if(val > best) best=val;
-if(best > alpha) alpha=best;
-if(alpha >= beta) break;
+if(!simulate(sim, move)) continue;
+for(let step=0;step<40;step++){
+let moves=["up","down","left","right"];
+let rndMove=moves[Math.floor(Math.random()*4)];
+simulate(sim,rndMove);
 }
-return best;
+totalScore += evaluate(sim);
+}
+return totalScore/simulations;
 }
 
 function deepThink(){
@@ -230,9 +229,7 @@ let bestMove="";
 let bestScore=-Infinity;
 const moves=["up","down","left","right"];
 for(let move of moves){
-let sim=JSON.parse(JSON.stringify(current));
-if(!simulate(sim,move)) continue;
-let score=-search(sim,9,-Infinity,Infinity); // عمق 10
+let score=monteCarlo(current, move, 300); // عدد المحاكاة لكل حركة
 if(score>bestScore){
 bestScore=score;
 bestMove=move;
