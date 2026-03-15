@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS AI - النسخة الذكية</title>
+<title>QDS PRO - ذكاء اصطناعي متطور</title>
 
 <style>
-
 :root{
 --bg:#050505;
 --accent:#00f2ff;
 --panel:#111;
+--gold:#ffd700;
+--danger:#ff4444;
 }
 
 body{
 background:var(--bg);
 color:#fff;
-font-family:Segoe UI;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 margin:0;
 padding:15px;
 text-align:center;
+background:linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
 }
 
 .container{
@@ -31,23 +33,81 @@ margin:auto;
 font-size:3rem;
 font-weight:900;
 color:var(--accent);
-text-shadow:0 0 20px var(--accent);
+text-shadow:0 0 30px var(--accent), 0 0 60px #0088ff;
+margin-bottom:5px;
+letter-spacing:2px;
 }
 
 .credit{
 margin-top:5px;
 font-size:1rem;
 color:#aaa;
+background:rgba(0,242,255,0.1);
+padding:8px 15px;
+border-radius:30px;
+display:inline-block;
 }
 
 .status{
 background:var(--panel);
+border:3px solid var(--accent);
+border-radius:15px;
+padding:20px;
+margin:15px 0;
+font-size:2.5rem;
+color:var(--accent);
+box-shadow:0 0 30px rgba(0,242,255,0.3);
+transition:0.3s;
+}
+
+.status.warning{
+border-color:var(--gold);
+color:var(--gold);
+box-shadow:0 0 30px rgba(255,215,0,0.3);
+}
+
+.status.danger{
+border-color:var(--danger);
+color:var(--danger);
+box-shadow:0 0 30px rgba(255,68,68,0.3);
+}
+
+.status.victory{
+border-color:#00ff88;
+color:#00ff88;
+box-shadow:0 0 50px #00ff88;
+font-size:3rem;
+}
+
+.score-board{
+display:flex;
+justify-content:space-between;
+margin:15px 0;
+gap:10px;
+}
+
+.score-box{
+background:var(--panel);
 border:2px solid var(--accent);
 border-radius:12px;
-padding:15px;
-margin:15px 0;
-font-size:2rem;
+padding:12px;
+flex:1;
+font-size:1.1rem;
+}
+
+.score-box span{
+display:block;
+font-size:1.8rem;
+font-weight:bold;
 color:var(--accent);
+}
+
+.max-level{
+border-color:var(--gold);
+}
+
+.max-level span{
+color:var(--gold);
 }
 
 .grid{
@@ -55,17 +115,21 @@ display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:10px;
 background:#222;
-padding:12px;
-border-radius:15px;
+padding:15px;
+border-radius:20px;
+border:2px solid #333;
+box-shadow:inset 0 0 30px #000;
 }
 
 .tile{
 aspect-ratio:1;
 background:#000;
-border-radius:8px;
+border-radius:10px;
 display:flex;
 align-items:center;
 justify-content:center;
+border:2px solid #333;
+transition:0.2s;
 }
 
 .tile input{
@@ -74,21 +138,71 @@ height:100%;
 border:none;
 background:transparent;
 color:var(--accent);
-font-size:1.6rem;
+font-size:1.8rem;
 text-align:center;
 outline:none;
+font-weight:bold;
 }
 
+/* تلوين حسب المستوى */
+.tile input[value="1"] { color: #88ccff; }
+.tile input[value="2"] { color: #88ff88; }
+.tile input[value="3"] { color: #ffff88; }
+.tile input[value="4"] { color: #ffaa88; }
+.tile input[value="5"] { color: #ff8888; }
+.tile input[value="6"] { color: #ff88ff; }
+.tile input[value="7"] { color: #ddaaff; }
+.tile input[value="8"] { color: #aaccff; text-shadow:0 0 10px blue; }
+.tile input[value="9"] { color: #ffaa00; text-shadow:0 0 10px orange; }
+.tile input[value="10"] { color: #ff5500; text-shadow:0 0 20px red; font-size:2rem; }
+
 .btn{
-background:var(--accent);
+background:linear-gradient(135deg, #00a2ff, #00f2ff);
 border:none;
 padding:18px;
 border-radius:12px;
-font-size:1.2rem;
+font-size:1.3rem;
 font-weight:900;
 cursor:pointer;
 width:100%;
 margin-top:15px;
+color:#000;
+box-shadow:0 5px 0 #0088cc, 0 10px 20px black;
+transition:0.1s;
+}
+
+.btn:active{
+transform:translateY(5px);
+box-shadow:0 2px 0 #0088cc, 0 10px 20px black;
+}
+
+.btn.victory{
+background:linear-gradient(135deg, #00ffaa, #00ff55);
+box-shadow:0 5px 0 #00aa55;
+}
+
+.info-panel{
+background:rgba(0,0,0,0.7);
+border:1px solid #333;
+border-radius:10px;
+padding:10px;
+margin:10px 0;
+font-size:0.9rem;
+color:#aaa;
+text-align:right;
+}
+
+.highlight{
+color:var(--accent);
+font-weight:bold;
+}
+
+.danger-text{
+color:var(--danger);
+}
+
+.safe-text{
+color:#00ff88;
 }
 
 </style>
@@ -98,339 +212,437 @@ margin-top:15px;
 
 <div class="container">
 
-<h1 class="brand">QDS</h1>
+<h1 class="brand">QDS ELITE</h1>
 
 <div class="credit">
-Al FaTeh<br>
-01016057623
+Al FaTeh · 01016057623
 </div>
 
 <div id="status" class="status">⚡</div>
 
+<div class="score-board">
+    <div class="score-box">
+        <div>المجموع</div>
+        <span id="totalScore">0</span>
+    </div>
+    <div class="score-box max-level">
+        <div>المستوى</div>
+        <span id="maxLevel">0</span>
+    </div>
+</div>
+
 <div id="grid" class="grid"></div>
 
-<button class="btn" onclick="deepThink()">⚡ تحليل QDS</button>
+<button class="btn" id="mainBtn" onclick="deepThink()">⚡ تحليل متقدم</button>
+
+<div class="info-panel" id="infoPanel">
+    <span id="strategyText">🔄 جاري التحليل...</span>
+</div>
 
 </div>
 
 <script>
+const grid = document.getElementById("grid")
 
-const grid=document.getElementById("grid")
+// إنشاء الخانات
+for(let i = 0; i < 16; i++)
+    grid.innerHTML += `<div class="tile"><input id="t${i}" type="number" min="0" max="20" placeholder="0"></div>`
 
-for(let i=0;i<16;i++)
-grid.innerHTML+=`<div class="tile"><input id="t${i}" type="number"></div>`
-
-let cache=new Map()
-let movesCache=new Map() // كاش إضافي للحركات
-
-function getBoard(){
-
-let b=[]
-
-for(let i=0;i<4;i++){
-
-let r=[]
-
-for(let j=0;j<4;j++)
-r.push(parseInt(document.getElementById("t"+(i*4+j)).value)||0)
-
-b.push(r)
-
+let cache = new Map()
+let thinking = false
+let gameState = {
+    maxLevel: 0,
+    criticalMode: false,
+    victoryAchieved: false,
+    movesSinceCritical: 0
 }
 
-return b
-
+function getBoard() {
+    let b = []
+    for(let i = 0; i < 4; i++) {
+        let r = []
+        for(let j = 0; j < 4; j++) {
+            let val = parseInt(document.getElementById("t" + (i*4 + j)).value) || 0
+            r.push(val)
+        }
+        b.push(r)
+    }
+    return b
 }
 
-function setBoard(b){
-
-for(let i=0;i<4;i++)
-for(let j=0;j<4;j++)
-document.getElementById("t"+(i*4+j)).value=b[i][j]||""
-
+function setBoard(b) {
+    for(let i = 0; i < 4; i++)
+        for(let j = 0; j < 4; j++)
+            document.getElementById("t" + (i*4 + j)).value = b[i][j] || ""
 }
 
-function compress(row){
-
-let n=row.filter(v=>v)
-
-for(let i=0;i<n.length-1;i++){
-
-if(n[i]==n[i+1]){
-
-n[i]+=1
-n.splice(i+1,1)
-
+function getMaxLevel(b) {
+    let max = 0
+    for(let i = 0; i < 4; i++)
+        for(let j = 0; j < 4; j++)
+            if(b[i][j] > max) max = b[i][j]
+    return max
 }
 
+function calculateTotalScore(b) {
+    let score = 0
+    for(let i = 0; i < 4; i++)
+        for(let j = 0; j < 4; j++)
+            if(b[i][j] > 0)
+                score += Math.pow(2, b[i][j])
+    return score
 }
 
-while(n.length<4)n.push(0)
+function updateDisplay(b) {
+    let maxLevel = getMaxLevel(b)
+    let totalScore = calculateTotalScore(b)
+    
+    document.getElementById("maxLevel").innerText = maxLevel
+    document.getElementById("totalScore").innerText = totalScore.toLocaleString()
+    
+    // تحديث حالة اللعبة
+    gameState.maxLevel = maxLevel
+    
+    if(maxLevel >= 10 && !gameState.victoryAchieved) {
+        gameState.victoryAchieved = true
+        document.getElementById("status").className = "status victory"
+        document.getElementById("status").innerText = "🏆 10! أحسنت!"
+        document.getElementById("mainBtn").className = "btn victory"
+        document.getElementById("mainBtn").innerText = "🏆 انتصرت! جرب مرة أخرى"
+    } else if(maxLevel >= 8 && maxLevel < 10) {
+        if(gameState.criticalMode) {
+            document.getElementById("status").className = "status danger"
+        } else {
+            document.getElementById("status").className = "status warning"
+        }
+    } else {
+        document.getElementById("status").className = "status"
+    }
+}
 
-return n
-
+function compress(row) {
+    let n = row.filter(v => v > 0)
+    
+    for(let i = 0; i < n.length - 1; i++) {
+        if(n[i] == n[i + 1] && n[i] > 0) {
+            n[i] += 1
+            n.splice(i + 1, 1)
+        }
+    }
+    
+    while(n.length < 4) n.push(0)
+    return n
 }
 
 function simulate(b, dir) {
     let old = JSON.stringify(b)
     
-    // تصحيح الاتجاهات حسب المطلوب
-    if(dir == "left") { // حركة لليسار
-        for(let i=0; i<4; i++) {
-            b[i] = compress(b[i])
-        }
+    if(dir == "left") {
+        for(let i = 0; i < 4; i++) b[i] = compress(b[i])
     }
-    else if(dir == "right") { // حركة لليمين
-        for(let i=0; i<4; i++) {
+    else if(dir == "right") {
+        for(let i = 0; i < 4; i++) {
             b[i].reverse()
             b[i] = compress(b[i])
             b[i].reverse()
         }
     }
     else if(dir == "up") {
-        for(let j=0; j<4; j++) {
+        for(let j = 0; j < 4; j++) {
             let c = [b[0][j], b[1][j], b[2][j], b[3][j]]
             let nc = compress(c)
-            for(let i=0; i<4; i++) b[i][j] = nc[i]
+            for(let i = 0; i < 4; i++) b[i][j] = nc[i]
         }
     }
     else if(dir == "down") {
-        for(let j=0; j<4; j++) {
+        for(let j = 0; j < 4; j++) {
             let c = [b[0][j], b[1][j], b[2][j], b[3][j]]
             c.reverse()
             let nc = compress(c)
             nc.reverse()
-            for(let i=0; i<4; i++) b[i][j] = nc[i]
+            for(let i = 0; i < 4; i++) b[i][j] = nc[i]
         }
     }
     
     return old != JSON.stringify(b)
 }
 
-function emptyCells(b){
-
-let e=[]
-
-for(let i=0;i<4;i++)
-for(let j=0;j<4;j++)
-if(b[i][j]==0)e.push([i,j])
-
-return e
-
+function emptyCells(b) {
+    let e = []
+    for(let i = 0; i < 4; i++)
+        for(let j = 0; j < 4; j++)
+            if(b[i][j] == 0) e.push([i, j])
+    return e
 }
 
-// تقييم متطور جداً
-function evaluate(b){
-
-let score=0
-let empty=emptyCells(b).length
-
-// 1. الأولوية القصوى للخلايا الفارغة
-score+=empty*10000
-
-// 2. مكافأة للقيمة الأكبر في الزاوية
-let maxVal=0
-let maxPos={i:0,j:0}
-for(let i=0;i<4;i++){
-for(let j=0;j<4;j++){
-if(b[i][j]>maxVal){
-maxVal=b[i][j]
-maxPos={i,j}
-}
-}
-}
-
-// الزاوية اليسرى العليا هي الأفضل
-if(maxPos.i==0 && maxPos.j==0) score+=maxVal*1000
-else if(maxPos.i==0 && maxPos.j==3) score+=maxVal*700
-else if(maxPos.i==3 && maxPos.j==0) score+=maxVal*700
-else if(maxPos.i==3 && maxPos.j==3) score+=maxVal*500
-else score-=maxVal*200 // عقاب لو في النص
-
-// 3. مكافأة للتجانس (الأرقام المتساوية جنب بعضها)
-for(let i=0;i<4;i++){
-for(let j=0;j<3;j++){
-if(b[i][j]==b[i][j+1] && b[i][j]>0){
-score+=b[i][j]*400
-}
-}
-}
-for(let j=0;j<4;j++){
-for(let i=0;i<3;i++){
-if(b[i][j]==b[i+1][j] && b[i][j]>0){
-score+=b[i][j]*400
-}
-}
-}
-
-// 4. مكافأة للترتيب التصاعدي (زيادة في اتجاه الزاوية)
-// الصفوف
-for(let i=0;i<4;i++){
-for(let j=0;j<3;j++){
-if(b[i][j]>=b[i][j+1]) score+=b[i][j]*50
-}
-}
-// الأعمدة
-for(let j=0;j<4;j++){
-for(let i=0;i<3;i++){
-if(b[i][j]>=b[i+1][j]) score+=b[i][j]*50
-}
-}
-
-// 5. عقاب للقيم الكبيرة في المنتصف
-for(let i=1;i<3;i++){
-for(let j=1;j<3;j++){
-score-=b[i][j]*100
-}
-}
-
-// 6. مكافأة للقيم الكبيرة عموماً
-score+=maxVal*500
-
-return score
-
-}
-
-// خوارزمية Minimax متطورة مع تقليم ألفا-بيتا
-function minimax(b, depth, alpha, beta, isMax){
-
-if(depth==0)return evaluate(b)
-
-let key=JSON.stringify(b)+depth+isMax
-if(cache.has(key))return cache.get(key)
-
-if(isMax){
-// دور اللاعب
-let moves=["up","down","left","right"]
-let best=-Infinity
-
-for(let m of moves){
-let sim=JSON.parse(JSON.stringify(b))
-if(!simulate(sim,m))continue
-
-let val=minimax(sim,depth-1,alpha,beta,false)
-
-if(val>best){
-best=val
-}
-alpha=Math.max(alpha,val)
-if(beta<=alpha)break // تقليم ألفا-بيتا
-}
-
-cache.set(key,best)
-return best
-
-}else{
-// دور الخصم (تقدير أسوأ سيناريو للأرقام الجديدة)
-let empty=emptyCells(b)
-if(empty.length==0)return evaluate(b)
-
-let best=Infinity
-
-// بناخد أسوأ حالة (أقل تقييم) عشان نكون متأكدين
-for(let [i,j] of empty){
-for(let val of [1,2]){ // 1 = 2, 2 = 4
-let sim=JSON.parse(JSON.stringify(b))
-sim[i][j]=val
-let val2=minimax(sim,depth-1,alpha,beta,true)
-best=Math.min(best,val2)
-beta=Math.min(beta,val2)
-if(beta<=alpha)break
-}
-}
-
-cache.set(key,best)
-return best
-}
-
-}
-
-function showArrow(move){
-
-const arrows={
-up:"↑",
-down:"↓",
-left:"←",
-right:"→"
-}
-
-document.getElementById("status").innerText=arrows[move]
-
-}
-
-function getBestMove(b, depth) {
-    let moves = ["up", "down", "left", "right"]
-    let bestMove = ""
-    let bestScore = -Infinity
-    let moveScores = []
+// تقييم الوضع - استراتيجيتين مختلفتين
+function evaluate(b, critical = false) {
+    let score = 0
+    let empty = emptyCells(b).length
+    let maxVal = getMaxLevel(b)
     
-    // تقييم سريع لكل حركة
-    for(let m of moves) {
-        let sim = JSON.parse(JSON.stringify(b))
-        if(!simulate(sim, m)) continue
+    if(critical) {
+        // ========== استراتيجية الطوارئ (لما الوضع صعب) ==========
         
-        // تقييم سريع
-        let quickScore = evaluate(sim)
-        moveScores.push({move: m, score: quickScore})
-    }
-    
-    // ترتيب الحركات حسب التقييم السريع
-    moveScores.sort((a,b) => b.score - a.score)
-    
-    // نأخذ أفضل 3 حركات فقط للتحليل العميق
-    let topMoves = moveScores.slice(0, 3)
-    
-    // تحليل عميق للحركات الواعدة
-    for(let ms of topMoves) {
-        let sim = JSON.parse(JSON.stringify(b))
-        simulate(sim, ms.move)
+        // 1. الأولوية القصوى للخلايا الفارغة (300%)
+        score += empty * 30000
         
-        // استخدام Minimax مع عمق أكبر
-        let score = minimax(sim, depth, -Infinity, Infinity, false)
+        // 2. تشتيت الأرقام الكبيرة (عكس الاستراتيجية العادية)
+        if(b[0][0] == maxVal) score += maxVal * 200
+        else if(b[3][3] == maxVal) score += maxVal * 200
+        else score += maxVal * 500 // نشجع وجودها في أماكن مختلفة
         
-        if(score > bestScore) {
-            bestScore = score
-            bestMove = ms.move
+        // 3. تشجيع الدمج الفوري
+        for(let i = 0; i < 4; i++) {
+            for(let j = 0; j < 3; j++) {
+                if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
+                    score += b[i][j] * 1000 // مكافأة ضخمة للدمج المباشر
+                }
+            }
+        }
+        
+        // 4. مكافأة للحركات اللي تخلق فراغات جديدة
+        score += empty * 5000
+        
+    } else {
+        // ========== الاستراتيجية العادية (لما الوضع مستقر) ==========
+        
+        // 1. الخلايا الفارغة
+        score += empty * 10000
+        
+        // 2. الزوايا - الأرقام الكبيرة في الزاوية اليسرى العليا
+        if(b[0][0] == maxVal) score += maxVal * 1000
+        else if(b[0][3] == maxVal || b[3][0] == maxVal) score += maxVal * 700
+        else if(b[3][3] == maxVal) score += maxVal * 500
+        else score -= maxVal * 300
+        
+        // 3. التجانس
+        for(let i = 0; i < 4; i++) {
+            for(let j = 0; j < 3; j++) {
+                if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
+                    score += b[i][j] * 500
+                }
+            }
+        }
+        
+        // 4. الترتيب التصاعدي
+        for(let i = 0; i < 4; i++) {
+            for(let j = 0; j < 3; j++) {
+                if(b[i][j] >= b[i][j + 1]) score += b[i][j] * 100
+            }
+        }
+        
+        // 5. عقاب المنتصف
+        for(let i = 1; i < 3; i++) {
+            for(let j = 1; j < 3; j++) {
+                score -= b[i][j] * 150
+            }
         }
     }
     
-    return bestMove
+    return score
 }
 
-function deepThink(){
-
-if(cache.size>100000) cache.clear()
-
-let b=getBoard()
-let empty=emptyCells(b).length
-let maxVal=0
-for(let i=0;i<4;i++) for(let j=0;j<4;j++) if(b[i][j]>maxVal) maxVal=b[i][j]
-
-// عمق تفكير ديناميكي حسب الموقف
-let depth
-if(maxVal>=10) depth=10      // مستويات عالية - تفكير عميق جداً
-else if(maxVal>=8) depth=9
-else if(maxVal>=6) depth=8
-else if(empty>8) depth=6     // بداية اللعبة - أسرع
-else if(empty>5) depth=7
-else depth=8                 // منتصف اللعبة
-
-let bestMove = getBestMove(b, depth)
-
-if(bestMove){
-simulate(b, bestMove)
-setBoard(b)
-showArrow(bestMove)
-}else{
-document.getElementById("status").innerText="❌"
+// Minimax مع استراتيجيتين
+function minimax(b, depth, alpha, beta, isMax, critical) {
+    if(depth == 0) return evaluate(b, critical)
+    
+    let key = JSON.stringify(b) + depth + isMax + critical
+    if(cache.has(key)) return cache.get(key)
+    
+    if(isMax) {
+        let moves = ["up", "down", "left", "right"]
+        let best = -Infinity
+        
+        for(let m of moves) {
+            let sim = JSON.parse(JSON.stringify(b))
+            if(!simulate(sim, m)) continue
+            
+            let val = minimax(sim, depth - 1, alpha, beta, false, critical)
+            
+            if(val > best) best = val
+            alpha = Math.max(alpha, val)
+            if(beta <= alpha) break
+        }
+        
+        cache.set(key, best)
+        return best
+    } else {
+        let empty = emptyCells(b)
+        if(empty.length == 0) return evaluate(b, critical)
+        
+        let best = Infinity
+        
+        // أسوأ سيناريو (الأرقام الجديدة)
+        for(let [i, j] of empty) {
+            for(let val of [1, 2]) {
+                let sim = JSON.parse(JSON.stringify(b))
+                sim[i][j] = val
+                let val2 = minimax(sim, depth - 1, alpha, beta, true, critical)
+                best = Math.min(best, val2)
+                beta = Math.min(beta, val2)
+                if(beta <= alpha) break
+            }
+        }
+        
+        cache.set(key, best)
+        return best
+    }
 }
 
+// تحليل الموقف وتحديد الاستراتيجية المناسبة
+function analyzeSituation(b) {
+    let empty = emptyCells(b).length
+    let maxVal = getMaxLevel(b)
+    let critical = false
+    let reason = ""
+    
+    // شروط الدخول في وضع الطوارئ
+    if(maxVal >= 9 && empty <= 3) {
+        critical = true
+        reason = "🔥 وضع الطوارئ: مستوى عالي وخلايا قليلة"
+    }
+    else if(maxVal >= 8 && empty <= 2) {
+        critical = true
+        reason = "⚠️ خطر! مستوى 8 ومساحة محدودة"
+    }
+    else if(empty <= 1) {
+        critical = true
+        reason = "🚨 لا توجد خلايا فارغة تقريباً!"
+    }
+    else if(gameState.criticalMode && gameState.movesSinceCritical < 3) {
+        critical = true
+        reason = "⏱️ استمرار وضع الطوارئ"
+        gameState.movesSinceCritical++
+    } else {
+        gameState.criticalMode = false
+        gameState.movesSinceCritical = 0
+        reason = "✅ وضع طبيعي - بناء استراتيجي"
+    }
+    
+    if(critical) gameState.criticalMode = true
+    
+    // تحديث واجهة المعلومات
+    let infoText = document.getElementById("infoPanel")
+    if(critical) {
+        infoText.innerHTML = `<span class="danger-text">${reason}</span>`
+    } else {
+        infoText.innerHTML = `<span class="safe-text">${reason}</span>`
+    }
+    
+    return critical
 }
 
-window.onload=function(){
-// مجرد تجهيز الموقع - بدون إضافة أرقام
-document.getElementById("status").innerText="⚡"
-cache.clear()
+function showArrow(move) {
+    const arrows = {
+        up: "↑",
+        down: "↓",
+        left: "←",
+        right: "→"
+    }
+    
+    if(!gameState.victoryAchieved) {
+        document.getElementById("status").innerText = arrows[move] || "⚡"
+    }
+}
+
+function deepThink() {
+    if(thinking || gameState.victoryAchieved) return
+    
+    thinking = true
+    document.getElementById("status").innerText = "⏳"
+    
+    setTimeout(() => {
+        if(cache.size > 100000) cache.clear()
+        
+        let b = getBoard()
+        let empty = emptyCells(b).length
+        let maxVal = getMaxLevel(b)
+        
+        // تحليل الموقف وتحديد الاستراتيجية
+        let criticalMode = analyzeSituation(b)
+        
+        // عمق تفكير ديناميكي حسب الموقف
+        let depth
+        if(criticalMode) {
+            depth = 10 // في الطوارئ نفكر أعمق
+        } else if(maxVal >= 9) {
+            depth = 9
+        } else if(maxVal >= 7) {
+            depth = 8
+        } else if(empty > 8) {
+            depth = 6
+        } else {
+            depth = 7
+        }
+        
+        let moves = ["up", "down", "left", "right"]
+        let bestMove = ""
+        let bestScore = -Infinity
+        
+        // تقييم سريع لكل حركة
+        let moveScores = []
+        for(let m of moves) {
+            let sim = JSON.parse(JSON.stringify(b))
+            if(!simulate(sim, m)) continue
+            
+            // تقييم سريع حسب الاستراتيجية الحالية
+            let quickScore = evaluate(sim, criticalMode)
+            moveScores.push({move: m, score: quickScore})
+        }
+        
+        // ترتيب الحركات
+        moveScores.sort((a, b) => b.score - a.score)
+        
+        // تحليل عميق لأفضل 3 حركات
+        let topMoves = moveScores.slice(0, 3)
+        
+        for(let ms of topMoves) {
+            let sim = JSON.parse(JSON.stringify(b))
+            simulate(sim, ms.move)
+            
+            // استخدام Minimax مع الاستراتيجية المناسبة
+            let score = minimax(sim, depth - 1, -Infinity, Infinity, false, criticalMode)
+            
+            if(score > bestScore) {
+                bestScore = score
+                bestMove = ms.move
+            }
+        }
+        
+        if(bestMove) {
+            simulate(b, bestMove)
+            setBoard(b)
+            updateDisplay(b)
+            showArrow(bestMove)
+        } else {
+            document.getElementById("status").innerText = "❌"
+        }
+        
+        thinking = false
+    }, 5)
+}
+
+// إعادة تعيين
+window.onload = function() {
+    for(let i = 0; i < 16; i++)
+        document.getElementById("t" + i).value = ""
+    
+    gameState = {
+        maxLevel: 0,
+        criticalMode: false,
+        victoryAchieved: false,
+        movesSinceCritical: 0
+    }
+    
+    document.getElementById("status").className = "status"
+    document.getElementById("status").innerText = "⚡"
+    document.getElementById("mainBtn").className = "btn"
+    document.getElementById("mainBtn").innerText = "⚡ تحليل متقدم"
+    document.getElementById("maxLevel").innerText = "0"
+    document.getElementById("totalScore").innerText = "0"
+    document.getElementById("infoPanel").innerHTML = "🔄 جاري التحليل..."
+    cache.clear()
 }
 
 </script>
