@@ -6,6 +6,7 @@
 <title>QDS AI</title>
 
 <style>
+
 :root{
 --bg:#050505;
 --accent:#00f2ff;
@@ -44,18 +45,8 @@ margin-bottom:20px;
 }
 
 #status-text{
-color:var(--accent);
 font-size:2rem;
-font-weight:900;
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
-}
-
-#status-arrow{
-direction:ltr;
-font-size:2.5rem;
+color:var(--accent);
 }
 
 .grid{
@@ -122,6 +113,7 @@ border-radius:12px;
 font-size:1.5rem;
 cursor:pointer;
 }
+
 </style>
 </head>
 
@@ -132,10 +124,7 @@ cursor:pointer;
 <h1 class="brand-name">QDS</h1>
 
 <div class="status-box">
-<div id="status-text">
-<span id="status-label">الوضعية</span>
-<span id="status-arrow">⚡</span>
-</div>
+<div id="status-text">⚡</div>
 </div>
 
 <div class="grid" id="mainGrid"></div>
@@ -143,6 +132,7 @@ cursor:pointer;
 <button class="btn-ai" onclick="deepThink()">⚡ تحليل QDS</button>
 
 <div class="nav-controls">
+
 <div></div>
 <button class="btn-move" onclick="manualMove('up')">↑</button>
 <div></div>
@@ -150,6 +140,7 @@ cursor:pointer;
 <button class="btn-move" onclick="manualMove('left')">←</button>
 <button class="btn-move" onclick="manualMove('down')">↓</button>
 <button class="btn-move" onclick="manualMove('right')">→</button>
+
 </div>
 
 </div>
@@ -161,82 +152,130 @@ const gridEl=document.getElementById("mainGrid");
 for(let i=0;i<16;i++)
 gridEl.innerHTML+=`<div class="tile"><input type="number" id="t-${i}" placeholder="0"></div>`;
 
+
 const W=[
-[2,4,8,16],
-[32,64,128,256],
-[1024,512,256,128],
-[2048,4096,8192,16384]
+[65536,16384,4096,1024],
+[512,256,128,64],
+[32,16,8,4],
+[2,2,2,2]
 ];
 
+
 function getM(){
+
 let m=[];
+
 for(let i=0;i<4;i++){
+
 let r=[];
+
 for(let j=0;j<4;j++)
 r.push(parseInt(document.getElementById(`t-${i*4+j}`).value)||0);
+
 m.push(r);
-}
-return m;
+
 }
 
+return m;
+
+}
+
+
 function setM(m){
+
 for(let i=0;i<4;i++)
 for(let j=0;j<4;j++)
 document.getElementById(`t-${i*4+j}`).value=m[i][j]||"";
+
 }
+
 
 function compress(row){
+
 let n=row.filter(v=>v!==0);
-for(let i=0;i<n.length-1;i++)
+
+for(let i=0;i<n.length-1;i++){
+
 if(n[i]===n[i+1]){
-n[i]*=2;
+
+n[i]=n[i]+1;   // القاعدة الجديدة
+
 n.splice(i+1,1);
-}
-while(n.length<4) n.push(0);
-return n;
+
 }
 
+}
+
+while(n.length<4) n.push(0);
+
+return n;
+
+}
+
+
 function simulate(m,dir){
+
 const old=JSON.stringify(m);
 
 if(dir==="left"){
+
 for(let i=0;i<4;i++) m[i]=compress(m[i]);
+
 }
 
 else if(dir==="right"){
+
 for(let i=0;i<4;i++){
+
 m[i].reverse();
 m[i]=compress(m[i]);
 m[i].reverse();
+
 }
+
 }
 
 else if(dir==="up"){
+
 for(let j=0;j<4;j++){
+
 let col=[m[0][j],m[1][j],m[2][j],m[3][j]];
+
 let nc=compress(col);
+
 for(let i=0;i<4;i++) m[i][j]=nc[i];
+
 }
+
 }
 
 else if(dir==="down"){
+
 for(let j=0;j<4;j++){
+
 let col=[m[0][j],m[1][j],m[2][j],m[3][j]];
+
 col.reverse();
+
 let nc=compress(col);
+
 nc.reverse();
+
 for(let i=0;i<4;i++) m[i][j]=nc[i];
+
 }
+
 }
 
 return old!==JSON.stringify(m);
+
 }
+
 
 function evaluate(m){
 
 let score=0;
 let empty=0;
-let max=0;
 
 for(let i=0;i<4;i++)
 for(let j=0;j<4;j++){
@@ -247,23 +286,39 @@ score+=v*W[i][j];
 
 if(v===0) empty++;
 
-if(v>max) max=v;
-
 }
 
-score+=empty*500;
-
-if(
-m[0][0]===max||
-m[0][3]===max||
-m[3][0]===max||
-m[3][3]===max
-){
-score+=max*4;
-}
+score+=empty*2000;
 
 return score;
+
 }
+
+
+function search(m,depth){
+
+if(depth===0) return evaluate(m);
+
+let best=-Infinity;
+
+const moves=["up","down","left","right"];
+
+for(let move of moves){
+
+let sim=JSON.parse(JSON.stringify(m));
+
+if(!simulate(sim,move)) continue;
+
+let val=search(sim,depth-1);
+
+if(val>best) best=val;
+
+}
+
+return best;
+
+}
+
 
 function deepThink(){
 
@@ -274,32 +329,19 @@ let bestScore=-Infinity;
 
 const moves=["up","down","left","right"];
 
-for(let m1 of moves){
+for(let move of moves){
 
-let sim1=JSON.parse(JSON.stringify(current));
+let sim=JSON.parse(JSON.stringify(current));
 
-if(!simulate(sim1,m1)) continue;
+if(!simulate(sim,move)) continue;
 
-for(let m2 of moves){
-
-let sim2=JSON.parse(JSON.stringify(sim1));
-
-if(!simulate(sim2,m2)) continue;
-
-for(let m3 of moves){
-
-let sim3=JSON.parse(JSON.stringify(sim2));
-
-simulate(sim3,m3);
-
-let score=evaluate(sim3);
+let score=search(sim,4);   // عمق التفكير
 
 if(score>bestScore){
-bestScore=score;
-bestMove=m1;
-}
 
-}
+bestScore=score;
+
+bestMove=move;
 
 }
 
@@ -310,24 +352,26 @@ if(bestMove){
 manualMove(bestMove);
 
 const arrows={
+
 up:"↑",
 down:"↓",
 left:"←",
 right:"→"
+
 };
 
-document.getElementById("status-arrow").innerText=arrows[bestMove];
+document.getElementById("status-text").innerText=arrows[bestMove];
 
 }
 
 }
+
 
 function manualMove(d){
 
 let m=getM();
 
-if(simulate(m,d))
-setM(m);
+if(simulate(m,d)) setM(m);
 
 }
 
