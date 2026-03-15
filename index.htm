@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS AI - الوصول للرقم 12</title>
+<title>QDS AI</title>
 
 <style>
 
@@ -60,16 +60,6 @@ font-size:1.2rem;
 color:var(--accent);
 }
 
-.max-box{
-background:var(--panel);
-border:2px solid gold;
-border-radius:12px;
-padding:10px;
-margin:10px 0;
-font-size:1.2rem;
-color:gold;
-}
-
 .grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -97,16 +87,7 @@ color:var(--accent);
 font-size:1.6rem;
 text-align:center;
 outline:none;
-font-weight:bold;
 }
-
-/* ألوان مختلفة للأرقام العالية */
-.tile input[value="12"] { color: #ff4444; text-shadow:0 0 10px red; }
-.tile input[value="11"] { color: #ff8844; }
-.tile input[value="10"] { color: #ffaa44; }
-.tile input[value="9"] { color: #ffff44; }
-.tile input[value="8"] { color: #44ff44; }
-.tile input[value="7"] { color: #44ff88; }
 
 .btn{
 background:var(--accent);
@@ -152,7 +133,7 @@ justify-content:center;
 
 <div class="container">
 
-<h1 class="brand">QDS 12</h1>
+<h1 class="brand">QDS</h1>
 
 <div class="credit">
 Al FaTeh<br>
@@ -161,18 +142,17 @@ Al FaTeh<br>
 
 <div id="status" class="status">⚡</div>
 <div id="scoreDisplay" class="score-box">مجموع النقاط: 0</div>
-<div id="maxDisplay" class="max-box">أكبر رقم: 0</div>
 
 <div id="grid" class="grid"></div>
 
-<button class="btn" onclick="deepThink()">⚡ تحليل ذكي للوصول للرقم 12</button>
+<button class="btn" onclick="deepThink()">⚡ تحليل QDS</button>
 
 <div class="controls">
 <button class="btn-small" onclick="resetGame()">🔄 جديد</button>
 <button class="btn-small" onclick="manualUp()">↑</button>
 <button class="btn-small" onclick="manualDown()">↓</button>
-<button class="btn-small" onclick="manualRight()">←</button>
-<button class="btn-small" onclick="manualLeft()">→</button>
+<button class="btn-small" onclick="manualLeft()">←</button>
+<button class="btn-small" onclick="manualRight()">→</button>
 </div>
 
 </div>
@@ -187,7 +167,6 @@ grid.innerHTML+=`<div class="tile"><input id="t${i}" type="number"></div>`
 let cache=new Map()
 let totalScore=0
 let thinking=false
-let targetReached=false
 
 function getBoard(){
 
@@ -221,29 +200,13 @@ let score=0
 for(let i=0;i<4;i++)
 for(let j=0;j<4;j++)
 if(b[i][j]>0)
-score+=Math.pow(2,b[i][j]) // النقاط الحقيقية
+score+=Math.pow(2,b[i][j])
 return score
-}
-
-function getMaxNumber(b){
-let max=0
-for(let i=0;i<4;i++)
-for(let j=0;j<4;j++)
-if(b[i][j]>max) max=b[i][j]
-return max
 }
 
 function updateScore(b){
 totalScore=calculateBoardScore(b)
 document.getElementById("scoreDisplay").innerText=`مجموع النقاط: ${totalScore}`
-let maxNum=getMaxNumber(b)
-document.getElementById("maxDisplay").innerText=`أكبر رقم: ${maxNum}`
-if(maxNum>=12){
-targetReached=true
-document.getElementById("status").innerText="🏆 12! أحسنت!"
-document.getElementById("maxDisplay").style.background="gold"
-document.getElementById("maxDisplay").style.color="black"
-}
 }
 
 function compress(row){
@@ -267,45 +230,43 @@ return n
 
 }
 
-function simulate(b,dir){
-
-let old=JSON.stringify(b)
-
-if(dir=="right")
-for(let i=0;i<4;i++)b[i]=compress(b[i])
-
-if(dir=="left")
-for(let i=0;i<4;i++){
-b[i].reverse()
-b[i]=compress(b[i])
-b[i].reverse()
-}
-
-if(dir=="up")
-for(let j=0;j<4;j++){
-
-let c=[b[0][j],b[1][j],b[2][j],b[3][j]]
-let nc=compress(c)
-
-for(let i=0;i<4;i++)b[i][j]=nc[i]
-
-}
-
-if(dir=="down")
-for(let j=0;j<4;j++){
-
-let c=[b[0][j],b[1][j],b[2][j],b[3][j]]
-c.reverse()
-
-let nc=compress(c)
-nc.reverse()
-
-for(let i=0;i<4;i++)b[i][j]=nc[i]
-
-}
-
-return old!=JSON.stringify(b)
-
+function simulate(b, dir) {
+    let old = JSON.stringify(b)
+    
+    // تصحيح الاتجاهات حسب المطلوب:
+    // left = حركة لليسار (السهم يشير لليسار)
+    // right = حركة لليمين (السهم يشير لليمين)
+    
+    if(dir == "left") { // حركة لليسار
+        for(let i=0; i<4; i++) {
+            b[i] = compress(b[i]) // ضغط لليسار
+        }
+    }
+    else if(dir == "right") { // حركة لليمين
+        for(let i=0; i<4; i++) {
+            b[i].reverse()
+            b[i] = compress(b[i])
+            b[i].reverse()
+        }
+    }
+    else if(dir == "up") {
+        for(let j=0; j<4; j++) {
+            let c = [b[0][j], b[1][j], b[2][j], b[3][j]]
+            let nc = compress(c)
+            for(let i=0; i<4; i++) b[i][j] = nc[i]
+        }
+    }
+    else if(dir == "down") {
+        for(let j=0; j<4; j++) {
+            let c = [b[0][j], b[1][j], b[2][j], b[3][j]]
+            c.reverse()
+            let nc = compress(c)
+            nc.reverse()
+            for(let i=0; i<4; i++) b[i][j] = nc[i]
+        }
+    }
+    
+    return old != JSON.stringify(b)
 }
 
 function emptyCells(b){
@@ -320,55 +281,38 @@ return e
 
 }
 
-// تقييم متطور للوصول للرقم 12
 function evaluate(b){
 
 let score=0
 let empty=emptyCells(b).length
-let maxNum=getMaxNumber(b)
 
-// 1. مكافأة ضخمة للوصول للرقم 12
-if(maxNum>=12){
-score+=10000000
-return score
-}
-
-// 2. الأولوية القصوى للخلايا الفارغة
+// 1. الأولوية القصوى للخلايا الفارغة
 score+=empty*10000
 
-// 3. مكافأة كبيرة للرقم الأكبر في الزاوية
-// الرقم 12 لازم يكون في الزاوية
-if(b[0][0]==maxNum) score+=maxNum*1000
-else if(b[0][3]==maxNum || b[3][0]==maxNum) score+=maxNum*600
-else if(b[3][3]==maxNum) score+=maxNum*400
-else score-=maxNum*200 // عقاب لو أكبر رقم مش في زاوية
+// 2. مكافأة للقيمة الأكبر في الزاوية
+let maxVal=0
+for(let i=0;i<4;i++)
+for(let j=0;j<4;j++)
+if(b[i][j]>maxVal) maxVal=b[i][j]
 
-// 4. مكافأة للتجانس (الأرقام اللي جنب بعضها)
+if(b[0][0]==maxVal) score+=maxVal*500
+else if(b[0][3]==maxVal || b[3][0]==maxVal) score+=maxVal*300
+else if(b[3][3]==maxVal) score+=maxVal*200
+else score-=maxVal*100
+
+// 3. مكافأة للتجانس
 for(let i=0;i<4;i++){
 for(let j=0;j<3;j++){
 if(b[i][j]==b[i][j+1] && b[i][j]>0){
-score+=b[i][j]*300
+score+=b[i][j]*200
 }
 }
 }
 for(let j=0;j<4;j++){
 for(let i=0;i<3;i++){
 if(b[i][j]==b[i+1][j] && b[i][j]>0){
-score+=b[i][j]*300
+score+=b[i][j]*200
 }
-}
-}
-
-// 5. مكافأة للرقم 11 (قبل الهدف مباشرة)
-if(maxNum==11) score+=50000
-
-// 6. تشجيع بناء أرقام عالية
-score+=maxNum*2000
-
-// 7. مكافأة للترتيب التصاعدي
-for(let i=0;i<4;i++){
-for(let j=0;j<3;j++){
-if(b[i][j]>=b[i][j+1]) score+=b[i][j]*20
 }
 }
 
@@ -376,210 +320,178 @@ return score
 
 }
 
-// Expectimax متطور مع تقليم
-function advancedExpectimax(b, depth, isMax=true){
+function smartExpectimax(b, depth){
 
 if(depth==0)return evaluate(b)
 
-let key=JSON.stringify(b)+depth+isMax
+let key=JSON.stringify(b)+depth
 if(cache.has(key))return cache.get(key)
 
-if(isMax){
-// دور اللاعب
-let moves=["up","down","right","left"]
+let moves=["up","down","left","right"] // ترتيب عادي
 let best=-Infinity
 
 for(let m of moves){
+
 let sim=JSON.parse(JSON.stringify(b))
+
 if(!simulate(sim,m))continue
-let val=advancedExpectimax(sim,depth-1,false)
+
+let val=smartExpectimax(sim,depth-1)
+
 if(val>best){
 best=val
 }
-// تقليم سريع
-if(best>1000000) break
-}
-cache.set(key,best)
-return best
-}else{
-// دور الخصم (الأرقام العشوائية)
-let empty=emptyCells(b)
-if(empty.length==0) return evaluate(b)
-let best=Infinity
 
-// بنجرب أسوأ سيناريو (الرقم 2 أو 4)
-for(let [i,j] of empty){
-for(let val of [1,2]){ // 1 = 2, 2 = 4
-let sim=JSON.parse(JSON.stringify(b))
-sim[i][j]=val
-let val2=advancedExpectimax(sim,depth-1,true)
-best=Math.min(best,val2)
+if(best>1000000) break
+
 }
-}
+
 cache.set(key,best)
+
 return best
-}
 
 }
 
 function spawnRandom(b){
-let empty=emptyCells(b)
-if(empty.length>0){
-let [i,j]=empty[Math.floor(Math.random()*empty.length)]
-b[i][j]=Math.random()<0.9?1:2
-}
+    let empty=emptyCells(b)
+    if(empty.length>0){
+        let [i,j]=empty[Math.floor(Math.random()*empty.length)]
+        b[i][j]=Math.random()<0.9?1:2
+    }
 }
 
 function showArrow(move){
-
-const arrows={
-up:"↑",
-down:"↓",
-right:"←",
-left:"→"
-}
-
-document.getElementById("status").innerText=arrows[move]
-
+    const arrows={
+        up:"↑",
+        down:"↓",
+        left:"←",  // حركة لليسار = سهم لليسار
+        right:"→"  // حركة لليمين = سهم لليمين
+    }
+    document.getElementById("status").innerText = arrows[move] || "⚡"
 }
 
 // حركات يدوية
 function manualUp(){
-if(thinking) return
-let b=getBoard()
-if(simulate(b,"up")){
-spawnRandom(b)
-setBoard(b)
-updateScore(b)
-showArrow("up")
-}
+    if(thinking) return
+    let b=getBoard()
+    if(simulate(b,"up")){
+        spawnRandom(b)
+        setBoard(b)
+        updateScore(b)
+        showArrow("up")
+    }
 }
 
 function manualDown(){
-if(thinking) return
-let b=getBoard()
-if(simulate(b,"down")){
-spawnRandom(b)
-setBoard(b)
-updateScore(b)
-showArrow("down")
-}
-}
-
-function manualRight(){
-if(thinking) return
-let b=getBoard()
-if(simulate(b,"right")){
-spawnRandom(b)
-setBoard(b)
-updateScore(b)
-showArrow("right")
-}
+    if(thinking) return
+    let b=getBoard()
+    if(simulate(b,"down")){
+        spawnRandom(b)
+        setBoard(b)
+        updateScore(b)
+        showArrow("down")
+    }
 }
 
 function manualLeft(){
-if(thinking) return
-let b=getBoard()
-if(simulate(b,"left")){
-spawnRandom(b)
-setBoard(b)
-updateScore(b)
-showArrow("left")
+    if(thinking) return
+    let b=getBoard()
+    if(simulate(b,"left")){ // حركة لليسار
+        spawnRandom(b)
+        setBoard(b)
+        updateScore(b)
+        showArrow("left") // سهم لليسار ←
+    }
 }
+
+function manualRight(){
+    if(thinking) return
+    let b=getBoard()
+    if(simulate(b,"right")){ // حركة لليمين
+        spawnRandom(b)
+        setBoard(b)
+        updateScore(b)
+        showArrow("right") // سهم لليمين →
+    }
 }
 
 function resetGame(){
-if(thinking) return
-let b=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-b[0][0]=1
-b[2][2]=1
-setBoard(b)
-totalScore=2
-targetReached=false
-updateScore(b)
-document.getElementById("status").innerText="⚡"
-document.getElementById("maxDisplay").style.background=""
-document.getElementById("maxDisplay").style.color="gold"
-cache.clear()
+    if(thinking) return
+    let b=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    b[0][0]=1
+    b[2][2]=1
+    setBoard(b)
+    totalScore=2
+    updateScore(b)
+    document.getElementById("status").innerText="⚡"
+    cache.clear()
 }
 
 function deepThink(){
 
-if(thinking || targetReached) return
+    if(thinking) return
 
-thinking=true
-document.getElementById("status").innerText="⏳"
+    thinking=true
+    document.getElementById("status").innerText="⏳"
 
-setTimeout(()=>{
+    setTimeout(()=>{
 
-if(cache.size>100000) cache.clear()
+        if(cache.size>50000) cache.clear()
 
-let b=getBoard()
-let empty=emptyCells(b).length
-let maxNum=getMaxNumber(b)
+        let b=getBoard()
+        let empty=emptyCells(b).length
 
-// عمق تفكير ذكي جداً للوصول للرقم 12
-let depth
-if(maxNum>=11) depth=10  // قربنا من الهدف، نفكر بعمق
-else if(maxNum>=9) depth=9
-else if(maxNum>=7) depth=8
-else if(empty>8) depth=6
-else if(empty>4) depth=7
-else depth=8
+        let depth
+        if(empty>10) depth=4
+        else if(empty>7) depth=5
+        else if(empty>4) depth=6
+        else if(empty>2) depth=7
+        else depth=8
 
-let moves=["up","down","right","left"]
-let bestMove=""
-let bestScore=-Infinity
+        let moves=["up","down","left","right"] // ترتيب عادي
+        let bestMove=""
+        let bestScore=-Infinity
 
-// بحث متقدم على مرحلتين
-let moveScores=[]
+        // البحث على مرحلتين
+        let candidateMoves=[]
+        for(let m of moves){
+            let sim=JSON.parse(JSON.stringify(b))
+            if(!simulate(sim,m)) continue
+            let quickScore=smartExpectimax(sim,Math.min(3,depth-2))
+            candidateMoves.push({move:m, score:quickScore})
+        }
 
-for(let m of moves){
-let sim=JSON.parse(JSON.stringify(b))
-if(!simulate(sim,m)) continue
-let quickScore=advancedExpectimax(sim,Math.min(3,depth-2),false)
-moveScores.push({move:m, score:quickScore})
-}
+        candidateMoves.sort((a,b)=>b.score-a.score)
+        let topMoves=candidateMoves.slice(0,3)
 
-// ترتيب الحركات
-moveScores.sort((a,b)=>b.score-a.score)
+        for(let cm of topMoves){
+            let sim=JSON.parse(JSON.stringify(b))
+            simulate(sim,cm.move)
+            let score=smartExpectimax(sim,depth-1)
+            if(score>bestScore){
+                bestScore=score
+                bestMove=cm.move
+            }
+        }
 
-// نفحص أفضل 3 حركات بشكل أعمق
-let topMoves=moveScores.slice(0,3)
+        if(bestMove){
+            simulate(b,bestMove)
+            spawnRandom(b)
+            setBoard(b)
+            updateScore(b)
+            showArrow(bestMove)
+        }else{
+            document.getElementById("status").innerText="❌"
+        }
 
-for(let ms of topMoves){
-let sim=JSON.parse(JSON.stringify(b))
-simulate(sim,ms.move)
-let score=advancedExpectimax(sim,depth-1,false)
-if(score>bestScore){
-bestScore=score
-bestMove=ms.move
-}
-}
+        thinking=false
 
-if(bestMove){
-simulate(b,bestMove)
-spawnRandom(b)
-setBoard(b)
-updateScore(b)
-showArrow(bestMove)
-
-// لو وصلنا للرقم 12 نحتفل
-if(getMaxNumber(b)>=12){
-document.getElementById("status").innerText="🏆 12! أحسنت!"
-}
-}else{
-document.getElementById("status").innerText="❌"
-}
-
-thinking=false
-
-}, 5)
+    }, 5)
 
 }
 
 window.onload=function(){
-resetGame()
+    resetGame()
 }
 
 </script>
