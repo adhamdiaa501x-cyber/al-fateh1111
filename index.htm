@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS ULTRA - ذكاء اصطناعي فائق</title>
+<title>QDS ULTRA - الذكاء الأسطوري</title>
 
 <style>
 :root{
@@ -253,7 +253,7 @@ Al FaTeh · 01016057623 · هدف 32768
 
 <div id="grid" class="grid"></div>
 
-<button class="btn" id="mainBtn" onclick="deepThink()">⚡ تحليل فائق (عمق 12)</button>
+<button class="btn" id="mainBtn" onclick="deepThink()">⚡ تحليل فائق</button>
 
 <div class="info-panel" id="infoPanel">
     <span id="strategyText">🔄 جاري التحليل...</span>
@@ -264,7 +264,7 @@ Al FaTeh · 01016057623 · هدف 32768
 <script>
 const grid = document.getElementById("grid")
 
-// إنشاء الخانات (نقبل حتى مستوى 20)
+// إنشاء الخانات
 for(let i = 0; i < 16; i++)
     grid.innerHTML += `<div class="tile"><input id="t${i}" type="number" min="0" max="20" placeholder="0"></div>`
 
@@ -321,22 +321,18 @@ function updateDisplay(b) {
     document.getElementById("maxLevel").innerText = maxLevel
     document.getElementById("totalScore").innerText = totalScore.toLocaleString()
     
-    // تحديث حالة اللعبة
     gameState.maxLevel = maxLevel
     
-    // لو وصل للمستوى 15 (32768)
     if(maxLevel >= 15 && !gameState.reachedLevel15) {
         gameState.reachedLevel15 = true
         document.getElementById("status").className = "status legend"
         document.getElementById("status").innerText = "👑 15! أسطورة!"
         document.getElementById("mainBtn").className = "btn legend"
     }
-    // لو وصل للمستوى 12 (4096)
     else if(maxLevel >= 12 && !gameState.reachedLevel15) {
         document.getElementById("status").className = "status victory"
         document.getElementById("status").innerText = "🏆 " + maxLevel + "! استمر"
     }
-    // تغيير الألوان حسب الموقف
     else if(gameState.criticalMode) {
         document.getElementById("status").className = "status danger"
     } else if(maxLevel >= 10) {
@@ -401,19 +397,42 @@ function emptyCells(b) {
     return e
 }
 
-// تقييم متطور جداً للمستويات العالية
+// التحقق من وجود حركة ممكنة
+function hasAnyMove(b) {
+    // لو في خلايا فارغة، أكيد في حركة
+    if(emptyCells(b).length > 0) return true
+    
+    // فحص الدمج الأفقي
+    for(let i = 0; i < 4; i++) {
+        for(let j = 0; j < 3; j++) {
+            if(b[i][j] == b[i][j+1] && b[i][j] > 0) {
+                return true
+            }
+        }
+    }
+    
+    // فحص الدمج العمودي
+    for(let j = 0; j < 4; j++) {
+        for(let i = 0; i < 3; i++) {
+            if(b[i][j] == b[i+1][j] && b[i][j] > 0) {
+                return true
+            }
+        }
+    }
+    
+    return false
+}
+
+// تقييم الوضع
 function evaluate(b, critical = false) {
     let score = 0
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
     
     if(critical) {
-        // ========== استراتيجية الطوارئ المتطورة ==========
-        
-        // 1. الخلايا الفارغة أهم حاجة
+        // استراتيجية الطوارئ
         score += empty * 50000
         
-        // 2. تشجيع الدمج الفوري (مضاعف)
         for(let i = 0; i < 4; i++) {
             for(let j = 0; j < 3; j++) {
                 if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
@@ -429,22 +448,16 @@ function evaluate(b, critical = false) {
             }
         }
         
-        // 3. مكافأة للحركات اللي تخلق فراغات
         score += empty * 20000
-        
     } else {
-        // ========== الاستراتيجية العادية للمستويات العالية ==========
-        
-        // 1. الخلايا الفارغة
+        // الاستراتيجية العادية
         score += empty * 15000
         
-        // 2. الزوايا - مهم جداً للمستويات العالية
         if(b[0][0] == maxVal) score += maxVal * 2000
         else if(b[0][3] == maxVal || b[3][0] == maxVal) score += maxVal * 1500
         else if(b[3][3] == maxVal) score += maxVal * 1000
         else score -= maxVal * 500
         
-        // 3. التجانس - مهم للدمج
         for(let i = 0; i < 4; i++) {
             for(let j = 0; j < 3; j++) {
                 if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
@@ -460,26 +473,12 @@ function evaluate(b, critical = false) {
             }
         }
         
-        // 4. الترتيب التصاعدي القوي
-        for(let i = 0; i < 4; i++) {
-            for(let j = 0; j < 3; j++) {
-                if(b[i][j] >= b[i][j + 1]) score += b[i][j] * 200
-            }
-        }
-        for(let j = 0; j < 4; j++) {
-            for(let i = 0; i < 3; i++) {
-                if(b[i][j] >= b[i + 1][j]) score += b[i][j] * 200
-            }
-        }
-        
-        // 5. عقاب شديد للمنتصف
         for(let i = 1; i < 3; i++) {
             for(let j = 1; j < 3; j++) {
                 score -= b[i][j] * 300
             }
         }
         
-        // 6. مكافأة إضافية للوصول لمستويات عالية
         if(maxVal >= 12) score += 100000
         if(maxVal >= 13) score += 200000
         if(maxVal >= 14) score += 500000
@@ -489,7 +488,7 @@ function evaluate(b, critical = false) {
     return score
 }
 
-// Minimax متطور مع عمق كبير
+// Minimax
 function minimax(b, depth, alpha, beta, isMax, critical) {
     if(depth == 0) return evaluate(b, critical)
     
@@ -519,7 +518,6 @@ function minimax(b, depth, alpha, beta, isMax, critical) {
         
         let best = Infinity
         
-        // أسوأ سيناريو
         for(let [i, j] of empty) {
             for(let val of [1, 2]) {
                 let sim = JSON.parse(JSON.stringify(b))
@@ -536,14 +534,13 @@ function minimax(b, depth, alpha, beta, isMax, critical) {
     }
 }
 
-// تحليل الموقع المتقدم
+// تحليل الموقف
 function analyzeSituation(b) {
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
     let critical = false
     let reason = ""
     
-    // شروط الطوارئ للمستويات العالية
     if(maxVal >= 12 && empty <= 4) {
         critical = true
         reason = "🔥 طوارئ قصوى! مستوى عالي جداً"
@@ -600,6 +597,15 @@ function showArrow(move) {
 function deepThink() {
     if(thinking) return
     
+    let b = getBoard()
+    
+    // التحقق من وجود حركة
+    if(!hasAnyMove(b)) {
+        document.getElementById("status").innerText = "💀 انتهت اللعبة!"
+        document.getElementById("status").className = "status danger"
+        return
+    }
+    
     thinking = true
     document.getElementById("status").innerText = "⏳"
     
@@ -610,15 +616,13 @@ function deepThink() {
         let empty = emptyCells(b).length
         let maxVal = getMaxLevel(b)
         
-        // تحليل الموقف
         let criticalMode = analyzeSituation(b)
         
-        // عمق تفكير ضخم (3 أضعاف)
         let depth
         if(criticalMode) {
-            depth = 14 // طوارئ: تفكير عميق جداً
+            depth = 14
         } else if(maxVal >= 12) {
-            depth = 13 // مستويات أسطورية
+            depth = 13
         } else if(maxVal >= 10) {
             depth = 12
         } else if(maxVal >= 8) {
@@ -631,7 +635,6 @@ function deepThink() {
             depth = 9
         }
         
-        // تحديث واجهة المعلومات
         let strategyText = criticalMode ? 
             '<span class="strategy-badge emergency-strategy">🚨 طوارئ</span>' : 
             '<span class="strategy-badge normal-strategy">🔵 عادي</span>'
@@ -643,7 +646,6 @@ function deepThink() {
         let bestMove = ""
         let bestScore = -Infinity
         
-        // تقييم سريع لكل حركة
         let moveScores = []
         for(let m of moves) {
             let sim = JSON.parse(JSON.stringify(b))
@@ -653,10 +655,7 @@ function deepThink() {
             moveScores.push({move: m, score: quickScore})
         }
         
-        // ترتيب الحركات
         moveScores.sort((a, b) => b.score - a.score)
-        
-        // تحليل عميق لأفضل 4 حركات (كل الحركات المتاحة)
         let topMoves = moveScores.slice(0, 4)
         
         for(let ms of topMoves) {
@@ -676,15 +675,12 @@ function deepThink() {
             setBoard(b)
             updateDisplay(b)
             showArrow(bestMove)
-        } else {
-            document.getElementById("status").innerText = "❌"
         }
         
         thinking = false
     }, 10)
 }
 
-// إعادة تعيين
 window.onload = function() {
     for(let i = 0; i < 16; i++)
         document.getElementById("t" + i).value = ""
