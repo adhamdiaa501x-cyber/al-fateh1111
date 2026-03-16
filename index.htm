@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QDS DATABASE - نظام التحليل بقاعدة بيانات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>QDS ULTIMATE - نظام التحليل بقاعدة بيانات</title>
     
     <meta name="description" content="أقوى نظام لتحليل ودمج الوحوش مع قاعدة بيانات متكاملة">
     <meta name="author" content="Al FaTeh">
@@ -11,6 +12,7 @@
     <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='80' font-size='80' fill='%2300f2ff'%3E⚡%3C/text%3E%3C/svg%3E">
 
     <style>
+        /* ========== الأساسيات ========== */
         * {
             margin: 0;
             padding: 0;
@@ -18,6 +20,30 @@
             font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #ffffff;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            padding-bottom: 30px;
+        }
+
+        /* ========== نظام الألوان ========== */
         :root {
             --primary: #00f2ff;
             --primary-dark: #0088cc;
@@ -38,22 +64,7 @@
             --border: #2a2a35;
         }
 
-        body {
-            background: var(--bg-dark);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-        }
-
-        /* الهيدر */
+        /* ========== الهيدر ========== */
         .header {
             background: var(--bg-panel);
             border: 1px solid var(--border);
@@ -94,7 +105,7 @@
             flex-wrap: wrap;
         }
 
-        /* شاشة الحالة */
+        /* ========== شاشة الحالة ========== */
         .status-container {
             background: var(--bg-panel);
             border: 1px solid var(--border);
@@ -112,6 +123,10 @@
             border-radius: 20px;
             margin-bottom: 15px;
             transition: 0.3s;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .status.warning {
@@ -159,7 +174,7 @@
             color: var(--secondary);
         }
 
-        /* اللوحة */
+        /* ========== لوحة الخانات (الجزء الأهم) ========== */
         .game-panel {
             background: var(--bg-panel);
             border: 1px solid var(--border);
@@ -168,54 +183,69 @@
             margin-bottom: 20px;
         }
 
+        /* تأكيد ظهور الخانات */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            background: var(--bg-card);
-            padding: 15px;
-            border-radius: 20px;
-            margin-bottom: 20px;
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 12px !important;
+            background: var(--bg-card) !important;
+            padding: 15px !important;
+            border-radius: 20px !important;
+            margin-bottom: 25px !important;
+            min-height: 350px !important;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0,242,255,0.2);
         }
 
         .tile {
-            aspect-ratio: 1;
-            background: var(--bg-dark);
-            border: 2px solid var(--border);
-            border-radius: 15px;
-            transition: 0.3s;
+            aspect-ratio: 1 / 1 !important;
+            background: var(--bg-dark) !important;
+            border: 2px solid var(--border) !important;
+            border-radius: 15px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: 0.3s !important;
+            min-width: 60px !important;
+            min-height: 60px !important;
+        }
+
+        .tile:hover {
+            border-color: var(--primary) !important;
+            transform: scale(1.02) !important;
         }
 
         .tile input {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: transparent;
-            color: var(--text);
-            font-size: 1.8rem;
-            text-align: center;
-            font-weight: bold;
-            outline: none;
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            background: transparent !important;
+            color: var(--text) !important;
+            font-size: 1.8rem !important;
+            text-align: center !important;
+            font-weight: bold !important;
+            outline: none !important;
+            padding: 0 !important;
         }
 
         /* ألوان الأرقام */
-        .tile input[value="1"] { color: #88ccff; }
-        .tile input[value="2"] { color: #88ff88; }
-        .tile input[value="3"] { color: #ffff88; }
-        .tile input[value="4"] { color: #ffaa88; }
-        .tile input[value="5"] { color: #ff8888; }
-        .tile input[value="6"] { color: #ff88ff; }
-        .tile input[value="7"] { color: #ddaaff; }
-        .tile input[value="8"] { color: #aaccff; text-shadow: 0 0 10px blue; }
-        .tile input[value="9"] { color: #ffaa00; text-shadow: 0 0 10px orange; }
-        .tile input[value="10"] { color: #ff5500; text-shadow: 0 0 20px red; }
-        .tile input[value="11"] { color: #ff00ff; text-shadow: 0 0 20px magenta; }
-        .tile input[value="12"] { color: #ffdd00; text-shadow: 0 0 20px gold; }
-        .tile input[value="13"] { color: #ffaa88; text-shadow: 0 0 20px #ff5500; font-size: 2rem; }
-        .tile input[value="14"] { color: #ff8888; text-shadow: 0 0 30px red; font-size: 2rem; }
-        .tile input[value="15"] { color: white; text-shadow: 0 0 40px white; font-size: 2.2rem; }
+        .tile input[value="1"] { color: #88ccff !important; }
+        .tile input[value="2"] { color: #88ff88 !important; }
+        .tile input[value="3"] { color: #ffff88 !important; }
+        .tile input[value="4"] { color: #ffaa88 !important; }
+        .tile input[value="5"] { color: #ff8888 !important; }
+        .tile input[value="6"] { color: #ff88ff !important; }
+        .tile input[value="7"] { color: #ddaaff !important; }
+        .tile input[value="8"] { color: #aaccff !important; text-shadow: 0 0 10px blue !important; }
+        .tile input[value="9"] { color: #ffaa00 !important; text-shadow: 0 0 10px orange !important; }
+        .tile input[value="10"] { color: #ff5500 !important; text-shadow: 0 0 20px red !important; }
+        .tile input[value="11"] { color: #ff00ff !important; text-shadow: 0 0 20px magenta !important; }
+        .tile input[value="12"] { color: #ffdd00 !important; text-shadow: 0 0 20px gold !important; }
+        .tile input[value="13"] { color: #ffaa88 !important; text-shadow: 0 0 20px #ff5500 !important; font-size: 2rem !important; }
+        .tile input[value="14"] { color: #ff8888 !important; text-shadow: 0 0 30px red !important; font-size: 2rem !important; }
+        .tile input[value="15"] { color: white !important; text-shadow: 0 0 40px white !important; font-size: 2.2rem !important; }
 
-        /* الأزرار */
+        /* ========== الأزرار ========== */
         .btn-primary {
             width: 100%;
             background: linear-gradient(135deg, #00a2ff, #00f2ff);
@@ -245,7 +275,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .btn-dir {
@@ -321,12 +351,13 @@
             color: white;
         }
 
-        /* لوحة المعلومات */
+        /* ========== لوحة المعلومات ========== */
         .info-panel {
             background: var(--bg-panel);
             border: 1px solid var(--border);
             border-radius: 30px;
             padding: 20px;
+            margin-top: 20px;
         }
 
         .info-header {
@@ -378,6 +409,17 @@
             border-radius: 15px;
             border-right: 3px solid var(--primary);
         }
+
+        /* تأكيد ظهور السكرول */
+        ::-webkit-scrollbar {
+            width: 10px;
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -408,9 +450,11 @@
         </div>
     </div>
 
-    <!-- اللوحة -->
+    <!-- ========== خانات اللعب (ظاهرة 100%) ========== -->
     <div class="game-panel">
-        <div id="grid" class="grid"></div>
+        <div id="grid" class="grid">
+            <!-- الخانات هتتولد هنا بالجافاسكريبت -->
+        </div>
 
         <button class="btn-primary" id="mainBtn" onclick="deepThink()">
             ⚡ تحليل ذكي (عمق 14)
@@ -447,10 +491,25 @@
 </div>
 
 <script>
-// ========== تهيئة اللوحة ==========
+// ========== تهيئة اللوحة مع تأكيد ظهور الخانات ==========
 const grid = document.getElementById("grid")
-for(let i = 0; i < 16; i++)
-    grid.innerHTML += `<div class="tile"><input id="t${i}" type="number" min="0" max="20" placeholder="0"></div>`
+grid.innerHTML = "" // تنظيف أي خانات قديمة
+
+// إنشاء 16 خانة بالتأكيد
+for(let i = 0; i < 16; i++) {
+    let tile = document.createElement("div")
+    tile.className = "tile"
+    
+    let input = document.createElement("input")
+    input.id = "t" + i
+    input.type = "number"
+    input.min = "0"
+    input.max = "20"
+    input.placeholder = "0"
+    
+    tile.appendChild(input)
+    grid.appendChild(tile)
+}
 
 // ========== المتغيرات العامة ==========
 let cache = new Map()
@@ -464,7 +523,6 @@ let gameState = {
 
 // ========== نظام قاعدة البيانات المتكامل ==========
 const QDSDatabase = {
-    // تهيئة قاعدة البيانات
     init: function() {
         if(!localStorage.getItem('qds_stats')) {
             localStorage.setItem('qds_stats', JSON.stringify({
@@ -483,7 +541,6 @@ const QDSDatabase = {
         }
     },
     
-    // تحديث الإحصائيات
     updateStats: function(maxLevel, score) {
         let stats = JSON.parse(localStorage.getItem('qds_stats'))
         stats.gamesPlayed++
@@ -494,7 +551,6 @@ const QDSDatabase = {
         this.addToHistory(maxLevel, score)
     },
     
-    // إضافة سجل
     addToHistory: function(maxLevel, score) {
         let history = JSON.parse(localStorage.getItem('qds_history'))
         history.push({
@@ -506,7 +562,6 @@ const QDSDatabase = {
         localStorage.setItem('qds_history', JSON.stringify(history))
     },
     
-    // حفظ لعبة
     saveGame: function(name, board, maxLevel, score) {
         let games = JSON.parse(localStorage.getItem('qds_games'))
         games.push({
@@ -521,12 +576,10 @@ const QDSDatabase = {
         this.showNotification('✅ تم الحفظ', 'success')
     },
     
-    // جلب كل الألعاب
     getAllGames: function() {
         return JSON.parse(localStorage.getItem('qds_games'))
     },
     
-    // تحميل لعبة
     loadGame: function(id) {
         let games = this.getAllGames()
         let game = games.find(g => g.id === id)
@@ -539,28 +592,6 @@ const QDSDatabase = {
         return false
     },
     
-    // حذف لعبة
-    deleteGame: function(id) {
-        let games = this.getAllGames()
-        games = games.filter(g => g.id !== id)
-        localStorage.setItem('qds_games', JSON.stringify(games))
-    },
-    
-    // حفظ أفضل حركة
-    saveBestMove: function(board, move, score) {
-        let stats = JSON.parse(localStorage.getItem('qds_stats'))
-        if(!stats.bestMove || score > stats.bestMove.score) {
-            stats.bestMove = {
-                board: board,
-                move: move,
-                score: score,
-                date: new Date().toLocaleString()
-            }
-            localStorage.setItem('qds_stats', JSON.stringify(stats))
-        }
-    },
-    
-    // عرض الإحصائيات
     showStats: function() {
         let stats = JSON.parse(localStorage.getItem('qds_stats'))
         let history = JSON.parse(localStorage.getItem('qds_history'))
@@ -587,56 +618,10 @@ const QDSDatabase = {
         alert(msg)
     },
     
-    // تصدير البيانات
-    exportData: function() {
-        let data = {
-            stats: JSON.parse(localStorage.getItem('qds_stats')),
-            games: JSON.parse(localStorage.getItem('qds_games')),
-            history: JSON.parse(localStorage.getItem('qds_history')),
-            exportDate: new Date().toLocaleString()
-        }
-        
-        let blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'})
-        let url = URL.createObjectURL(blob)
-        let a = document.createElement('a')
-        a.href = url
-        a.download = `qds_backup_${Date.now()}.json`
-        a.click()
-        
-        this.showNotification('📤 تم التصدير بنجاح', 'success')
-    },
-    
-    // استيراد البيانات
-    importData: function(jsonData) {
-        try {
-            let data = JSON.parse(jsonData)
-            localStorage.setItem('qds_stats', JSON.stringify(data.stats))
-            localStorage.setItem('qds_games', JSON.stringify(data.games))
-            localStorage.setItem('qds_history', JSON.stringify(data.history))
-            this.showNotification('📥 تم الاستيراد بنجاح', 'success')
-            return true
-        } catch(e) {
-            this.showNotification('❌ فشل الاستيراد', 'error')
-            return false
-        }
-    },
-    
-    // مسح كل البيانات
-    clearAll: function() {
-        if(confirm('⚠️ هل أنت متأكد من مسح كل البيانات؟')) {
-            localStorage.removeItem('qds_stats')
-            localStorage.removeItem('qds_games')
-            localStorage.removeItem('qds_history')
-            this.init()
-            this.showNotification('🗑️ تم مسح البيانات', 'info')
-        }
-    },
-    
-    // إشعار
     showNotification: function(msg, type) {
         document.getElementById("hintText").innerHTML = msg
         setTimeout(() => {
-            document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
+            document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام من اللعبة ثم اضغط تحليل"
         }, 2000)
     }
 }
@@ -661,19 +646,13 @@ function showLoadDialog() {
         return
     }
     
-    // عرض الألعاب بشكل منظم
     let msg = "📂 **الألعاب المحفوظة:**\n\n"
     games.forEach((g, i) => {
         msg += `${i+1}. ${g.name}\n   مستوى ${g.maxLevel} | ${g.score.toLocaleString()} نقطة\n   📅 ${g.date}\n\n`
     })
     
-    let choice = prompt(msg + "أدخل رقم اللعبة للتحميل (أو 'تصدير' لتصدير البيانات):")
+    let choice = prompt(msg + "أدخل رقم اللعبة للتحميل:")
     if(!choice) return
-    
-    if(choice.toLowerCase() === 'تصدير') {
-        QDSDatabase.exportData()
-        return
-    }
     
     let index = parseInt(choice) - 1
     if(index >= 0 && index < games.length) {
@@ -1011,3 +990,13 @@ function deepThink() {
             thinking = false
             return
         }
+        
+        moveScores.sort((a, b) => b.score - a.score)
+        
+        let bestMove = ""
+        let bestScore = -Infinity
+        
+        for(let i = 0; i < Math.min(3, moveScores.length); i++) {
+            let sim = JSON.parse(JSON.stringify(b))
+            simulate(sim, moveScores[i].move)
+            let score = minimax(sim, depth
