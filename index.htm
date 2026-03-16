@@ -441,7 +441,7 @@ let thinking = false
 let gameState = {
     maxLevel: 0,
     criticalMode: false,
-    reachedLevel15: false,
+    reachedLevel10: false,  // تغيير من reachedLevel15
     movesSinceCritical: 0
 }
 
@@ -499,11 +499,13 @@ function updateDisplay(b) {
     
     gameState.maxLevel = maxLevel
     
-    if(maxLevel >= 15 && !gameState.reachedLevel15) {
-        gameState.reachedLevel15 = true
+    // لو وصل للمستوى 10، نحتفل بس نكمل لعب
+    if(maxLevel >= 10 && !gameState.reachedLevel10) {
+        gameState.reachedLevel10 = true
         document.getElementById("status").className = "status legend"
-        document.getElementById("status").innerText = "👑 15!"
+        document.getElementById("status").innerText = "🏆 10! استمر"
         document.getElementById("mainBtn").className = "btn-primary legend"
+        document.getElementById("hintText").innerHTML = "🔥 مبروك المستوى 10! واصل للمستوى 15"
     }
     else if(maxLevel >= 12) {
         document.getElementById("status").className = "status warning"
@@ -741,8 +743,8 @@ function showArrow(move) {
     const arrows = { up: "↑", down: "↓", left: "←", right: "→" }
     let arrow = arrows[move] || "⚡"
     
-    if(gameState.reachedLevel15) arrow = "👑 " + arrow
-    else if(gameState.maxLevel >= 12) arrow = "🏆 " + arrow
+    if(gameState.maxLevel >= 10) arrow = "🏆 " + arrow
+    else arrow = "⚡ " + arrow
     
     document.getElementById("status").innerText = arrow
 }
@@ -861,7 +863,7 @@ function resetGame() {
     gameState = {
         maxLevel: 0,
         criticalMode: false,
-        reachedLevel15: false,
+        reachedLevel10: false,
         movesSinceCritical: 0
     }
     
@@ -882,4 +884,4 @@ window.onload = resetGame
 </script>
 
 </body>
-</html>
+    </html>
