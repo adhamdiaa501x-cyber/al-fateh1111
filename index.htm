@@ -1,273 +1,548 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QDS ULTRA - الذكاء الأسطوري</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QDS PROFESSIONAL - نظام تحليل دمج الوحوش المتطور</title>
+    
+    <!-- تحسينات SEO ومشاركة الموقع -->
+    <meta name="description" content="أداة احترافية لتحليل ودمج الوحوش في لعبة الفاتحون - نظام ذكاء اصطناعي متطور">
+    <meta name="keywords" content="الفاتحون, دمج وحوش, QDS, العاب استراتيجية">
+    <meta name="author" content="Al FaTeh">
+    
+    <!-- أيقونة الموقع -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='80' font-size='80' fill='%2300f2ff'%3E⚡%3C/text%3E%3C/svg%3E">
 
-<style>
-:root{
---bg:#050505;
---accent:#00f2ff;
---panel:#111;
---gold:#ffd700;
---danger:#ff4444;
---legend:#aa88ff;
-}
+    <style>
+        /* ========== نظام الألوان الاحترافي ========== */
+        :root {
+            --primary: #00f2ff;
+            --primary-dark: #00a2cc;
+            --primary-glow: rgba(0, 242, 255, 0.5);
+            --secondary: #ffd700;
+            --danger: #ff4444;
+            --success: #00ff88;
+            --legend: #aa88ff;
+            
+            --bg-dark: #0a0a0f;
+            --bg-panel: #111116;
+            --bg-card: #1a1a24;
+            
+            --text-primary: #ffffff;
+            --text-secondary: #aaaac0;
+            --border-color: #2a2a35;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 8px 30px rgba(0, 242, 255, 0.2);
+            --shadow-glow: 0 0 30px var(--primary-glow);
+            
+            --gradient-gold: linear-gradient(135deg, #ffd700, #ffaa00);
+            --gradient-primary: linear-gradient(135deg, #00f2ff, #0088ff);
+            --gradient-legend: linear-gradient(135deg, #aa88ff, #cc88ff);
+        }
 
-body{
-background:var(--bg);
-color:#fff;
-font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-margin:0;
-padding:15px;
-text-align:center;
-background:linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-.container{
-max-width:420px;
-margin:auto;
-}
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-.brand{
-font-size:3rem;
-font-weight:900;
-color:var(--accent);
-text-shadow:0 0 30px var(--accent), 0 0 60px #0088ff;
-margin-bottom:5px;
-letter-spacing:2px;
-}
+        /* خلفية متحركة احترافية */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(170, 136, 255, 0.1) 0%, transparent 30%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 10px);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-.credit{
-margin-top:5px;
-font-size:1rem;
-color:#aaa;
-background:rgba(0,242,255,0.1);
-padding:8px 15px;
-border-radius:30px;
-display:inline-block;
-}
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
 
-.status{
-background:var(--panel);
-border:3px solid var(--accent);
-border-radius:15px;
-padding:20px;
-margin:15px 0;
-font-size:2.5rem;
-color:var(--accent);
-box-shadow:0 0 30px rgba(0,242,255,0.3);
-transition:0.3s;
-}
+        /* ========== الهيدر الاحترافي ========== */
+        .header {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
 
-.status.warning{
-border-color:var(--gold);
-color:var(--gold);
-box-shadow:0 0 30px rgba(255,215,0,0.3);
-}
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            animation: scan 3s linear infinite;
+        }
 
-.status.danger{
-border-color:var(--danger);
-color:var(--danger);
-box-shadow:0 0 30px rgba(255,68,68,0.3);
-}
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
 
-.status.legend{
-border-color:#aa88ff;
-color:#aa88ff;
-box-shadow:0 0 50px #aa88ff;
-}
+        .brand {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--shadow-glow);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
 
-.score-board{
-display:flex;
-justify-content:space-between;
-margin:15px 0;
-gap:10px;
-}
+        .brand::after {
+            content: 'PRO';
+            font-size: 1rem;
+            background: var(--gradient-gold);
+            padding: 4px 8px;
+            border-radius: 20px;
+            position: absolute;
+            top: 5px;
+            left: -20px;
+            color: var(--bg-dark);
+            font-weight: bold;
+            -webkit-text-fill-color: initial;
+        }
 
-.score-box{
-background:var(--panel);
-border:2px solid var(--accent);
-border-radius:12px;
-padding:12px;
-flex:1;
-font-size:1.1rem;
-}
+        .credit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            flex-wrap: wrap;
+        }
 
-.score-box span{
-display:block;
-font-size:1.8rem;
-font-weight:bold;
-color:var(--accent);
-}
+        .credit-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
 
-.max-level{
-border-color:var(--gold);
-}
+        /* ========== شاشة الحالة المتطورة ========== */
+        .status-container {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
 
-.max-level span{
-color:var(--gold);
-}
+        .status {
+            font-size: 4rem;
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-background:#222;
-padding:15px;
-border-radius:20px;
-border:2px solid #333;
-box-shadow:inset 0 0 30px #000;
-}
+        .status.warning {
+            border-color: var(--secondary);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
 
-.tile{
-aspect-ratio:1;
-background:#000;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-border:2px solid #333;
-transition:0.2s;
-}
+        .status.danger {
+            border-color: var(--danger);
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.3);
+        }
 
-.tile input{
-width:100%;
-height:100%;
-border:none;
-background:transparent;
-color:var(--accent);
-font-size:1.8rem;
-text-align:center;
-outline:none;
-font-weight:bold;
-}
+        .status.legend {
+            border-color: var(--legend);
+            box-shadow: 0 0 50px rgba(170, 136, 255, 0.5);
+        }
 
-/* تلوين حسب المستوى */
-.tile input[value="1"] { color: #88ccff; }
-.tile input[value="2"] { color: #88ff88; }
-.tile input[value="3"] { color: #ffff88; }
-.tile input[value="4"] { color: #ffaa88; }
-.tile input[value="5"] { color: #ff8888; }
-.tile input[value="6"] { color: #ff88ff; }
-.tile input[value="7"] { color: #ddaaff; }
-.tile input[value="8"] { color: #aaccff; text-shadow:0 0 10px blue; }
-.tile input[value="9"] { color: #ffaa00; text-shadow:0 0 10px orange; }
-.tile input[value="10"] { color: #ff5500; text-shadow:0 0 20px red; }
-.tile input[value="11"] { color: #ff00ff; text-shadow:0 0 20px magenta; }
-.tile input[value="12"] { color: #ffdd00; text-shadow:0 0 20px gold; }
-.tile input[value="13"] { color: #ffaa88; text-shadow:0 0 20px #ff8800; font-size:2rem; }
-.tile input[value="14"] { color: #ff8888; text-shadow:0 0 30px #ff4444; font-size:2rem; }
-.tile input[value="15"] { color: #ffdddd; text-shadow:0 0 40px #ffffff; font-size:2.2rem; font-weight:900; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-.btn{
-background:linear-gradient(135deg, #00a2ff, #00f2ff);
-border:none;
-padding:18px;
-border-radius:12px;
-font-size:1.3rem;
-font-weight:900;
-cursor:pointer;
-width:100%;
-margin-top:15px;
-color:#000;
-box-shadow:0 5px 0 #0088cc, 0 10px 20px black;
-transition:0.1s;
-}
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
 
-.btn:active{
-transform:translateY(5px);
-box-shadow:0 2px 0 #0088cc, 0 10px 20px black;
-}
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
 
-.btn.legend{
-background:linear-gradient(135deg, #aa88ff, #cc88ff);
-box-shadow:0 5px 0 #8866cc;
-}
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
 
-.info-panel{
-background:rgba(0,0,0,0.7);
-border:1px solid #333;
-border-radius:10px;
-padding:10px;
-margin:10px 0;
-font-size:0.9rem;
-color:#aaa;
-text-align:right;
-}
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            line-height: 1;
+        }
 
-.depth-indicator{
-display:inline-block;
-padding:2px 8px;
-border-radius:12px;
-background:#333;
-color:#fff;
-font-size:0.8rem;
-margin-right:5px;
-}
+        .stat-value.max-level {
+            color: var(--secondary);
+        }
 
-.strategy-badge{
-display:inline-block;
-padding:3px 8px;
-border-radius:15px;
-font-size:0.8rem;
-margin-right:5px;
-}
+        /* ========== اللوحة الرئيسية ========== */
+        .game-container {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
 
-.normal-strategy{
-background:rgba(0,255,255,0.2);
-color:#00ffff;
-}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
 
-.emergency-strategy{
-background:rgba(255,68,68,0.2);
-color:#ff8888;
-}
+        .tile {
+            aspect-ratio: 1;
+            background: var(--bg-dark);
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-</style>
+        .tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tile:hover::before {
+            opacity: 1;
+        }
+
+        .tile input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .tile input:focus {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px var(--primary);
+        }
+
+        /* ألوان المستويات */
+        .tile input[value="1"] { color: #88ccff; }
+        .tile input[value="2"] { color: #88ff88; }
+        .tile input[value="3"] { color: #ffff88; }
+        .tile input[value="4"] { color: #ffaa88; }
+        .tile input[value="5"] { color: #ff8888; }
+        .tile input[value="6"] { color: #ff88ff; }
+        .tile input[value="7"] { color: #ddaaff; }
+        .tile input[value="8"] { color: #aaccff; text-shadow: 0 0 10px #0088ff; }
+        .tile input[value="9"] { color: #ffaa00; text-shadow: 0 0 10px #ff8800; }
+        .tile input[value="10"] { color: #ff5500; text-shadow: 0 0 20px #ff4400; }
+        .tile input[value="11"] { color: #ff00ff; text-shadow: 0 0 20px #ff00ff; }
+        .tile input[value="12"] { color: #ffdd00; text-shadow: 0 0 20px #ffaa00; }
+        .tile input[value="13"] { color: #ffaa88; text-shadow: 0 0 20px #ff5500; font-size: 2rem; }
+        .tile input[value="14"] { color: #ff8888; text-shadow: 0 0 30px #ff0000; font-size: 2rem; }
+        .tile input[value="15"] { color: #ffffff; text-shadow: 0 0 40px #ffffff; font-size: 2.2rem; font-weight: 900; }
+
+        /* ========== أزرار التحكم ========== */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 20px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--bg-dark);
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--primary-dark), var(--shadow-md);
+            transition: all 0.1s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(5px);
+            box-shadow: 0 2px 0 var(--primary-dark), var(--shadow-md);
+        }
+
+        .btn-primary.legend {
+            background: var(--gradient-legend);
+            box-shadow: 0 5px 0 #8866cc, var(--shadow-md);
+        }
+
+        .direction-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn-direction {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 2rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-direction:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-reset {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1.5rem;
+            color: var(--danger);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            grid-column: span 4;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            transform: scale(1.02);
+        }
+
+        /* ========== لوحة المعلومات ========== */
+        .info-panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .info-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .badge {
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .badge.emergency {
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .badge.normal {
+            background: rgba(0, 242, 255, 0.2);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .badge.depth {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        /* ========== تلميحات متحركة ========== */
+        .hint-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border-right: 3px solid var(--primary);
+        }
+
+        /* ========== أنيميشن ========== */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s ease infinite;
+        }
+
+        /* ========== تنسيق الجوال ========== */
+        @media (max-width: 480px) {
+            .brand { font-size: 2.8rem; }
+            .status { font-size: 3rem; }
+            .stat-value { font-size: 2rem; }
+            .tile input { font-size: 1.4rem; }
+            .btn-primary { font-size: 1.2rem; padding: 15px; }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
-
-<h1 class="brand">QDS ULTRA</h1>
-
-<div class="credit">
-Al FaTeh · 01016057623 · هدف 32768
-</div>
-
-<div id="status" class="status">⚡</div>
-
-<div class="score-board">
-    <div class="score-box">
-        <div>المجموع</div>
-        <span id="totalScore">0</span>
+    <!-- الهيدر الاحترافي -->
+    <div class="header">
+        <h1 class="brand">QDS</h1>
+        <div class="credit">
+            <span class="credit-item">👤 Al FaTeh</span>
+            <span class="credit-item">📱 01016057623</span>
+            <span class="credit-item">🎯 هدف 32768</span>
+        </div>
     </div>
-    <div class="score-box max-level">
-        <div>المستوى</div>
-        <span id="maxLevel">0</span>
+
+    <!-- شاشة الحالة -->
+    <div class="status-container">
+        <div id="status" class="status">⚡</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">المستوى الأقصى</div>
+                <div class="stat-value max-level" id="maxLevel">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">إجمالي النقاط</div>
+                <div class="stat-value" id="totalScore">0</div>
+            </div>
+        </div>
     </div>
-</div>
 
-<div id="grid" class="grid"></div>
+    <!-- لوحة اللعب -->
+    <div class="game-container">
+        <div id="grid" class="grid"></div>
 
-<button class="btn" id="mainBtn" onclick="deepThink()">⚡ تحليل فائق</button>
+        <!-- أزرار التحكم -->
+        <div class="control-panel">
+            <button class="btn-primary" id="mainBtn" onclick="deepThink()">
+                ⚡ تحليل ذكي متطور
+            </button>
 
-<div class="info-panel" id="infoPanel">
-    <span id="strategyText">🔄 جاري التحليل...</span>
-</div>
+            <div class="direction-panel">
+                <button class="btn-direction" onclick="manualUp()">↑</button>
+                <button class="btn-direction" onclick="manualDown()">↓</button>
+                <button class="btn-direction" onclick="manualLeft()">←</button>
+                <button class="btn-direction" onclick="manualRight()">→</button>
+                <button class="btn-reset" onclick="resetGame()">🔄 بداية جديدة</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- لوحة المعلومات -->
+    <div class="info-panel">
+        <div class="info-header">
+            <span>📊 معلومات التحليل</span>
+        </div>
+        <div class="info-content" id="infoPanel">
+            <span class="badge normal">🔵 وضع طبيعي</span>
+            <span class="badge depth">⏱️ عمق 0</span>
+        </div>
+        <div class="hint-text" id="hintText">
+            أدخل الأرقام من اللعبة ثم اضغط زر التحليل
+        </div>
+    </div>
 </div>
 
 <script>
+// ========== تهيئة اللوحة ==========
 const grid = document.getElementById("grid")
-
-// إنشاء الخانات
 for(let i = 0; i < 16; i++)
     grid.innerHTML += `<div class="tile"><input id="t${i}" type="number" min="0" max="20" placeholder="0"></div>`
 
+// ========== متغيرات عامة ==========
 let cache = new Map()
 let thinking = false
 let gameState = {
@@ -275,9 +550,11 @@ let gameState = {
     criticalMode: false,
     reachedLevel15: false,
     movesSinceCritical: 0,
-    currentStrategy: "normal"
+    currentStrategy: "normal",
+    lastMove: null
 }
 
+// ========== دوال المساعدة ==========
 function getBoard() {
     let b = []
     for(let i = 0; i < 4; i++) {
@@ -323,25 +600,31 @@ function updateDisplay(b) {
     
     gameState.maxLevel = maxLevel
     
+    // تحديث شكل الشاشة حسب المستوى
     if(maxLevel >= 15 && !gameState.reachedLevel15) {
         gameState.reachedLevel15 = true
         document.getElementById("status").className = "status legend"
         document.getElementById("status").innerText = "👑 15! أسطورة!"
-        document.getElementById("mainBtn").className = "btn legend"
+        document.getElementById("mainBtn").className = "btn-primary legend"
+        document.getElementById("hintText").innerText = "🔥 مبروك! وصلت للأسطورة! استمر في اللعب"
     }
     else if(maxLevel >= 12 && !gameState.reachedLevel15) {
-        document.getElementById("status").className = "status victory"
-        document.getElementById("status").innerText = "🏆 " + maxLevel + "! استمر"
+        document.getElementById("status").className = "status warning"
+        document.getElementById("hintText").innerHTML = "🏆 مستوى " + maxLevel + "! باقي خطوات قليلة للأسطورة"
     }
     else if(gameState.criticalMode) {
         document.getElementById("status").className = "status danger"
+        document.getElementById("hintText").innerHTML = "⚠️ وضع الطوارئ - ركز على الدمج السريع"
     } else if(maxLevel >= 10) {
         document.getElementById("status").className = "status warning"
+        document.getElementById("hintText").innerHTML = "💪 أداء ممتاز! حافظ على الزوايا"
     } else {
         document.getElementById("status").className = "status"
+        document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
     }
 }
 
+// ========== دوال اللعبة الأساسية ==========
 function compress(row) {
     let n = row.filter(v => v > 0)
     
@@ -397,40 +680,31 @@ function emptyCells(b) {
     return e
 }
 
-// التحقق من وجود حركة ممكنة
 function hasAnyMove(b) {
-    // لو في خلايا فارغة، أكيد في حركة
     if(emptyCells(b).length > 0) return true
     
-    // فحص الدمج الأفقي
     for(let i = 0; i < 4; i++) {
         for(let j = 0; j < 3; j++) {
-            if(b[i][j] == b[i][j+1] && b[i][j] > 0) {
-                return true
-            }
+            if(b[i][j] == b[i][j+1] && b[i][j] > 0) return true
         }
     }
     
-    // فحص الدمج العمودي
     for(let j = 0; j < 4; j++) {
         for(let i = 0; i < 3; i++) {
-            if(b[i][j] == b[i+1][j] && b[i][j] > 0) {
-                return true
-            }
+            if(b[i][j] == b[i+1][j] && b[i][j] > 0) return true
         }
     }
     
     return false
 }
 
-// تقييم الوضع
+// ========== التقييم المتطور ==========
 function evaluate(b, critical = false) {
     let score = 0
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
     
     if(critical) {
-        // استراتيجية الطوارئ
         score += empty * 50000
         
         for(let i = 0; i < 4; i++) {
@@ -447,10 +721,7 @@ function evaluate(b, critical = false) {
                 }
             }
         }
-        
-        score += empty * 20000
     } else {
-        // الاستراتيجية العادية
         score += empty * 15000
         
         if(b[0][0] == maxVal) score += maxVal * 2000
@@ -461,13 +732,6 @@ function evaluate(b, critical = false) {
         for(let i = 0; i < 4; i++) {
             for(let j = 0; j < 3; j++) {
                 if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
-                    score += b[i][j] * 800
-                }
-            }
-        }
-        for(let j = 0; j < 4; j++) {
-            for(let i = 0; i < 3; i++) {
-                if(b[i][j] == b[i + 1][j] && b[i][j] > 0) {
                     score += b[i][j] * 800
                 }
             }
@@ -488,7 +752,7 @@ function evaluate(b, critical = false) {
     return score
 }
 
-// Minimax
+// ========== Minimax ==========
 function minimax(b, depth, alpha, beta, isMax, critical) {
     if(depth == 0) return evaluate(b, critical)
     
@@ -534,37 +798,22 @@ function minimax(b, depth, alpha, beta, isMax, critical) {
     }
 }
 
-// تحليل الموقف
+// ========== تحليل الموقف ==========
 function analyzeSituation(b) {
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
     let critical = false
-    let reason = ""
     
-    if(maxVal >= 12 && empty <= 4) {
-        critical = true
-        reason = "🔥 طوارئ قصوى! مستوى عالي جداً"
-    }
-    else if(maxVal >= 10 && empty <= 3) {
-        critical = true
-        reason = "⚠️ خطر شديد! مساحة قليلة"
-    }
-    else if(maxVal >= 8 && empty <= 2) {
-        critical = true
-        reason = "🚨 وضع حرج!"
-    }
-    else if(empty <= 1) {
-        critical = true
-        reason = "💀 لا توجد خلايا!"
-    }
+    if(maxVal >= 12 && empty <= 4) critical = true
+    else if(maxVal >= 10 && empty <= 3) critical = true
+    else if(maxVal >= 8 && empty <= 2) critical = true
+    else if(empty <= 1) critical = true
     else if(gameState.criticalMode && gameState.movesSinceCritical < 3) {
         critical = true
-        reason = "⏱️ استمرار الطوارئ"
         gameState.movesSinceCritical++
     } else {
         gameState.criticalMode = false
         gameState.movesSinceCritical = 0
-        reason = "✅ بناء استراتيجي"
     }
     
     if(critical) {
@@ -577,32 +826,30 @@ function analyzeSituation(b) {
     return critical
 }
 
+// ========== عرض السهم ==========
 function showArrow(move) {
-    const arrows = {
-        up: "↑",
-        down: "↓",
-        left: "←",
-        right: "→"
-    }
-    
-    document.getElementById("status").innerText = arrows[move] || "⚡"
+    const arrows = { up: "↑", down: "↓", left: "←", right: "→" }
+    let displayArrow = arrows[move] || "⚡"
     
     if(gameState.reachedLevel15) {
-        document.getElementById("status").innerText = "👑 " + (arrows[move] || "⚡")
+        document.getElementById("status").innerText = "👑 " + displayArrow
     } else if(gameState.maxLevel >= 12) {
-        document.getElementById("status").innerText = "🏆 " + (arrows[move] || "⚡")
+        document.getElementById("status").innerText = "🏆 " + displayArrow
+    } else {
+        document.getElementById("status").innerText = displayArrow
     }
 }
 
+// ========== التحليل الذكي ==========
 function deepThink() {
     if(thinking) return
     
     let b = getBoard()
     
-    // التحقق من وجود حركة
     if(!hasAnyMove(b)) {
         document.getElementById("status").innerText = "💀 انتهت اللعبة!"
         document.getElementById("status").className = "status danger"
+        document.getElementById("hintText").innerHTML = "💀 لا توجد حركات ممكنة - اضغط بداية جديدة"
         return
     }
     
@@ -618,55 +865,44 @@ function deepThink() {
         
         let criticalMode = analyzeSituation(b)
         
-        let depth
-        if(criticalMode) {
-            depth = 14
-        } else if(maxVal >= 12) {
-            depth = 13
-        } else if(maxVal >= 10) {
-            depth = 12
-        } else if(maxVal >= 8) {
-            depth = 11
-        } else if(maxVal >= 6) {
-            depth = 10
-        } else if(empty > 8) {
-            depth = 8
-        } else {
-            depth = 9
-        }
+        let depth = criticalMode ? 14 : 
+                   (maxVal >= 12 ? 13 :
+                   (maxVal >= 10 ? 12 :
+                   (maxVal >= 8 ? 11 :
+                   (maxVal >= 6 ? 10 :
+                   (empty > 8 ? 8 : 9)))))
         
+        // تحديث لوحة المعلومات
         let strategyText = criticalMode ? 
-            '<span class="strategy-badge emergency-strategy">🚨 طوارئ</span>' : 
-            '<span class="strategy-badge normal-strategy">🔵 عادي</span>'
+            '<span class="badge emergency">🚨 طوارئ</span>' : 
+            '<span class="badge normal">🔵 عادي</span>'
         
         document.getElementById("infoPanel").innerHTML = 
-            `${strategyText} <span class="depth-indicator">عمق ${depth}</span> <span>${criticalMode ? 'وضع طوارئ' : 'وضع طبيعي'}</span>`
+            strategyText + ` <span class="badge depth">⏱️ عمق ${depth}</span>`
         
         let moves = ["up", "down", "left", "right"]
         let bestMove = ""
         let bestScore = -Infinity
         
+        // تقييم سريع للحركات
         let moveScores = []
         for(let m of moves) {
             let sim = JSON.parse(JSON.stringify(b))
             if(!simulate(sim, m)) continue
-            
-            let quickScore = evaluate(sim, criticalMode)
-            moveScores.push({move: m, score: quickScore})
+            moveScores.push({move: m, score: evaluate(sim, criticalMode)})
         }
         
         moveScores.sort((a, b) => b.score - a.score)
-        let topMoves = moveScores.slice(0, 4)
         
-        for(let ms of topMoves) {
+        // تحليل عميق لأفضل 3 حركات
+        for(let i = 0; i < Math.min(3, moveScores.length); i++) {
             let sim = JSON.parse(JSON.stringify(b))
-            simulate(sim, ms.move)
-            
+            simulate(sim, moveScores[i].move)
             let score = minimax(sim, depth - 1, -Infinity, Infinity, false, criticalMode)
             
             if(score > bestScore) {
                 bestScore = score
-                bestMove = ms.move
+                bestMove = moveScores[i].move
             }
         }
         
@@ -681,7 +917,26 @@ function deepThink() {
     }, 10)
 }
 
-window.onload = function() {
+// ========== الحركات اليدوية ==========
+function manualUp() { manualMove("up") }
+function manualDown() { manualMove("down") }
+function manualLeft() { manualMove("left") }
+function manualRight() { manualMove("right") }
+
+function manualMove(dir) {
+    if(thinking) return
+    let b = getBoard()
+    if(simulate(b, dir)) {
+        setBoard(b)
+        updateDisplay(b)
+        showArrow(dir)
+    }
+}
+
+// ========== إعادة التعيين ==========
+function resetGame() {
+    if(thinking) return
+    
     for(let i = 0; i < 16; i++)
         document.getElementById("t" + i).value = ""
     
@@ -695,14 +950,16 @@ window.onload = function() {
     
     document.getElementById("status").className = "status"
     document.getElementById("status").innerText = "⚡"
-    document.getElementById("mainBtn").className = "btn"
+    document.getElementById("mainBtn").className = "btn-primary"
     document.getElementById("maxLevel").innerText = "0"
     document.getElementById("totalScore").innerText = "0"
-    document.getElementById("infoPanel").innerHTML = "🔄 جاري التحليل..."
+    document.getElementById("infoPanel").innerHTML = 
+        '<span class="badge normal">🔵 وضع طبيعي</span> <span class="badge depth">⏱️ عمق 0</span>'
+    document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
+    
     cache.clear()
 }
 
-</script>
-
-</body>
-</html>
+// ========== بداية التشغيل ==========
+window.onload = resetGame
+</script
