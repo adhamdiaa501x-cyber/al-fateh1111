@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QDS PROFESSIONAL - نظام تحليل دمج الوحوش المتطور</title>
+    <title>QDS ULTIMATE - النظام الأسطوري</title>
     
-    <!-- تحسينات SEO ومشاركة الموقع -->
-    <meta name="description" content="أداة احترافية لتحليل ودمج الوحوش في لعبة الفاتحون - نظام ذكاء اصطناعي متطور">
-    <meta name="keywords" content="الفاتحون, دمج وحوش, QDS, العاب استراتيجية">
+    <meta name="description" content="أقوى نظام لتحليل ودمج الوحوش في لعبة الفاتحون">
     <meta name="author" content="Al FaTeh">
     
-    <!-- أيقونة الموقع -->
     <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='80' font-size='80' fill='%2300f2ff'%3E⚡%3C/text%3E%3C/svg%3E">
 
     <style>
-        /* ========== نظام الألوان الاحترافي ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
         :root {
             --primary: #00f2ff;
-            --primary-dark: #00a2cc;
-            --primary-glow: rgba(0, 242, 255, 0.5);
+            --primary-dark: #0088cc;
             --secondary: #ffd700;
             --danger: #ff4444;
             --success: #00ff88;
@@ -28,176 +30,103 @@
             --bg-panel: #111116;
             --bg-card: #1a1a24;
             
-            --text-primary: #ffffff;
-            --text-secondary: #aaaac0;
-            --border-color: #2a2a35;
-            
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
-            --shadow-lg: 0 8px 30px rgba(0, 242, 255, 0.2);
-            --shadow-glow: 0 0 30px var(--primary-glow);
-            
-            --gradient-gold: linear-gradient(135deg, #ffd700, #ffaa00);
-            --gradient-primary: linear-gradient(135deg, #00f2ff, #0088ff);
-            --gradient-legend: linear-gradient(135deg, #aa88ff, #cc88ff);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --text: #ffffff;
+            --text-dim: #aaaac0;
+            --border: #2a2a35;
         }
 
         body {
             background: var(--bg-dark);
-            color: var(--text-primary);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 15px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* خلفية متحركة احترافية */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.1) 0%, transparent 30%),
-                radial-gradient(circle at 80% 70%, rgba(170, 136, 255, 0.1) 0%, transparent 30%),
-                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 10px);
-            pointer-events: none;
-            z-index: 0;
         }
 
         .container {
             max-width: 500px;
             width: 100%;
-            margin: auto;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ========== الهيدر الاحترافي ========== */
+        /* الهيدر */
         .header {
             background: var(--bg-panel);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 30px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-md);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--gradient-primary);
-            animation: scan 3s linear infinite;
-        }
-
-        @keyframes scan {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            text-align: center;
         }
 
         .brand {
             font-size: 3.5rem;
             font-weight: 900;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: var(--shadow-glow);
+            color: var(--primary);
+            text-shadow: 0 0 30px var(--primary);
             margin-bottom: 10px;
-            letter-spacing: 2px;
             position: relative;
             display: inline-block;
         }
 
         .brand::after {
-            content: 'PRO';
-            font-size: 1rem;
-            background: var(--gradient-gold);
-            padding: 4px 8px;
-            border-radius: 20px;
+            content: 'نهائي';
+            font-size: 0.9rem;
+            background: var(--secondary);
+            color: black;
+            padding: 4px 12px;
+            border-radius: 30px;
             position: absolute;
-            top: 5px;
-            left: -20px;
-            color: var(--bg-dark);
+            top: 0;
+            left: -30px;
             font-weight: bold;
-            -webkit-text-fill-color: initial;
         }
 
         .credit {
             display: flex;
-            align-items: center;
             justify-content: center;
             gap: 20px;
-            color: var(--text-secondary);
-            font-size: 1rem;
+            color: var(--text-dim);
             flex-wrap: wrap;
         }
 
-        .credit-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        /* ========== شاشة الحالة المتطورة ========== */
+        /* شاشة الحالة */
         .status-container {
             background: var(--bg-panel);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 30px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-md);
         }
 
         .status {
             font-size: 4rem;
             text-align: center;
             padding: 20px;
-            border-radius: 20px;
             background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
+            border: 2px solid var(--border);
+            border-radius: 20px;
             margin-bottom: 15px;
+            transition: 0.3s;
         }
 
         .status.warning {
             border-color: var(--secondary);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 30px rgba(255,215,0,0.3);
         }
 
         .status.danger {
             border-color: var(--danger);
-            box-shadow: 0 0 30px rgba(255, 68, 68, 0.3);
+            box-shadow: 0 0 30px rgba(255,68,68,0.3);
         }
 
         .status.legend {
             border-color: var(--legend);
-            box-shadow: 0 0 50px rgba(170, 136, 255, 0.5);
+            box-shadow: 0 0 50px rgba(170,136,255,0.5);
         }
 
-        .stats-grid {
+        .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
@@ -205,21 +134,14 @@
 
         .stat-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 20px;
             padding: 15px;
             text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-glow);
         }
 
         .stat-label {
-            color: var(--text-secondary);
+            color: var(--text-dim);
             font-size: 0.9rem;
             margin-bottom: 5px;
         }
@@ -228,21 +150,19 @@
             font-size: 2.5rem;
             font-weight: bold;
             color: var(--primary);
-            line-height: 1;
         }
 
-        .stat-value.max-level {
+        .stat-value.max {
             color: var(--secondary);
         }
 
-        /* ========== اللوحة الرئيسية ========== */
-        .game-container {
+        /* اللوحة */
+        .game-panel {
             background: var(--bg-panel);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 30px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-md);
         }
 
         .grid {
@@ -252,34 +172,15 @@
             background: var(--bg-card);
             padding: 15px;
             border-radius: 20px;
-            border: 1px solid var(--border-color);
             margin-bottom: 20px;
         }
 
         .tile {
             aspect-ratio: 1;
             background: var(--bg-dark);
+            border: 2px solid var(--border);
             border-radius: 15px;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tile::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .tile:hover::before {
-            opacity: 1;
+            transition: 0.3s;
         }
 
         .tile input {
@@ -287,20 +188,14 @@
             height: 100%;
             border: none;
             background: transparent;
-            color: var(--text-primary);
+            color: var(--text);
             font-size: 1.8rem;
-            font-weight: bold;
             text-align: center;
+            font-weight: bold;
             outline: none;
-            transition: all 0.3s ease;
         }
 
-        .tile input:focus {
-            transform: scale(1.05);
-            text-shadow: 0 0 20px var(--primary);
-        }
-
-        /* ألوان المستويات */
+        /* ألوان الأرقام */
         .tile input[value="1"] { color: #88ccff; }
         .tile input[value="2"] { color: #88ff88; }
         .tile input[value="3"] { color: #ffff88; }
@@ -308,230 +203,188 @@
         .tile input[value="5"] { color: #ff8888; }
         .tile input[value="6"] { color: #ff88ff; }
         .tile input[value="7"] { color: #ddaaff; }
-        .tile input[value="8"] { color: #aaccff; text-shadow: 0 0 10px #0088ff; }
-        .tile input[value="9"] { color: #ffaa00; text-shadow: 0 0 10px #ff8800; }
-        .tile input[value="10"] { color: #ff5500; text-shadow: 0 0 20px #ff4400; }
-        .tile input[value="11"] { color: #ff00ff; text-shadow: 0 0 20px #ff00ff; }
-        .tile input[value="12"] { color: #ffdd00; text-shadow: 0 0 20px #ffaa00; }
+        .tile input[value="8"] { color: #aaccff; text-shadow: 0 0 10px blue; }
+        .tile input[value="9"] { color: #ffaa00; text-shadow: 0 0 10px orange; }
+        .tile input[value="10"] { color: #ff5500; text-shadow: 0 0 20px red; }
+        .tile input[value="11"] { color: #ff00ff; text-shadow: 0 0 20px magenta; }
+        .tile input[value="12"] { color: #ffdd00; text-shadow: 0 0 20px gold; }
         .tile input[value="13"] { color: #ffaa88; text-shadow: 0 0 20px #ff5500; font-size: 2rem; }
-        .tile input[value="14"] { color: #ff8888; text-shadow: 0 0 30px #ff0000; font-size: 2rem; }
-        .tile input[value="15"] { color: #ffffff; text-shadow: 0 0 40px #ffffff; font-size: 2.2rem; font-weight: 900; }
+        .tile input[value="14"] { color: #ff8888; text-shadow: 0 0 30px red; font-size: 2rem; }
+        .tile input[value="15"] { color: white; text-shadow: 0 0 40px white; font-size: 2.2rem; }
 
-        /* ========== أزرار التحكم ========== */
-        .control-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
+        /* الأزرار */
         .btn-primary {
-            background: var(--gradient-primary);
+            width: 100%;
+            background: linear-gradient(135deg, #00a2ff, #00f2ff);
             border: none;
             padding: 20px;
             border-radius: 50px;
             font-size: 1.4rem;
             font-weight: bold;
-            color: var(--bg-dark);
+            color: black;
             cursor: pointer;
-            box-shadow: 0 5px 0 var(--primary-dark), var(--shadow-md);
-            transition: all 0.1s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 0 #0088cc;
+            transition: 0.1s;
+            margin-bottom: 15px;
         }
 
         .btn-primary:active {
             transform: translateY(5px);
-            box-shadow: 0 2px 0 var(--primary-dark), var(--shadow-md);
+            box-shadow: none;
         }
 
         .btn-primary.legend {
-            background: var(--gradient-legend);
-            box-shadow: 0 5px 0 #8866cc, var(--shadow-md);
+            background: linear-gradient(135deg, #aa88ff, #cc88ff);
+            box-shadow: 0 5px 0 #8866cc;
         }
 
-        .direction-panel {
+        .direction-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .btn-direction {
+        .btn-dir {
             background: var(--bg-card);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border);
             padding: 15px;
             border-radius: 30px;
             font-size: 2rem;
             color: var(--primary);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .btn-direction:hover {
+        .btn-dir:hover {
             border-color: var(--primary);
             transform: scale(1.05);
-            box-shadow: var(--shadow-glow);
         }
 
         .btn-reset {
+            width: 100%;
             background: var(--bg-card);
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--danger);
             padding: 15px;
             border-radius: 30px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--danger);
             cursor: pointer;
-            transition: all 0.3s ease;
-            grid-column: span 4;
+            transition: 0.3s;
         }
 
         .btn-reset:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-            transform: scale(1.02);
+            background: var(--danger);
+            color: white;
         }
 
-        /* ========== لوحة المعلومات ========== */
+        /* لوحة المعلومات */
         .info-panel {
             background: var(--bg-panel);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 30px;
             padding: 20px;
-            margin-top: 20px;
-            box-shadow: var(--shadow-md);
         }
 
         .info-header {
             display: flex;
-            align-items: center;
             gap: 10px;
             margin-bottom: 15px;
-            color: var(--text-secondary);
-        }
-
-        .info-content {
-            display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
         }
 
         .badge {
-            padding: 5px 15px;
+            padding: 6px 16px;
             border-radius: 30px;
             font-size: 0.9rem;
             font-weight: bold;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
         }
 
         .badge.emergency {
-            background: rgba(255, 68, 68, 0.2);
+            background: rgba(255,68,68,0.2);
             color: var(--danger);
             border-color: var(--danger);
         }
 
         .badge.normal {
-            background: rgba(0, 242, 255, 0.2);
+            background: rgba(0,242,255,0.2);
             color: var(--primary);
             border-color: var(--primary);
         }
 
         .badge.depth {
-            background: rgba(255, 215, 0, 0.2);
+            background: rgba(255,215,0,0.2);
             color: var(--secondary);
             border-color: var(--secondary);
         }
 
-        /* ========== تلميحات متحركة ========== */
-        .hint-text {
-            color: var(--text-secondary);
+        .hint {
+            color: var(--text-dim);
             font-size: 0.95rem;
             line-height: 1.6;
             padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0,0,0,0.3);
             border-radius: 15px;
             border-right: 3px solid var(--primary);
-        }
-
-        /* ========== أنيميشن ========== */
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        .pulse {
-            animation: pulse 2s ease infinite;
-        }
-
-        /* ========== تنسيق الجوال ========== */
-        @media (max-width: 480px) {
-            .brand { font-size: 2.8rem; }
-            .status { font-size: 3rem; }
-            .stat-value { font-size: 2rem; }
-            .tile input { font-size: 1.4rem; }
-            .btn-primary { font-size: 1.2rem; padding: 15px; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- الهيدر الاحترافي -->
+    <!-- الهيدر -->
     <div class="header">
         <h1 class="brand">QDS</h1>
         <div class="credit">
-            <span class="credit-item">👤 Al FaTeh</span>
-            <span class="credit-item">📱 01016057623</span>
-            <span class="credit-item">🎯 هدف 32768</span>
+            <span>👤 Al FaTeh</span>
+            <span>📱 01016057623</span>
+            <span>🎯 32768</span>
         </div>
     </div>
 
-    <!-- شاشة الحالة -->
+    <!-- الحالة -->
     <div class="status-container">
         <div id="status" class="status">⚡</div>
-        <div class="stats-grid">
+        <div class="stats">
             <div class="stat-card">
-                <div class="stat-label">المستوى الأقصى</div>
-                <div class="stat-value max-level" id="maxLevel">0</div>
+                <div class="stat-label">المستوى</div>
+                <div class="stat-value max" id="maxLevel">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">إجمالي النقاط</div>
+                <div class="stat-label">النقاط</div>
                 <div class="stat-value" id="totalScore">0</div>
             </div>
         </div>
     </div>
 
-    <!-- لوحة اللعب -->
-    <div class="game-container">
+    <!-- اللوحة -->
+    <div class="game-panel">
         <div id="grid" class="grid"></div>
 
-        <!-- أزرار التحكم -->
-        <div class="control-panel">
-            <button class="btn-primary" id="mainBtn" onclick="deepThink()">
-                ⚡ تحليل ذكي متطور
-            </button>
+        <button class="btn-primary" id="mainBtn" onclick="deepThink()">
+            ⚡ تحليل ذكي (عمق 14)
+        </button>
 
-            <div class="direction-panel">
-                <button class="btn-direction" onclick="manualUp()">↑</button>
-                <button class="btn-direction" onclick="manualDown()">↓</button>
-                <button class="btn-direction" onclick="manualLeft()">←</button>
-                <button class="btn-direction" onclick="manualRight()">→</button>
-                <button class="btn-reset" onclick="resetGame()">🔄 بداية جديدة</button>
-            </div>
+        <div class="direction-grid">
+            <button class="btn-dir" onclick="manualUp()">↑</button>
+            <button class="btn-dir" onclick="manualDown()">↓</button>
+            <button class="btn-dir" onclick="manualLeft()">←</button>
+            <button class="btn-dir" onclick="manualRight()">→</button>
         </div>
+
+        <button class="btn-reset" onclick="resetGame()">🔄 بداية جديدة</button>
     </div>
 
-    <!-- لوحة المعلومات -->
+    <!-- المعلومات -->
     <div class="info-panel">
-        <div class="info-header">
-            <span>📊 معلومات التحليل</span>
-        </div>
-        <div class="info-content" id="infoPanel">
+        <div class="info-header" id="infoPanel">
             <span class="badge normal">🔵 وضع طبيعي</span>
             <span class="badge depth">⏱️ عمق 0</span>
         </div>
-        <div class="hint-text" id="hintText">
-            أدخل الأرقام من اللعبة ثم اضغط زر التحليل
+        <div class="hint" id="hintText">
+            أدخل الأرقام من اللعبة ثم اضغط تحليل
         </div>
     </div>
 </div>
@@ -542,16 +395,14 @@ const grid = document.getElementById("grid")
 for(let i = 0; i < 16; i++)
     grid.innerHTML += `<div class="tile"><input id="t${i}" type="number" min="0" max="20" placeholder="0"></div>`
 
-// ========== متغيرات عامة ==========
+// ========== المتغيرات العامة ==========
 let cache = new Map()
 let thinking = false
 let gameState = {
     maxLevel: 0,
     criticalMode: false,
     reachedLevel15: false,
-    movesSinceCritical: 0,
-    currentStrategy: "normal",
-    lastMove: null
+    movesSinceCritical: 0
 }
 
 // ========== دوال المساعدة ==========
@@ -582,7 +433,7 @@ function getMaxLevel(b) {
     return max
 }
 
-function calculateTotalScore(b) {
+function calculateScore(b) {
     let score = 0
     for(let i = 0; i < 4; i++)
         for(let j = 0; j < 4; j++)
@@ -593,38 +444,31 @@ function calculateTotalScore(b) {
 
 function updateDisplay(b) {
     let maxLevel = getMaxLevel(b)
-    let totalScore = calculateTotalScore(b)
+    let totalScore = calculateScore(b)
     
     document.getElementById("maxLevel").innerText = maxLevel
     document.getElementById("totalScore").innerText = totalScore.toLocaleString()
     
     gameState.maxLevel = maxLevel
     
-    // تحديث شكل الشاشة حسب المستوى
     if(maxLevel >= 15 && !gameState.reachedLevel15) {
         gameState.reachedLevel15 = true
         document.getElementById("status").className = "status legend"
-        document.getElementById("status").innerText = "👑 15! أسطورة!"
+        document.getElementById("status").innerText = "👑 15!"
         document.getElementById("mainBtn").className = "btn-primary legend"
-        document.getElementById("hintText").innerText = "🔥 مبروك! وصلت للأسطورة! استمر في اللعب"
     }
-    else if(maxLevel >= 12 && !gameState.reachedLevel15) {
+    else if(maxLevel >= 12) {
         document.getElementById("status").className = "status warning"
-        document.getElementById("hintText").innerHTML = "🏆 مستوى " + maxLevel + "! باقي خطوات قليلة للأسطورة"
     }
     else if(gameState.criticalMode) {
         document.getElementById("status").className = "status danger"
-        document.getElementById("hintText").innerHTML = "⚠️ وضع الطوارئ - ركز على الدمج السريع"
-    } else if(maxLevel >= 10) {
-        document.getElementById("status").className = "status warning"
-        document.getElementById("hintText").innerHTML = "💪 أداء ممتاز! حافظ على الزوايا"
-    } else {
+    }
+    else {
         document.getElementById("status").className = "status"
-        document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
     }
 }
 
-// ========== دوال اللعبة الأساسية ==========
+// ========== دوال اللعبة ==========
 function compress(row) {
     let n = row.filter(v => v > 0)
     
@@ -680,69 +524,86 @@ function emptyCells(b) {
     return e
 }
 
-function hasAnyMove(b) {
-    if(emptyCells(b).length > 0) return true
+// ========== التحقق الذكي من الحركة ==========
+function hasAvailableMoves(b) {
+    // 1. لو في خلايا فارغة => حركة
+    let empty = emptyCells(b).length
+    if(empty > 0) {
+        console.log(`✅ في ${empty} خلايا فارغة`)
+        return true
+    }
     
+    // 2. فحص الدمج الأفقي
     for(let i = 0; i < 4; i++) {
         for(let j = 0; j < 3; j++) {
-            if(b[i][j] == b[i][j+1] && b[i][j] > 0) return true
+            if(b[i][j] == b[i][j+1] && b[i][j] > 0) {
+                console.log(`✅ دمج أفقي: ${b[i][j]}`)
+                return true
+            }
         }
     }
     
+    // 3. فحص الدمج العمودي
     for(let j = 0; j < 4; j++) {
         for(let i = 0; i < 3; i++) {
-            if(b[i][j] == b[i+1][j] && b[i][j] > 0) return true
+            if(b[i][j] == b[i+1][j] && b[i][j] > 0) {
+                console.log(`✅ دمج عمودي: ${b[i][j]}`)
+                return true
+            }
         }
     }
     
     return false
 }
 
-// ========== التقييم المتطور ==========
+// ========== تقييم الوضع ==========
 function evaluate(b, critical = false) {
     let score = 0
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
     
     if(critical) {
+        // وضع الطوارئ: دمج سريع
         score += empty * 50000
         
         for(let i = 0; i < 4; i++) {
             for(let j = 0; j < 3; j++) {
-                if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
+                if(b[i][j] == b[i][j+1] && b[i][j] > 0)
                     score += b[i][j] * 3000
-                }
             }
         }
         for(let j = 0; j < 4; j++) {
             for(let i = 0; i < 3; i++) {
-                if(b[i][j] == b[i + 1][j] && b[i][j] > 0) {
+                if(b[i][j] == b[i+1][j] && b[i][j] > 0)
                     score += b[i][j] * 3000
-                }
             }
         }
     } else {
+        // الوضع العادي: بناء استراتيجي
         score += empty * 15000
         
+        // مكافأة الزوايا
         if(b[0][0] == maxVal) score += maxVal * 2000
         else if(b[0][3] == maxVal || b[3][0] == maxVal) score += maxVal * 1500
         else if(b[3][3] == maxVal) score += maxVal * 1000
         else score -= maxVal * 500
         
+        // مكافأة التجانس
         for(let i = 0; i < 4; i++) {
             for(let j = 0; j < 3; j++) {
-                if(b[i][j] == b[i][j + 1] && b[i][j] > 0) {
+                if(b[i][j] == b[i][j+1] && b[i][j] > 0)
                     score += b[i][j] * 800
-                }
             }
         }
         
+        // عقاب المنتصف
         for(let i = 1; i < 3; i++) {
             for(let j = 1; j < 3; j++) {
                 score -= b[i][j] * 300
             }
         }
         
+        // مكافآت المستويات العالية
         if(maxVal >= 12) score += 100000
         if(maxVal >= 13) score += 200000
         if(maxVal >= 14) score += 500000
@@ -752,7 +613,7 @@ function evaluate(b, critical = false) {
     return score
 }
 
-// ========== Minimax ==========
+// ========== Minimax مع تقليم ==========
 function minimax(b, depth, alpha, beta, isMax, critical) {
     if(depth == 0) return evaluate(b, critical)
     
@@ -768,8 +629,7 @@ function minimax(b, depth, alpha, beta, isMax, critical) {
             if(!simulate(sim, m)) continue
             
             let val = minimax(sim, depth - 1, alpha, beta, false, critical)
-            
-            if(val > best) best = val
+            best = Math.max(best, val)
             alpha = Math.max(alpha, val)
             if(beta <= alpha) break
         }
@@ -802,54 +662,43 @@ function minimax(b, depth, alpha, beta, isMax, critical) {
 function analyzeSituation(b) {
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
-    let critical = false
     
-    if(maxVal >= 12 && empty <= 4) critical = true
-    else if(maxVal >= 10 && empty <= 3) critical = true
-    else if(maxVal >= 8 && empty <= 2) critical = true
-    else if(empty <= 1) critical = true
-    else if(gameState.criticalMode && gameState.movesSinceCritical < 3) {
-        critical = true
+    if(maxVal >= 12 && empty <= 4) return true
+    if(maxVal >= 10 && empty <= 3) return true
+    if(maxVal >= 8 && empty <= 2) return true
+    if(empty <= 1) return true
+    if(gameState.criticalMode && gameState.movesSinceCritical < 3) {
         gameState.movesSinceCritical++
-    } else {
-        gameState.criticalMode = false
-        gameState.movesSinceCritical = 0
+        return true
     }
     
-    if(critical) {
-        gameState.criticalMode = true
-        gameState.currentStrategy = "emergency"
-    } else {
-        gameState.currentStrategy = "normal"
-    }
-    
-    return critical
+    gameState.criticalMode = false
+    gameState.movesSinceCritical = 0
+    return false
 }
 
 // ========== عرض السهم ==========
 function showArrow(move) {
     const arrows = { up: "↑", down: "↓", left: "←", right: "→" }
-    let displayArrow = arrows[move] || "⚡"
+    let arrow = arrows[move] || "⚡"
     
-    if(gameState.reachedLevel15) {
-        document.getElementById("status").innerText = "👑 " + displayArrow
-    } else if(gameState.maxLevel >= 12) {
-        document.getElementById("status").innerText = "🏆 " + displayArrow
-    } else {
-        document.getElementById("status").innerText = displayArrow
-    }
+    if(gameState.reachedLevel15) arrow = "👑 " + arrow
+    else if(gameState.maxLevel >= 12) arrow = "🏆 " + arrow
+    
+    document.getElementById("status").innerText = arrow
 }
 
-// ========== التحليل الذكي ==========
+// ========== التحليل الرئيسي ==========
 function deepThink() {
     if(thinking) return
     
     let b = getBoard()
     
-    if(!hasAnyMove(b)) {
-        document.getElementById("status").innerText = "💀 انتهت اللعبة!"
+    // التحقق من وجود حركة
+    if(!hasAvailableMoves(b)) {
+        document.getElementById("status").innerText = "💀 انتهت"
         document.getElementById("status").className = "status danger"
-        document.getElementById("hintText").innerHTML = "💀 لا توجد حركات ممكنة - اضغط بداية جديدة"
+        document.getElementById("hintText").innerHTML = "💀 انتهت اللعبة - اضغط بداية جديدة"
         return
     }
     
@@ -864,37 +713,55 @@ function deepThink() {
         let maxVal = getMaxLevel(b)
         
         let criticalMode = analyzeSituation(b)
+        gameState.criticalMode = criticalMode
         
-        let depth = criticalMode ? 14 : 
-                   (maxVal >= 12 ? 13 :
-                   (maxVal >= 10 ? 12 :
-                   (maxVal >= 8 ? 11 :
-                   (maxVal >= 6 ? 10 :
-                   (empty > 8 ? 8 : 9)))))
+        // تحديد العمق
+        let depth = 14
+        if(!criticalMode) {
+            if(maxVal >= 12) depth = 13
+            else if(maxVal >= 10) depth = 12
+            else if(maxVal >= 8) depth = 11
+            else if(maxVal >= 6) depth = 10
+            else depth = 9
+        }
         
-        // تحديث لوحة المعلومات
+        // تحديث المعلومات
         let strategyText = criticalMode ? 
             '<span class="badge emergency">🚨 طوارئ</span>' : 
             '<span class="badge normal">🔵 عادي</span>'
         
+        let emptyText = empty > 0 ? 
+            `<span class="badge normal">📦 ${empty}</span>` : 
+            '<span class="badge emergency">📦 ممتلئ</span>'
+        
         document.getElementById("infoPanel").innerHTML = 
-            strategyText + ` <span class="badge depth">⏱️ عمق ${depth}</span>`
+            strategyText + ` <span class="badge depth">⏱️ عمق ${depth}</span> ` + emptyText
         
+        // تقييم الحركات
         let moves = ["up", "down", "left", "right"]
-        let bestMove = ""
-        let bestScore = -Infinity
-        
-        // تقييم سريع للحركات
         let moveScores = []
+        
         for(let m of moves) {
             let sim = JSON.parse(JSON.stringify(b))
             if(!simulate(sim, m)) continue
-            moveScores.push({move: m, score: evaluate(sim, criticalMode)})
+            moveScores.push({
+                move: m,
+                score: evaluate(sim, criticalMode)
+            })
+        }
+        
+        if(moveScores.length === 0) {
+            document.getElementById("status").innerText = "❌"
+            thinking = false
+            return
         }
         
         moveScores.sort((a, b) => b.score - a.score)
         
         // تحليل عميق لأفضل 3 حركات
+        let bestMove = ""
+        let bestScore = -Infinity
+        
         for(let i = 0; i < Math.min(3, moveScores.length); i++) {
             let sim = JSON.parse(JSON.stringify(b))
             simulate(sim, moveScores[i].move)
@@ -911,6 +778,12 @@ function deepThink() {
             setBoard(b)
             updateDisplay(b)
             showArrow(bestMove)
+            
+            if(empty === 0) {
+                document.getElementById("hintText").innerHTML = "⚠️ لوحة ممتلئة - ركز على الدمج"
+            } else {
+                document.getElementById("hintText").innerHTML = "✅ تحليل ناجح - اتبع السهم"
+            }
         }
         
         thinking = false
@@ -925,11 +798,19 @@ function manualRight() { manualMove("right") }
 
 function manualMove(dir) {
     if(thinking) return
+    
     let b = getBoard()
+    
     if(simulate(b, dir)) {
         setBoard(b)
         updateDisplay(b)
         showArrow(dir)
+        
+        if(emptyCells(b).length === 0) {
+            document.getElementById("hintText").innerHTML = "⚠️ اللوحة ممتلئة - استمر في الدمج"
+        }
+    } else {
+        document.getElementById("hintText").innerHTML = `⛔ حركة ${dir} غير ممكنة`
     }
 }
 
@@ -944,8 +825,7 @@ function resetGame() {
         maxLevel: 0,
         criticalMode: false,
         reachedLevel15: false,
-        movesSinceCritical: 0,
-        currentStrategy: "normal"
+        movesSinceCritical: 0
     }
     
     document.getElementById("status").className = "status"
@@ -962,4 +842,7 @@ function resetGame() {
 
 // ========== بداية التشغيل ==========
 window.onload = resetGame
-</script
+</script>
+
+</body>
+</html>
