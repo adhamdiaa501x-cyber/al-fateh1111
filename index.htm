@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QDS ULTIMATE - النظام الأسطوري</title>
+    <title>QDS DATABASE - نظام التحليل بقاعدة بيانات</title>
     
-    <meta name="description" content="أقوى نظام لتحليل ودمج الوحوش في لعبة الفاتحون">
+    <meta name="description" content="أقوى نظام لتحليل ودمج الوحوش مع قاعدة بيانات متكاملة">
     <meta name="author" content="Al FaTeh">
     
     <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='80' font-size='80' fill='%2300f2ff'%3E⚡%3C/text%3E%3C/svg%3E">
@@ -25,6 +25,9 @@
             --danger: #ff4444;
             --success: #00ff88;
             --legend: #aa88ff;
+            --save: #2a5f2a;
+            --load: #5f2a5f;
+            --stats: #2a2a5f;
             
             --bg-dark: #0a0a0f;
             --bg-panel: #111116;
@@ -61,7 +64,7 @@
         }
 
         .brand {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 900;
             color: var(--primary);
             text-shadow: 0 0 30px var(--primary);
@@ -71,7 +74,7 @@
         }
 
         .brand::after {
-            content: 'نهائي';
+            content: 'DB';
             font-size: 0.9rem;
             background: var(--secondary);
             color: black;
@@ -79,7 +82,7 @@
             border-radius: 30px;
             position: absolute;
             top: 0;
-            left: -30px;
+            left: -40px;
             font-weight: bold;
         }
 
@@ -261,6 +264,46 @@
             transform: scale(1.05);
         }
 
+        /* أزرار قاعدة البيانات */
+        .db-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .btn-db {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 12px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-db.save {
+            background: var(--save);
+            border-color: #4caf50;
+        }
+
+        .btn-db.load {
+            background: var(--load);
+            border-color: #aa88ff;
+        }
+
+        .btn-db.stats {
+            background: var(--stats);
+            border-color: var(--primary);
+        }
+
+        .btn-db:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
         .btn-reset {
             width: 100%;
             background: var(--bg-card);
@@ -320,6 +363,12 @@
             border-color: var(--secondary);
         }
 
+        .badge.db {
+            background: rgba(170,136,255,0.2);
+            color: var(--legend);
+            border-color: var(--legend);
+        }
+
         .hint {
             color: var(--text-dim);
             font-size: 0.95rem;
@@ -374,6 +423,13 @@
             <button class="btn-dir" onclick="manualRight()">→</button>
         </div>
 
+        <!-- أزرار قاعدة البيانات -->
+        <div class="db-grid">
+            <button class="btn-db save" onclick="showSaveDialog()">💾 حفظ</button>
+            <button class="btn-db load" onclick="showLoadDialog()">📂 تحميل</button>
+            <button class="btn-db stats" onclick="QDSDatabase.showStats()">📊 إحصائيات</button>
+        </div>
+
         <button class="btn-reset" onclick="resetGame()">🔄 بداية جديدة</button>
     </div>
 
@@ -382,6 +438,7 @@
         <div class="info-header" id="infoPanel">
             <span class="badge normal">🔵 وضع طبيعي</span>
             <span class="badge depth">⏱️ عمق 0</span>
+            <span class="badge db">💾 DB</span>
         </div>
         <div class="hint" id="hintText">
             أدخل الأرقام من اللعبة ثم اضغط تحليل
@@ -403,6 +460,244 @@ let gameState = {
     criticalMode: false,
     reachedLevel15: false,
     movesSinceCritical: 0
+}
+
+// ========== نظام قاعدة البيانات المتكامل ==========
+const QDSDatabase = {
+    // تهيئة قاعدة البيانات
+    init: function() {
+        if(!localStorage.getItem('qds_stats')) {
+            localStorage.setItem('qds_stats', JSON.stringify({
+                gamesPlayed: 0,
+                highestLevel: 0,
+                totalScore: 0,
+                wins: 0,
+                bestMove: null
+            }))
+        }
+        if(!localStorage.getItem('qds_games')) {
+            localStorage.setItem('qds_games', JSON.stringify([]))
+        }
+        if(!localStorage.getItem('qds_history')) {
+            localStorage.setItem('qds_history', JSON.stringify([]))
+        }
+    },
+    
+    // تحديث الإحصائيات
+    updateStats: function(maxLevel, score) {
+        let stats = JSON.parse(localStorage.getItem('qds_stats'))
+        stats.gamesPlayed++
+        stats.highestLevel = Math.max(stats.highestLevel, maxLevel)
+        stats.totalScore += score
+        if(maxLevel >= 15) stats.wins++
+        localStorage.setItem('qds_stats', JSON.stringify(stats))
+        this.addToHistory(maxLevel, score)
+    },
+    
+    // إضافة سجل
+    addToHistory: function(maxLevel, score) {
+        let history = JSON.parse(localStorage.getItem('qds_history'))
+        history.push({
+            date: new Date().toLocaleString(),
+            level: maxLevel,
+            score: score
+        })
+        if(history.length > 20) history.shift()
+        localStorage.setItem('qds_history', JSON.stringify(history))
+    },
+    
+    // حفظ لعبة
+    saveGame: function(name, board, maxLevel, score) {
+        let games = JSON.parse(localStorage.getItem('qds_games'))
+        games.push({
+            id: Date.now(),
+            name: name,
+            board: JSON.parse(JSON.stringify(board)),
+            maxLevel: maxLevel,
+            score: score,
+            date: new Date().toLocaleString()
+        })
+        localStorage.setItem('qds_games', JSON.stringify(games))
+        this.showNotification('✅ تم الحفظ', 'success')
+    },
+    
+    // جلب كل الألعاب
+    getAllGames: function() {
+        return JSON.parse(localStorage.getItem('qds_games'))
+    },
+    
+    // تحميل لعبة
+    loadGame: function(id) {
+        let games = this.getAllGames()
+        let game = games.find(g => g.id === id)
+        if(game) {
+            setBoard(game.board)
+            updateDisplay(game.board)
+            this.showNotification(`📂 تم تحميل: ${game.name}`, 'info')
+            return true
+        }
+        return false
+    },
+    
+    // حذف لعبة
+    deleteGame: function(id) {
+        let games = this.getAllGames()
+        games = games.filter(g => g.id !== id)
+        localStorage.setItem('qds_games', JSON.stringify(games))
+    },
+    
+    // حفظ أفضل حركة
+    saveBestMove: function(board, move, score) {
+        let stats = JSON.parse(localStorage.getItem('qds_stats'))
+        if(!stats.bestMove || score > stats.bestMove.score) {
+            stats.bestMove = {
+                board: board,
+                move: move,
+                score: score,
+                date: new Date().toLocaleString()
+            }
+            localStorage.setItem('qds_stats', JSON.stringify(stats))
+        }
+    },
+    
+    // عرض الإحصائيات
+    showStats: function() {
+        let stats = JSON.parse(localStorage.getItem('qds_stats'))
+        let history = JSON.parse(localStorage.getItem('qds_history'))
+        let games = this.getAllGames()
+        
+        let msg = `📊 **إحصائياتك الشاملة**\n\n`
+        msg += `🎮 الألعاب التي لعبتها: ${stats.gamesPlayed}\n`
+        msg += `🏆 أعلى مستوى وصلت له: ${stats.highestLevel}\n`
+        msg += `💰 إجمالي النقاط: ${stats.totalScore.toLocaleString()}\n`
+        msg += `👑 مرات الفوز (15): ${stats.wins}\n`
+        msg += `💾 ألعاب محفوظة: ${games.length}\n\n`
+        
+        if(stats.bestMove) {
+            msg += `⭐ أفضل حركة: ${stats.bestMove.move}\n`
+            msg += `📅 ${stats.bestMove.date}\n\n`
+        }
+        
+        msg += `📋 **آخر 5 ألعاب:**\n`
+        let recent = history.slice(-5).reverse()
+        recent.forEach((h, i) => {
+            msg += `${i+1}. مستوى ${h.level} | ${h.score.toLocaleString()} نقطة\n`
+        })
+        
+        alert(msg)
+    },
+    
+    // تصدير البيانات
+    exportData: function() {
+        let data = {
+            stats: JSON.parse(localStorage.getItem('qds_stats')),
+            games: JSON.parse(localStorage.getItem('qds_games')),
+            history: JSON.parse(localStorage.getItem('qds_history')),
+            exportDate: new Date().toLocaleString()
+        }
+        
+        let blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'})
+        let url = URL.createObjectURL(blob)
+        let a = document.createElement('a')
+        a.href = url
+        a.download = `qds_backup_${Date.now()}.json`
+        a.click()
+        
+        this.showNotification('📤 تم التصدير بنجاح', 'success')
+    },
+    
+    // استيراد البيانات
+    importData: function(jsonData) {
+        try {
+            let data = JSON.parse(jsonData)
+            localStorage.setItem('qds_stats', JSON.stringify(data.stats))
+            localStorage.setItem('qds_games', JSON.stringify(data.games))
+            localStorage.setItem('qds_history', JSON.stringify(data.history))
+            this.showNotification('📥 تم الاستيراد بنجاح', 'success')
+            return true
+        } catch(e) {
+            this.showNotification('❌ فشل الاستيراد', 'error')
+            return false
+        }
+    },
+    
+    // مسح كل البيانات
+    clearAll: function() {
+        if(confirm('⚠️ هل أنت متأكد من مسح كل البيانات؟')) {
+            localStorage.removeItem('qds_stats')
+            localStorage.removeItem('qds_games')
+            localStorage.removeItem('qds_history')
+            this.init()
+            this.showNotification('🗑️ تم مسح البيانات', 'info')
+        }
+    },
+    
+    // إشعار
+    showNotification: function(msg, type) {
+        document.getElementById("hintText").innerHTML = msg
+        setTimeout(() => {
+            document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
+        }, 2000)
+    }
+}
+
+// ========== دوال الحفظ والتحميل ==========
+function showSaveDialog() {
+    let name = prompt("📝 أدخل اسم للحفظ:", "لعبة " + new Date().toLocaleString())
+    if(!name) return
+    
+    let b = getBoard()
+    let maxLevel = getMaxLevel(b)
+    let score = calculateScore(b)
+    
+    QDSDatabase.saveGame(name, b, maxLevel, score)
+    updateDatabaseBadge()
+}
+
+function showLoadDialog() {
+    let games = QDSDatabase.getAllGames()
+    if(games.length === 0) {
+        alert("📭 لا توجد ألعاب محفوظة")
+        return
+    }
+    
+    // عرض الألعاب بشكل منظم
+    let msg = "📂 **الألعاب المحفوظة:**\n\n"
+    games.forEach((g, i) => {
+        msg += `${i+1}. ${g.name}\n   مستوى ${g.maxLevel} | ${g.score.toLocaleString()} نقطة\n   📅 ${g.date}\n\n`
+    })
+    
+    let choice = prompt(msg + "أدخل رقم اللعبة للتحميل (أو 'تصدير' لتصدير البيانات):")
+    if(!choice) return
+    
+    if(choice.toLowerCase() === 'تصدير') {
+        QDSDatabase.exportData()
+        return
+    }
+    
+    let index = parseInt(choice) - 1
+    if(index >= 0 && index < games.length) {
+        QDSDatabase.loadGame(games[index].id)
+    }
+}
+
+function updateDatabaseBadge() {
+    let games = QDSDatabase.getAllGames()
+    document.getElementById("infoPanel").innerHTML = 
+        `<span class="badge normal">🔵 ${gameState.criticalMode ? 'طوارئ' : 'عادي'}</span> ` +
+        `<span class="badge depth">⏱️ عمق ${getCurrentDepth()}</span> ` +
+        `<span class="badge db">💾 ${games.length}</span>`
+}
+
+function getCurrentDepth() {
+    let b = getBoard()
+    let maxVal = getMaxLevel(b)
+    if(gameState.criticalMode) return 14
+    if(maxVal >= 12) return 13
+    if(maxVal >= 10) return 12
+    if(maxVal >= 8) return 11
+    if(maxVal >= 6) return 10
+    return 9
 }
 
 // ========== دوال المساعدة ==========
@@ -466,9 +761,10 @@ function updateDisplay(b) {
     else {
         document.getElementById("status").className = "status"
     }
+    
+    updateDatabaseBadge()
 }
 
-// ========== دوال اللعبة ==========
 function compress(row) {
     let n = row.filter(v => v > 0)
     
@@ -524,46 +820,31 @@ function emptyCells(b) {
     return e
 }
 
-// ========== التحقق الذكي من الحركة ==========
 function hasAvailableMoves(b) {
-    // 1. لو في خلايا فارغة => حركة
     let empty = emptyCells(b).length
-    if(empty > 0) {
-        console.log(`✅ في ${empty} خلايا فارغة`)
-        return true
-    }
+    if(empty > 0) return true
     
-    // 2. فحص الدمج الأفقي
     for(let i = 0; i < 4; i++) {
         for(let j = 0; j < 3; j++) {
-            if(b[i][j] == b[i][j+1] && b[i][j] > 0) {
-                console.log(`✅ دمج أفقي: ${b[i][j]}`)
-                return true
-            }
+            if(b[i][j] == b[i][j+1] && b[i][j] > 0) return true
         }
     }
     
-    // 3. فحص الدمج العمودي
     for(let j = 0; j < 4; j++) {
         for(let i = 0; i < 3; i++) {
-            if(b[i][j] == b[i+1][j] && b[i][j] > 0) {
-                console.log(`✅ دمج عمودي: ${b[i][j]}`)
-                return true
-            }
+            if(b[i][j] == b[i+1][j] && b[i][j] > 0) return true
         }
     }
     
     return false
 }
 
-// ========== تقييم الوضع ==========
 function evaluate(b, critical = false) {
     let score = 0
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
     
     if(critical) {
-        // وضع الطوارئ: دمج سريع
         score += empty * 50000
         
         for(let i = 0; i < 4; i++) {
@@ -579,16 +860,13 @@ function evaluate(b, critical = false) {
             }
         }
     } else {
-        // الوضع العادي: بناء استراتيجي
         score += empty * 15000
         
-        // مكافأة الزوايا
         if(b[0][0] == maxVal) score += maxVal * 2000
         else if(b[0][3] == maxVal || b[3][0] == maxVal) score += maxVal * 1500
         else if(b[3][3] == maxVal) score += maxVal * 1000
         else score -= maxVal * 500
         
-        // مكافأة التجانس
         for(let i = 0; i < 4; i++) {
             for(let j = 0; j < 3; j++) {
                 if(b[i][j] == b[i][j+1] && b[i][j] > 0)
@@ -596,14 +874,12 @@ function evaluate(b, critical = false) {
             }
         }
         
-        // عقاب المنتصف
         for(let i = 1; i < 3; i++) {
             for(let j = 1; j < 3; j++) {
                 score -= b[i][j] * 300
             }
         }
         
-        // مكافآت المستويات العالية
         if(maxVal >= 12) score += 100000
         if(maxVal >= 13) score += 200000
         if(maxVal >= 14) score += 500000
@@ -613,7 +889,6 @@ function evaluate(b, critical = false) {
     return score
 }
 
-// ========== Minimax مع تقليم ==========
 function minimax(b, depth, alpha, beta, isMax, critical) {
     if(depth == 0) return evaluate(b, critical)
     
@@ -658,7 +933,6 @@ function minimax(b, depth, alpha, beta, isMax, critical) {
     }
 }
 
-// ========== تحليل الموقف ==========
 function analyzeSituation(b) {
     let empty = emptyCells(b).length
     let maxVal = getMaxLevel(b)
@@ -677,7 +951,6 @@ function analyzeSituation(b) {
     return false
 }
 
-// ========== عرض السهم ==========
 function showArrow(move) {
     const arrows = { up: "↑", down: "↓", left: "←", right: "→" }
     let arrow = arrows[move] || "⚡"
@@ -688,13 +961,11 @@ function showArrow(move) {
     document.getElementById("status").innerText = arrow
 }
 
-// ========== التحليل الرئيسي ==========
 function deepThink() {
     if(thinking) return
     
     let b = getBoard()
     
-    // التحقق من وجود حركة
     if(!hasAvailableMoves(b)) {
         document.getElementById("status").innerText = "💀 انتهت"
         document.getElementById("status").className = "status danger"
@@ -715,29 +986,14 @@ function deepThink() {
         let criticalMode = analyzeSituation(b)
         gameState.criticalMode = criticalMode
         
-        // تحديد العمق
-        let depth = 14
-        if(!criticalMode) {
-            if(maxVal >= 12) depth = 13
-            else if(maxVal >= 10) depth = 12
-            else if(maxVal >= 8) depth = 11
-            else if(maxVal >= 6) depth = 10
-            else depth = 9
-        }
+        let depth = criticalMode ? 14 :
+                   (maxVal >= 12 ? 13 :
+                   (maxVal >= 10 ? 12 :
+                   (maxVal >= 8 ? 11 :
+                   (maxVal >= 6 ? 10 : 9))))
         
-        // تحديث المعلومات
-        let strategyText = criticalMode ? 
-            '<span class="badge emergency">🚨 طوارئ</span>' : 
-            '<span class="badge normal">🔵 عادي</span>'
+        updateDatabaseBadge()
         
-        let emptyText = empty > 0 ? 
-            `<span class="badge normal">📦 ${empty}</span>` : 
-            '<span class="badge emergency">📦 ممتلئ</span>'
-        
-        document.getElementById("infoPanel").innerHTML = 
-            strategyText + ` <span class="badge depth">⏱️ عمق ${depth}</span> ` + emptyText
-        
-        // تقييم الحركات
         let moves = ["up", "down", "left", "right"]
         let moveScores = []
         
@@ -755,94 +1011,3 @@ function deepThink() {
             thinking = false
             return
         }
-        
-        moveScores.sort((a, b) => b.score - a.score)
-        
-        // تحليل عميق لأفضل 3 حركات
-        let bestMove = ""
-        let bestScore = -Infinity
-        
-        for(let i = 0; i < Math.min(3, moveScores.length); i++) {
-            let sim = JSON.parse(JSON.stringify(b))
-            simulate(sim, moveScores[i].move)
-            let score = minimax(sim, depth - 1, -Infinity, Infinity, false, criticalMode)
-            
-            if(score > bestScore) {
-                bestScore = score
-                bestMove = moveScores[i].move
-            }
-        }
-        
-        if(bestMove) {
-            simulate(b, bestMove)
-            setBoard(b)
-            updateDisplay(b)
-            showArrow(bestMove)
-            
-            if(empty === 0) {
-                document.getElementById("hintText").innerHTML = "⚠️ لوحة ممتلئة - ركز على الدمج"
-            } else {
-                document.getElementById("hintText").innerHTML = "✅ تحليل ناجح - اتبع السهم"
-            }
-        }
-        
-        thinking = false
-    }, 10)
-}
-
-// ========== الحركات اليدوية ==========
-function manualUp() { manualMove("up") }
-function manualDown() { manualMove("down") }
-function manualLeft() { manualMove("left") }
-function manualRight() { manualMove("right") }
-
-function manualMove(dir) {
-    if(thinking) return
-    
-    let b = getBoard()
-    
-    if(simulate(b, dir)) {
-        setBoard(b)
-        updateDisplay(b)
-        showArrow(dir)
-        
-        if(emptyCells(b).length === 0) {
-            document.getElementById("hintText").innerHTML = "⚠️ اللوحة ممتلئة - استمر في الدمج"
-        }
-    } else {
-        document.getElementById("hintText").innerHTML = `⛔ حركة ${dir} غير ممكنة`
-    }
-}
-
-// ========== إعادة التعيين ==========
-function resetGame() {
-    if(thinking) return
-    
-    for(let i = 0; i < 16; i++)
-        document.getElementById("t" + i).value = ""
-    
-    gameState = {
-        maxLevel: 0,
-        criticalMode: false,
-        reachedLevel15: false,
-        movesSinceCritical: 0
-    }
-    
-    document.getElementById("status").className = "status"
-    document.getElementById("status").innerText = "⚡"
-    document.getElementById("mainBtn").className = "btn-primary"
-    document.getElementById("maxLevel").innerText = "0"
-    document.getElementById("totalScore").innerText = "0"
-    document.getElementById("infoPanel").innerHTML = 
-        '<span class="badge normal">🔵 وضع طبيعي</span> <span class="badge depth">⏱️ عمق 0</span>'
-    document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
-    
-    cache.clear()
-}
-
-// ========== بداية التشغيل ==========
-window.onload = resetGame
-</script>
-
-</body>
-</html>
