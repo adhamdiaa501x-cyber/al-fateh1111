@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خير البلد - خير وأكل فلاحي أصيل</title>
-    <!-- خط أميري عربي راقي من Google Fonts -->
+    <!-- خط تجوال عربي راقي -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-dark);
-            padding-bottom: 110px;
+            padding-bottom: 120px;
         }
 
         /* الهيدر الأنيق */
@@ -51,7 +51,6 @@
             font-size: 1.8rem;
             font-weight: 800;
             margin-bottom: 6px;
-            letter-spacing: -0.5px;
         }
 
         header p {
@@ -71,6 +70,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
             gap: 22px;
+            margin-bottom: 30px;
         }
 
         .product-card {
@@ -86,11 +86,10 @@
         }
 
         .product-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0,0,0,0.08);
         }
 
-        /* شارة طازج */
         .badge {
             position: absolute;
             top: 12px;
@@ -107,7 +106,7 @@
 
         .product-img {
             width: 100%;
-            height: 210px;
+            height: 200px;
             object-fit: cover;
             border-bottom: 1px solid #f2ece4;
         }
@@ -117,7 +116,7 @@
         }
 
         .product-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 6px;
             color: var(--text-dark);
@@ -158,10 +157,6 @@
             outline: none;
         }
 
-        .qty-control input:focus {
-            border-color: var(--primary-brown);
-        }
-
         .add-btn {
             width: 100%;
             background-color: var(--accent-green);
@@ -182,7 +177,64 @@
             background-color: var(--accent-green-hover);
         }
 
-        /* شريط السلة الثابت في الأسفل */
+        /* قسم بيانات الطلب والشحن */
+        .order-form-section {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(124, 74, 3, 0.08);
+            margin-top: 20px;
+        }
+
+        .order-form-section h2 {
+            font-size: 1.3rem;
+            color: var(--primary-brown);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #f2ece4;
+            padding-bottom: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: 1px solid #e0d7cd;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            background: #faf8f5;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary-brown);
+            background: #fff;
+        }
+
+        /* شريط السلة الثابت */
         .cart-bar {
             position: fixed;
             bottom: 0;
@@ -200,7 +252,7 @@
         }
 
         .cart-info {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-dark);
         }
@@ -239,9 +291,48 @@
     </header>
 
     <div class="container">
+        <!-- المنتجات -->
         <div class="products-grid" id="products-container"></div>
+
+        <!-- بيانات التوصيل والدفع -->
+        <div class="order-form-section">
+            <h2>📝 بيانات الاستلام والدفع</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="cust-name">الاسم بالكامل *</label>
+                    <input type="text" id="cust-name" placeholder="أدخل اسمك الكريم">
+                </div>
+
+                <div class="form-group">
+                    <label for="cust-phone">رقم التليفون / الواتساب *</label>
+                    <input type="tel" id="cust-phone" placeholder="01xxxxxxxxx">
+                </div>
+
+                <div class="form-group">
+                    <label for="delivery-type">طريقة الاستلام *</label>
+                    <select id="delivery-type" onchange="toggleAddressField()">
+                        <option value="delivery">توصيل للعنوان 🚚</option>
+                        <option value="pickup">استلام من موقع العمل 🏪</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment-type">طريقة الدفع *</label>
+                    <select id="payment-type">
+                        <option value="cash">كاش عند الاستلام 💵</option>
+                        <option value="instapay">انستا باي InstaPay 📱</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width" id="address-group">
+                    <label for="cust-address">عنوان التوصيل بالتفصيل *</label>
+                    <input type="text" id="cust-address" placeholder="المنطقة، الشارع، رقم العمارة أو علامة مميزة">
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- الشريط السفلي -->
     <div class="cart-bar">
         <div class="cart-info">
             الإجمالي: <span id="total-price">0</span> ج.م
@@ -296,7 +387,7 @@
                         <h3 class="product-title">${prod.name}</h3>
                         <div class="product-price">${prod.price} جنيه / ${prod.unit}</div>
                         <div class="qty-control">
-                            <label>الكمية المطلوب بالـ (${prod.unit}):</label>
+                            <label>الكمية بالـ (${prod.unit}):</label>
                             <input type="number" id="qty-${prod.id}" min="${prod.minQty}" step="${prod.step}" value="${prod.minQty}">
                         </div>
                         <button class="add-btn" onclick="addToCart(${prod.id})">
@@ -330,6 +421,16 @@
             return total;
         }
 
+        function toggleAddressField() {
+            const deliveryType = document.getElementById('delivery-type').value;
+            const addressGroup = document.getElementById('address-group');
+            if (deliveryType === 'pickup') {
+                addressGroup.style.display = 'none';
+            } else {
+                addressGroup.style.display = 'flex';
+            }
+        }
+
         function sendToWhatsApp() {
             const keys = Object.keys(cart);
             if (keys.length === 0) {
@@ -337,15 +438,42 @@
                 return;
             }
 
-            let message = "السلام عليكم، حابب أعمل طلب جديد من موقع خير البلد:\n\n";
-            let total = 0;
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const deliveryType = document.getElementById('delivery-type').value;
+            const paymentType = document.getElementById('payment-type').value;
+            const address = document.getElementById('cust-address').value.trim();
 
+            if (!name || !phone) {
+                alert("برجاء إدخال الاسم ورقم التليفون لإتمام الطلب.");
+                return;
+            }
+
+            if (deliveryType === 'delivery' && !address) {
+                alert("برجاء كتابة عنوان التوصيل بالتفصيل.");
+                return;
+            }
+
+            const deliveryText = deliveryType === 'delivery' ? 'توصيل للعنوان 🚚' : 'استلام من موقع العمل 🏪';
+            const paymentText = paymentType === 'cash' ? 'كاش عند الاستلام 💵' : 'انستا باي InstaPay 📱';
+
+            let message = `السلام عليكم، حابب أعمل طلب جديد من موقع *خير البلد*:\n\n`;
+            message += `👤 *الاسم:* ${name}\n`;
+            message += `📞 *التليفون:* ${phone}\n`;
+            message += `📍 *طريقة الاستلام:* ${deliveryText}\n`;
+            if (deliveryType === 'delivery') {
+                message += `🏡 *العنوان:* ${address}\n`;
+            }
+            message += `💳 *طريقة الدفع:* ${paymentText}\n\n`;
+            message += `📦 *الطلبات:*\n`;
+
+            let total = 0;
             keys.forEach(id => {
                 const product = products.find(p => p.id == id);
                 const qty = cart[id];
                 const itemTotal = product.price * qty;
                 total += itemTotal;
-                message += `▪️ ${product.name}: ${qty} ${product.unit} (بسعر ${itemTotal} جنيه)\n`;
+                message += `▪️ ${product.name}: ${qty} ${product.unit} (${itemTotal} جنيه)\n`;
             });
 
             message += `\n💰 *الإجمالي الكلي:* ${total} جنيه`;
