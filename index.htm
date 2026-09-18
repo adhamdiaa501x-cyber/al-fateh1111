@@ -2,886 +2,259 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>QDS ULTIMATE - نظام التحليل المتطور</title>
-    
-    <meta name="description" content="أقوى نظام لتحليل ودمج الوحوش">
-    <meta name="author" content="Al FaTeh">
-    
-    <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='80' font-size='80' fill='%2300f2ff'%3E⚡%3C/text%3E%3C/svg%3E">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خير البلد - فطير وقرص فلاحي</title>
     <style>
-        /* ========== الأساسيات ========== */
         * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        html, body {
-            width: 100%;
-            min-height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
         }
 
         body {
-            background: #0a0a0f;
-            color: #ffffff;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 15px;
+            background-color: #f4f7f6;
+            color: #333;
+            padding-bottom: 90px;
+        }
+
+        header {
+            background-color: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .container {
-            max-width: 500px;
-            width: 100%;
-            margin: 0 auto;
-            padding-bottom: 30px;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
-        /* ========== نظام الألوان ========== */
-        :root {
-            --primary: #00f2ff;
-            --primary-dark: #0088cc;
-            --secondary: #ffd700;
-            --danger: #ff4444;
-            --success: #00ff88;
-            --legend: #aa88ff;
-            
-            --bg-dark: #0a0a0f;
-            --bg-panel: #111116;
-            --bg-card: #1a1a24;
-            
-            --text: #ffffff;
-            --text-dim: #aaaac0;
-            --border: #2a2a35;
-        }
-
-        /* ========== الهيدر ========== */
-        .header {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .brand {
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--primary);
-            text-shadow: 0 0 30px var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .credit {
-            display: flex;
-            justify-content: center;
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
-            color: var(--text-dim);
-            flex-wrap: wrap;
         }
 
-        /* ========== شاشة الحالة ========== */
-        .status-container {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 20px;
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .status {
-            font-size: 4rem;
-            text-align: center;
-            padding: 20px;
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            margin-bottom: 15px;
-            transition: 0.3s;
-            min-height: 120px;
+        .product-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #1b5e20;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: #e65100;
+            margin-bottom: 12px;
+        }
+
+        .qty-control {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        .status.warning {
-            border-color: var(--secondary);
-            box-shadow: 0 0 30px rgba(255,215,0,0.3);
-        }
-
-        .status.danger {
-            border-color: var(--danger);
-            box-shadow: 0 0 30px rgba(255,68,68,0.3);
-        }
-
-        .status.legend {
-            border-color: var(--legend);
-            box-shadow: 0 0 50px rgba(170,136,255,0.5);
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 15px;
+        .qty-control input {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             text-align: center;
         }
 
-        .stat-label {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .stat-value.max {
-            color: var(--secondary);
-        }
-
-        /* ========== لوحة الخانات ========== */
-        .game-panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .grid {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 12px !important;
-            background: var(--bg-card) !important;
-            padding: 15px !important;
-            border-radius: 20px !important;
-            margin-bottom: 25px !important;
-            min-height: 350px !important;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 20px rgba(0,242,255,0.2);
-        }
-
-        .tile {
-            aspect-ratio: 1 / 1 !important;
-            background: var(--bg-dark) !important;
-            border: 2px solid var(--border) !important;
-            border-radius: 15px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            transition: 0.3s !important;
-            min-width: 60px !important;
-            min-height: 60px !important;
-        }
-
-        .tile:hover {
-            border-color: var(--primary) !important;
-            transform: scale(1.02) !important;
-        }
-
-        .tile input {
-            width: 100% !important;
-            height: 100% !important;
-            border: none !important;
-            background: transparent !important;
-            color: var(--text) !important;
-            font-size: 1.8rem !important;
-            text-align: center !important;
-            font-weight: bold !important;
-            outline: none !important;
-            padding: 0 !important;
-        }
-
-        /* ألوان الأرقام */
-        .tile input[value="1"] { color: #88ccff !important; }
-        .tile input[value="2"] { color: #88ff88 !important; }
-        .tile input[value="3"] { color: #ffff88 !important; }
-        .tile input[value="4"] { color: #ffaa88 !important; }
-        .tile input[value="5"] { color: #ff8888 !important; }
-        .tile input[value="6"] { color: #ff88ff !important; }
-        .tile input[value="7"] { color: #ddaaff !important; }
-        .tile input[value="8"] { color: #aaccff !important; text-shadow: 0 0 10px blue !important; }
-        .tile input[value="9"] { color: #ffaa00 !important; text-shadow: 0 0 10px orange !important; }
-        .tile input[value="10"] { color: #ff5500 !important; text-shadow: 0 0 20px red !important; }
-        .tile input[value="11"] { color: #ff00ff !important; text-shadow: 0 0 20px magenta !important; }
-        .tile input[value="12"] { color: #ffdd00 !important; text-shadow: 0 0 20px gold !important; }
-        .tile input[value="13"] { color: #ffaa88 !important; text-shadow: 0 0 20px #ff5500 !important; font-size: 2rem !important; }
-        .tile input[value="14"] { color: #ff8888 !important; text-shadow: 0 0 30px red !important; font-size: 2rem !important; }
-        .tile input[value="15"] { color: white !important; text-shadow: 0 0 40px white !important; font-size: 2.2rem !important; }
-
-        /* ========== الأزرار ========== */
-        .btn-primary {
+        .add-btn {
             width: 100%;
-            background: linear-gradient(135deg, #00a2ff, #00f2ff);
-            border: none;
-            padding: 20px;
-            border-radius: 50px;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: black;
-            cursor: pointer;
-            box-shadow: 0 5px 0 #0088cc;
-            transition: 0.1s;
-            margin-bottom: 15px;
-        }
-
-        .btn-primary:active {
-            transform: translateY(5px);
-            box-shadow: none;
-        }
-
-        .btn-primary.legend {
-            background: linear-gradient(135deg, #aa88ff, #cc88ff);
-            box-shadow: 0 5px 0 #8866cc;
-        }
-
-        .direction-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .btn-dir {
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            padding: 15px;
-            border-radius: 30px;
-            font-size: 2rem;
-            color: var(--primary);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-dir:hover {
-            border-color: var(--primary);
-            transform: scale(1.05);
-        }
-
-        .btn-reset {
-            width: 100%;
-            background: var(--bg-card);
-            border: 2px solid var(--danger);
-            padding: 15px;
-            border-radius: 30px;
-            font-size: 1.3rem;
-            color: var(--danger);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-reset:hover {
-            background: var(--danger);
+            background-color: #2e7d32;
             color: white;
-        }
-
-        /* ========== لوحة المعلومات ========== */
-        .info-panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .info-header {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-        }
-
-        .badge.emergency {
-            background: rgba(255,68,68,0.2);
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .badge.normal {
-            background: rgba(0,242,255,0.2);
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .badge.depth {
-            background: rgba(255,215,0,0.2);
-            color: var(--secondary);
-            border-color: var(--secondary);
-        }
-
-        .hint {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            border: none;
             padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            border-right: 3px solid var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
-        /* سكرول */
-        ::-webkit-scrollbar {
-            width: 10px;
-            background: var(--bg-dark);
+        .add-btn:hover {
+            background-color: #1b5e20;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-top: 2px solid #2e7d32;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-info {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- الهيدر -->
-    <div class="header">
-        <h1 class="brand">QDS</h1>
-        <div class="credit">
-            <span>👤 Al FaTeh</span>
-            <span>📱 01016057623</span>
-            <span>🎯 32768</span>
-        </div>
+    <header>
+        <h1>منتجات فلاحي طازجة 🌾</h1>
+        <p>فطير مشلتت وقرص فلاحي بالسمن البلدي</p>
+    </header>
+
+    <div class="container">
+        <div class="products-grid" id="products-container"></div>
     </div>
 
-    <!-- الحالة -->
-    <div class="status-container">
-        <div id="status" class="status">⚡</div>
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-label">المستوى</div>
-                <div class="stat-value max" id="maxLevel">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">النقاط</div>
-                <div class="stat-value" id="totalScore">0</div>
-            </div>
+    <div class="cart-bar">
+        <div class="cart-info">
+            الإجمالي: <span id="total-price">0</span> جنيه
         </div>
-    </div>
-
-    <!-- خانات اللعب -->
-    <div class="game-panel">
-        <div id="grid" class="grid"></div>
-
-        <button class="btn-primary" id="mainBtn" onclick="deepThink()">
-            ⚡ تحليل ذكي (عمق 14)
+        <button class="checkout-btn" onclick="sendToWhatsApp()">
+            تأكيد الطلب عبر واتساب 💬
         </button>
-
-        <div class="direction-grid">
-            <button class="btn-dir" onclick="manualUp()">↑</button>
-            <button class="btn-dir" onclick="manualDown()">↓</button>
-            <button class="btn-dir" onclick="manualLeft()">←</button>
-            <button class="btn-dir" onclick="manualRight()">→</button>
-        </div>
-
-        <button class="btn-reset" onclick="resetGame()">🔄 بداية جديدة</button>
     </div>
 
-    <!-- المعلومات -->
-    <div class="info-panel">
-        <div class="info-header" id="infoPanel">
-            <span class="badge normal">🔵 وضع طبيعي</span>
-            <span class="badge depth">⏱️ عمق 0</span>
-        </div>
-        <div class="hint" id="hintText">
-            أدخل الأرقام من اللعبة ثم اضغط تحليل
-        </div>
-    </div>
-</div>
+    <script>
+        // تم إضافة رقم الواتساب الخاص بك بالرمز الدولي لمصر
+        const myPhoneNumber = "201004398541"; 
 
-<script>
-// ========== تهيئة اللوحة ==========
-const grid = document.getElementById("grid")
-grid.innerHTML = ""
+        const products = [
+            { 
+                id: 1, 
+                name: "قرص فلاحي طازجة", 
+                price: 170, 
+                unit: "كيلو", 
+                minQty: 1, 
+                step: 0.5, 
+                image: "images/qoras.jpg" 
+            },
+            { 
+                id: 2, 
+                name: "فطير مشلتت (حجم كبير)", 
+                price: 160, 
+                unit: "فطيرة", 
+                minQty: 1, 
+                step: 1, 
+                image: "images/ftir.jpg" 
+            },
+            { 
+                id: 3, 
+                name: "فطير مشلتت (حجم صغير)", 
+                price: 140, 
+                unit: "فطيرة", 
+                minQty: 1, 
+                step: 1, 
+                image: "images/ftir.jpg" 
+            }
+        ];
 
-// إنشاء 16 خانة
-for(let i = 0; i < 16; i++) {
-    let tile = document.createElement("div")
-    tile.className = "tile"
-    
-    let input = document.createElement("input")
-    input.id = "t" + i
-    input.type = "number"
-    input.min = "0"
-    input.max = "20"
-    input.placeholder = "0"
-    
-    tile.appendChild(input)
-    grid.appendChild(tile)
-}
+        let cart = {};
 
-// ========== المتغيرات العامة ==========
-let cache = new Map()
-let thinking = false
-let gameState = {
-    maxLevel: 0,
-    criticalMode: false,
-    reachedLevel10: false,  // تغيير من reachedLevel15
-    movesSinceCritical: 0
-}
-
-// ========== دوال المساعدة ==========
-function getBoard() {
-    let b = []
-    for(let i = 0; i < 4; i++) {
-        let r = []
-        for(let j = 0; j < 4; j++) {
-            let val = parseInt(document.getElementById("t" + (i*4 + j)).value) || 0
-            r.push(val)
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            container.innerHTML = products.map(prod => `
+                <div class="product-card">
+                    <img src="${prod.image}" alt="${prod.name}" class="product-img" onerror="this.src='https://via.placeholder.com/260x200?text=صورة+المنتج'">
+                    <div class="product-info">
+                        <h3 class="product-title">${prod.name}</h3>
+                        <div class="product-price">${prod.price} جنيه / ${prod.unit}</div>
+                        <div class="qty-control">
+                            <label>الكمية (${prod.unit}):</label>
+                            <input type="number" id="qty-${prod.id}" min="${prod.minQty}" step="${prod.step}" value="${prod.minQty}">
+                        </div>
+                        <button class="add-btn" onclick="addToCart(${prod.id})">إضافة للسلة</button>
+                    </div>
+                </div>
+            `).join('');
         }
-        b.push(r)
-    }
-    return b
-}
 
-function setBoard(b) {
-    for(let i = 0; i < 4; i++) {
-        for(let j = 0; j < 4; j++) {
-            let cell = document.getElementById("t" + (i*4 + j))
-            if(cell) cell.value = b[i][j] || ""
-        }
-    }
-}
+        function addToCart(productId) {
+            const qtyInput = document.getElementById(`qty-${productId}`);
+            const qty = parseFloat(qtyInput.value);
 
-function getMaxLevel(b) {
-    let max = 0
-    for(let i = 0; i < 4; i++) {
-        for(let j = 0; j < 4; j++) {
-            if(b[i][j] > max) max = b[i][j]
-        }
-    }
-    return max
-}
-
-function calculateScore(b) {
-    let score = 0
-    for(let i = 0; i < 4; i++) {
-        for(let j = 0; j < 4; j++) {
-            if(b[i][j] > 0) {
-                score += Math.pow(2, b[i][j])
+            if (qty > 0) {
+                cart[productId] = qty;
+                updateTotal();
+                alert("تم إضافة المنتج للسلة!");
             }
         }
-    }
-    return score
-}
 
-function updateDisplay(b) {
-    let maxLevel = getMaxLevel(b)
-    let totalScore = calculateScore(b)
-    
-    document.getElementById("maxLevel").innerText = maxLevel
-    document.getElementById("totalScore").innerText = totalScore.toLocaleString()
-    
-    gameState.maxLevel = maxLevel
-    
-    // لو وصل للمستوى 10، نحتفل بس نكمل لعب
-    if(maxLevel >= 10 && !gameState.reachedLevel10) {
-        gameState.reachedLevel10 = true
-        document.getElementById("status").className = "status legend"
-        document.getElementById("status").innerText = "🏆 10! استمر"
-        document.getElementById("mainBtn").className = "btn-primary legend"
-        document.getElementById("hintText").innerHTML = "🔥 مبروك المستوى 10! واصل للمستوى 15"
-    }
-    else if(maxLevel >= 12) {
-        document.getElementById("status").className = "status warning"
-        document.getElementById("status").innerText = "🏆 " + maxLevel
-    }
-    else if(gameState.criticalMode) {
-        document.getElementById("status").className = "status danger"
-    }
-    else {
-        document.getElementById("status").className = "status"
-    }
-    
-    updateInfo()
-}
-
-function updateInfo() {
-    let depth = getCurrentDepth()
-    let mode = gameState.criticalMode ? 'طوارئ' : 'عادي'
-    let badgeClass = gameState.criticalMode ? 'emergency' : 'normal'
-    
-    document.getElementById("infoPanel").innerHTML = 
-        `<span class="badge ${badgeClass}">🔵 ${mode}</span> ` +
-        `<span class="badge depth">⏱️ عمق ${depth}</span>`
-}
-
-function getCurrentDepth() {
-    let b = getBoard()
-    let maxVal = getMaxLevel(b)
-    if(gameState.criticalMode) return 14
-    if(maxVal >= 12) return 13
-    if(maxVal >= 10) return 12
-    if(maxVal >= 8) return 11
-    if(maxVal >= 6) return 10
-    return 9
-}
-
-function compress(row) {
-    let n = row.filter(v => v > 0)
-    
-    for(let i = 0; i < n.length - 1; i++) {
-        if(n[i] == n[i + 1] && n[i] > 0) {
-            n[i] += 1
-            n.splice(i + 1, 1)
-        }
-    }
-    
-    while(n.length < 4) n.push(0)
-    return n
-}
-
-function simulate(b, dir) {
-    let old = JSON.stringify(b)
-    
-    if(dir == "left") {
-        for(let i = 0; i < 4; i++) b[i] = compress(b[i])
-    }
-    else if(dir == "right") {
-        for(let i = 0; i < 4; i++) {
-            b[i].reverse()
-            b[i] = compress(b[i])
-            b[i].reverse()
-        }
-    }
-    else if(dir == "up") {
-        for(let j = 0; j < 4; j++) {
-            let c = [b[0][j], b[1][j], b[2][j], b[3][j]]
-            let nc = compress(c)
-            for(let i = 0; i < 4; i++) b[i][j] = nc[i]
-        }
-    }
-    else if(dir == "down") {
-        for(let j = 0; j < 4; j++) {
-            let c = [b[0][j], b[1][j], b[2][j], b[3][j]]
-            c.reverse()
-            let nc = compress(c)
-            nc.reverse()
-            for(let i = 0; i < 4; i++) b[i][j] = nc[i]
-        }
-    }
-    
-    return old != JSON.stringify(b)
-}
-
-function emptyCells(b) {
-    let e = []
-    for(let i = 0; i < 4; i++) {
-        for(let j = 0; j < 4; j++) {
-            if(b[i][j] == 0) e.push([i, j])
-        }
-    }
-    return e
-}
-
-function hasAvailableMoves(b) {
-    let empty = emptyCells(b).length
-    if(empty > 0) return true
-    
-    for(let i = 0; i < 4; i++) {
-        for(let j = 0; j < 3; j++) {
-            if(b[i][j] == b[i][j+1] && b[i][j] > 0) return true
-        }
-    }
-    
-    for(let j = 0; j < 4; j++) {
-        for(let i = 0; i < 3; i++) {
-            if(b[i][j] == b[i+1][j] && b[i][j] > 0) return true
-        }
-    }
-    
-    return false
-}
-
-function evaluate(b, critical = false) {
-    let score = 0
-    let empty = emptyCells(b).length
-    let maxVal = getMaxLevel(b)
-    
-    if(critical) {
-        // استراتيجية الطوارئ
-        score += empty * 50000
-        
-        for(let i = 0; i < 4; i++) {
-            for(let j = 0; j < 3; j++) {
-                if(b[i][j] == b[i][j+1] && b[i][j] > 0) {
-                    score += b[i][j] * 3000
+        function updateTotal() {
+            let total = 0;
+            for (let id in cart) {
+                const product = products.find(p => p.id == id);
+                if (product) {
+                    total += product.price * cart[id];
                 }
             }
+            document.getElementById('total-price').innerText = total;
+            return total;
         }
-        for(let j = 0; j < 4; j++) {
-            for(let i = 0; i < 3; i++) {
-                if(b[i][j] == b[i+1][j] && b[i][j] > 0) {
-                    score += b[i][j] * 3000
-                }
+
+        function sendToWhatsApp() {
+            const keys = Object.keys(cart);
+            if (keys.length === 0) {
+                alert("السلة فارغة! حدد الكمية ودوس إضافة للسلة أولاً.");
+                return;
             }
-        }
-    } else {
-        // استراتيجية عادية
-        score += empty * 15000
-        
-        // مكافأة الزوايا
-        if(b[0][0] == maxVal) score += maxVal * 2000
-        else if(b[0][3] == maxVal || b[3][0] == maxVal) score += maxVal * 1500
-        else if(b[3][3] == maxVal) score += maxVal * 1000
-        else score -= maxVal * 500
-        
-        // مكافأة التجانس
-        for(let i = 0; i < 4; i++) {
-            for(let j = 0; j < 3; j++) {
-                if(b[i][j] == b[i][j+1] && b[i][j] > 0) {
-                    score += b[i][j] * 800
-                }
-            }
-        }
-        
-        // عقاب المنتصف
-        for(let i = 1; i < 3; i++) {
-            for(let j = 1; j < 3; j++) {
-                score -= b[i][j] * 300
-            }
-        }
-        
-        // مكافآت المستويات العالية
-        if(maxVal >= 12) score += 100000
-        if(maxVal >= 13) score += 200000
-        if(maxVal >= 14) score += 500000
-        if(maxVal >= 15) score += 1000000
-    }
-    
-    return score
-}
 
-function minimax(b, depth, alpha, beta, isMax, critical) {
-    if(depth == 0) return evaluate(b, critical)
-    
-    let key = JSON.stringify(b) + depth + isMax + critical
-    if(cache.has(key)) return cache.get(key)
-    
-    if(isMax) {
-        let moves = ["up", "down", "left", "right"]
-        let best = -Infinity
-        
-        for(let m of moves) {
-            let sim = JSON.parse(JSON.stringify(b))
-            if(!simulate(sim, m)) continue
-            
-            let val = minimax(sim, depth - 1, alpha, beta, false, critical)
-            if(val > best) best = val
-            alpha = Math.max(alpha, val)
-            if(beta <= alpha) break
+            let message = "السلام عليكم، حابب أطلب من عندك:\n\n";
+            let total = 0;
+
+            keys.forEach(id => {
+                const product = products.find(p => p.id == id);
+                const qty = cart[id];
+                const itemTotal = product.price * qty;
+                total += itemTotal;
+                message += `▪️ ${product.name}: ${qty} ${product.unit} (بسعر ${itemTotal} جنيه)\n`;
+            });
+
+            message += `\n💰 *الإجمالي الكلي:* ${total} جنيه`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${myPhoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
         }
-        
-        cache.set(key, best)
-        return best
-    } else {
-        let empty = emptyCells(b)
-        if(empty.length == 0) return evaluate(b, critical)
-        
-        let best = Infinity
-        
-        for(let [i, j] of empty) {
-            for(let val of [1, 2]) {
-                let sim = JSON.parse(JSON.stringify(b))
-                sim[i][j] = val
-                let val2 = minimax(sim, depth - 1, alpha, beta, true, critical)
-                if(val2 < best) best = val2
-                beta = Math.min(beta, val2)
-                if(beta <= alpha) break
-            }
-        }
-        
-        cache.set(key, best)
-        return best
-    }
-}
 
-function analyzeSituation(b) {
-    let empty = emptyCells(b).length
-    let maxVal = getMaxLevel(b)
-    
-    if(maxVal >= 12 && empty <= 4) return true
-    if(maxVal >= 10 && empty <= 3) return true
-    if(maxVal >= 8 && empty <= 2) return true
-    if(empty <= 1) return true
-    if(gameState.criticalMode && gameState.movesSinceCritical < 3) {
-        gameState.movesSinceCritical++
-        return true
-    }
-    
-    gameState.criticalMode = false
-    gameState.movesSinceCritical = 0
-    return false
-}
-
-function showArrow(move) {
-    const arrows = { up: "↑", down: "↓", left: "←", right: "→" }
-    let arrow = arrows[move] || "⚡"
-    
-    if(gameState.maxLevel >= 10) arrow = "🏆 " + arrow
-    else arrow = "⚡ " + arrow
-    
-    document.getElementById("status").innerText = arrow
-}
-
-function deepThink() {
-    if(thinking) return
-    
-    let b = getBoard()
-    
-    if(!hasAvailableMoves(b)) {
-        document.getElementById("status").innerText = "💀 انتهت"
-        document.getElementById("status").className = "status danger"
-        document.getElementById("hintText").innerHTML = "💀 انتهت اللعبة - اضغط بداية جديدة"
-        return
-    }
-    
-    thinking = true
-    document.getElementById("status").innerText = "⏳"
-    
-    setTimeout(() => {
-        if(cache.size > 200000) cache.clear()
-        
-        let b = getBoard()
-        let maxVal = getMaxLevel(b)
-        
-        let criticalMode = analyzeSituation(b)
-        gameState.criticalMode = criticalMode
-        
-        let depth = getCurrentDepth()
-        updateInfo()
-        
-        let moves = ["up", "down", "left", "right"]
-        let moveScores = []
-        
-        for(let m of moves) {
-            let sim = JSON.parse(JSON.stringify(b))
-            if(!simulate(sim, m)) continue
-            moveScores.push({
-                move: m,
-                score: evaluate(sim, criticalMode)
-            })
-        }
-        
-        if(moveScores.length === 0) {
-            document.getElementById("status").innerText = "❌"
-            thinking = false
-            return
-        }
-        
-        moveScores.sort((a, b) => b.score - a.score)
-        
-        let bestMove = ""
-        let bestScore = -Infinity
-        
-        for(let i = 0; i < Math.min(3, moveScores.length); i++) {
-            let sim = JSON.parse(JSON.stringify(b))
-            simulate(sim, moveScores[i].move)
-            let score = minimax(sim, depth - 1, -Infinity, Infinity, false, criticalMode)
-            
-            if(score > bestScore) {
-                bestScore = score
-                bestMove = moveScores[i].move
-            }
-        }
-        
-        if(bestMove) {
-            simulate(b, bestMove)
-            setBoard(b)
-            updateDisplay(b)
-            showArrow(bestMove)
-            
-            if(emptyCells(b).length === 0) {
-                document.getElementById("hintText").innerHTML = "⚠️ لوحة ممتلئة - ركز على الدمج"
-            } else {
-                document.getElementById("hintText").innerHTML = "✅ تحليل ناجح - اتبع السهم"
-            }
-        }
-        
-        thinking = false
-    }, 10)
-}
-
-// ========== الحركات اليدوية ==========
-function manualUp() { manualMove("up") }
-function manualDown() { manualMove("down") }
-function manualLeft() { manualMove("left") }
-function manualRight() { manualMove("right") }
-
-function manualMove(dir) {
-    if(thinking) return
-    
-    let b = getBoard()
-    
-    if(simulate(b, dir)) {
-        setBoard(b)
-        updateDisplay(b)
-        showArrow(dir)
-        
-        if(emptyCells(b).length === 0) {
-            document.getElementById("hintText").innerHTML = "⚠️ اللوحة ممتلئة - استمر في الدمج"
-        }
-    } else {
-        document.getElementById("hintText").innerHTML = `⛔ حركة ${dir} غير ممكنة`
-    }
-}
-
-// ========== إعادة التعيين ==========
-function resetGame() {
-    if(thinking) return
-    
-    for(let i = 0; i < 16; i++) {
-        let cell = document.getElementById("t" + i)
-        if(cell) cell.value = ""
-    }
-    
-    gameState = {
-        maxLevel: 0,
-        criticalMode: false,
-        reachedLevel10: false,
-        movesSinceCritical: 0
-    }
-    
-    document.getElementById("status").className = "status"
-    document.getElementById("status").innerText = "⚡"
-    document.getElementById("mainBtn").className = "btn-primary"
-    document.getElementById("maxLevel").innerText = "0"
-    document.getElementById("totalScore").innerText = "0"
-    document.getElementById("infoPanel").innerHTML = 
-        '<span class="badge normal">🔵 وضع طبيعي</span> <span class="badge depth">⏱️ عمق 0</span>'
-    document.getElementById("hintText").innerHTML = "📝 أدخل الأرقام ثم اضغط تحليل"
-    
-    cache.clear()
-}
-
-// ========== بداية التشغيل ==========
-window.onload = resetGame
-</script>
-
+        renderProducts();
+    </script>
 </body>
-    </html>
+</html>
