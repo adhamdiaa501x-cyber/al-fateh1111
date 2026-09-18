@@ -3,140 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خير البلد - فطير وقرص فلاحي</title>
+    <title>خير البلد - خير وأكل فلاحي أصيل</title>
+    <!-- خط أميري عربي راقي من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #fbf8f3;
+            --card-bg: #ffffff;
+            --primary-brown: #7c4a03;
+            --accent-green: #4a6b32;
+            --accent-green-hover: #385225;
+            --price-color: #b85d19;
+            --text-dark: #2c221e;
+            --text-muted: #6e655f;
+            --whatsapp-green: #25D366;
+            --whatsapp-hover: #1da851;
+        }
+
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Tajawal', sans-serif;
             margin: 0;
             padding: 0;
+            transition: all 0.25s ease-in-out;
         }
 
         body {
-            background-color: #f4f7f6;
-            color: #333;
-            padding-bottom: 90px;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding-bottom: 110px;
         }
 
+        /* الهيدر الأنيق */
         header {
-            background-color: #2e7d32;
-            color: white;
+            background: linear-gradient(135deg, #5c3500 0%, #8b5a2b 100%);
+            color: #fff;
             text-align: center;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 35px 20px 25px 20px;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 15px rgba(92, 53, 0, 0.15);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-weight: 400;
         }
 
         .container {
             max-width: 1000px;
-            margin: 20px auto;
-            padding: 0 15px;
+            margin: 25px auto;
+            padding: 0 16px;
         }
 
+        /* شبكة المنتجات */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 22px;
         }
 
         .product-card {
-            background: white;
-            border-radius: 12px;
+            background: var(--card-bg);
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(124, 74, 3, 0.08);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+        /* شارة طازج */
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--primary-brown);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
         }
 
         .product-img {
             width: 100%;
-            height: 220px;
+            height: 210px;
             object-fit: cover;
+            border-bottom: 1px solid #f2ece4;
         }
 
         .product-info {
-            padding: 15px;
+            padding: 18px;
         }
 
         .product-title {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-            color: #1b5e20;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-dark);
         }
 
         .product-price {
-            font-weight: bold;
-            color: #e65100;
-            margin-bottom: 12px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--price-color);
+            margin-bottom: 15px;
         }
 
         .qty-control {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            background: #f7f3ed;
+            padding: 6px 12px;
+            border-radius: 12px;
             margin-bottom: 15px;
         }
 
+        .qty-control label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
         .qty-control input {
-            width: 80px;
+            width: 70px;
             padding: 6px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #e0d7cd;
+            border-radius: 8px;
             text-align: center;
+            font-weight: 700;
+            background: #fff;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        .qty-control input:focus {
+            border-color: var(--primary-brown);
         }
 
         .add-btn {
             width: 100%;
-            background-color: #2e7d32;
+            background-color: var(--accent-green);
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .add-btn:hover {
-            background-color: #1b5e20;
+            background-color: var(--accent-green-hover);
         }
 
+        /* شريط السلة الثابت في الأسفل */
         .cart-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: #ffffff;
-            border-top: 2px solid #2e7d32;
-            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(124, 74, 3, 0.12);
+            padding: 14px 22px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 -6px 20px rgba(0,0,0,0.06);
+            z-index: 1000;
         }
 
         .cart-info {
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .cart-info span {
+            color: var(--price-color);
+            font-size: 1.3rem;
         }
 
         .checkout-btn {
-            background-color: #25D366;
+            background-color: var(--whatsapp-green);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
+            padding: 12px 22px;
+            border-radius: 30px;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+        }
+
+        .checkout-btn:hover {
+            background-color: var(--whatsapp-hover);
+            transform: scale(1.02);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>منتجات فلاحي طازجة 🌾</h1>
-        <p>فطير مشلتت وقرص فلاحي بالسمن البلدي</p>
+        <h1>خير البلد 🌾</h1>
+        <p>فطير مشلتت وقرص فلاحي طازجة بالسمن البلدي الأصلي</p>
     </header>
 
     <div class="container">
@@ -145,15 +244,14 @@
 
     <div class="cart-bar">
         <div class="cart-info">
-            الإجمالي: <span id="total-price">0</span> جنيه
+            الإجمالي: <span id="total-price">0</span> ج.م
         </div>
         <button class="checkout-btn" onclick="sendToWhatsApp()">
-            تأكيد الطلب عبر واتساب 💬
+            تأكيد الطلب عبر الواتساب 💬
         </button>
     </div>
 
     <script>
-        // تم إضافة رقم الواتساب الخاص بك بالرمز الدولي لمصر
         const myPhoneNumber = "201004398541"; 
 
         const products = [
@@ -164,7 +262,7 @@
                 unit: "كيلو", 
                 minQty: 1, 
                 step: 0.5, 
-                image: "images/qoras.jpg" 
+                image: "qoras.jpg" 
             },
             { 
                 id: 2, 
@@ -173,7 +271,7 @@
                 unit: "فطيرة", 
                 minQty: 1, 
                 step: 1, 
-                image: "images/ftir.jpg" 
+                image: "ftir.jpg" 
             },
             { 
                 id: 3, 
@@ -182,7 +280,7 @@
                 unit: "فطيرة", 
                 minQty: 1, 
                 step: 1, 
-                image: "images/ftir.jpg" 
+                image: "ftir.jpg" 
             }
         ];
 
@@ -192,15 +290,18 @@
             const container = document.getElementById('products-container');
             container.innerHTML = products.map(prod => `
                 <div class="product-card">
+                    <span class="badge">طازج يومياً ✨</span>
                     <img src="${prod.image}" alt="${prod.name}" class="product-img" onerror="this.src='https://via.placeholder.com/260x200?text=صورة+المنتج'">
                     <div class="product-info">
                         <h3 class="product-title">${prod.name}</h3>
                         <div class="product-price">${prod.price} جنيه / ${prod.unit}</div>
                         <div class="qty-control">
-                            <label>الكمية (${prod.unit}):</label>
+                            <label>الكمية المطلوب بالـ (${prod.unit}):</label>
                             <input type="number" id="qty-${prod.id}" min="${prod.minQty}" step="${prod.step}" value="${prod.minQty}">
                         </div>
-                        <button class="add-btn" onclick="addToCart(${prod.id})">إضافة للسلة</button>
+                        <button class="add-btn" onclick="addToCart(${prod.id})">
+                            🛒 إضافة للسلة
+                        </button>
                     </div>
                 </div>
             `).join('');
@@ -213,7 +314,7 @@
             if (qty > 0) {
                 cart[productId] = qty;
                 updateTotal();
-                alert("تم إضافة المنتج للسلة!");
+                alert("تم إضافة المنتج لطلبك بنجاح! ✨");
             }
         }
 
@@ -232,11 +333,11 @@
         function sendToWhatsApp() {
             const keys = Object.keys(cart);
             if (keys.length === 0) {
-                alert("السلة فارغة! حدد الكمية ودوس إضافة للسلة أولاً.");
+                alert("سلتك فارغة! اختر الكمية ودوس إضافة للسلة أولاً.");
                 return;
             }
 
-            let message = "السلام عليكم، حابب أطلب من عندك:\n\n";
+            let message = "السلام عليكم، حابب أعمل طلب جديد من موقع خير البلد:\n\n";
             let total = 0;
 
             keys.forEach(id => {
